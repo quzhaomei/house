@@ -120,7 +120,6 @@ display: inline-block;
 										<td>${fn:escapeXml(user.nickname) }</td>
 										<td>${user.loginname }</td>
 										<td>${user.phone }</td>
-										</td>
 										<td>
 											<c:forEach items="${user.roles }" var="role">
 												<c:if test="${role.status==1 }">

@@ -22,4 +22,7 @@ public interface AdminUserDao {
 	int getCountByParam(@Param("user")AdminUser user);//查询数量
 	int checkUserCount(@Param("user")AdminUser user);
 	AdminUserDTO mengHuLogin(@Param("user")AdminUser user);//门户登陆
+	
+	List<AdminUserDTO> getListByParamAndRole(@Param("user")AdminUser user,
+			@Param("roleId")Integer roleId);//查询数组
 }

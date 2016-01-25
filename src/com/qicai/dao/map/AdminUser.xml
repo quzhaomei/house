@@ -138,6 +138,16 @@
 			</if>
 	</select>
 	
+	<select id="getListByParamAndRole" resultMap="userDTO">
+		select au.adminUserId,au.nickname 
+		from admin_user au left join user_to_role utr on au.adminUserId=utr.userId
+		where utr.roleId=#{roleId}
+		<if test="user.status!=null">
+		 and au.status=#{user.status}
+		</if>
+		order by au.createDate
+	</select>
+	
 	<select id="getCountByParam" resultType="int">
 		select count(*) from admin_user u 
 			where u.status!=0  

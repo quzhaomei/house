@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qicai.dao.StoreDao">
+ <cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true" /> 
+	<resultMap type="com.qicai.dto.bisiness.StoreDTO" id="storeDTO">
+		<id property="storeId" column="storeId" />
+		<result property="balance" column="balance" />
+		<result property="logo" column="logo" />
+		<result property="storeName" column="storeName" />
+		<result property="storeAddress" column="storeAddress" />
+		<result property="callPhone" column="callPhone" />
+		<result property="msgPhone" column="msgPhone" />
+		<result property="size" column="size" />
+		<result property="companyName" column="companyName" />
+		<result property="ruleUserName" column="ruleUserName" />
+		<result property="ruleUserPhone" column="ruleUserPhone" />
+		
+		
+		<result property="createDate" column="createDate" />
+		<result property="updateDate" column="updateDate" />
+		<result property="status" column="status" />
+		
+		<association property="zone" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="zone">
+			<id property="zoneId" column="zoneId"/>
+			<result property="name" column="name"/>
+		</association>
+		<association property="keeper" javaType="com.qicai.dto.admin.AdminUserDTO" column="keeperId">
+			<id property="adminUserId" column="keeperId"/>
+			<result property="nickname" column="nickname_k"/>
+			<result property="phone" column="phone_k"/>
+		</association>
+		<association property="createUser" javaType="com.qicai.dto.admin.AdminUserDTO" column="createUserId">
+			<id property="adminUserId" column="createUserId"/>
+			<result property="nickname" column="nickname"/>
+			<result property="phone" column="phone"/>
+		</association>
+		<association property="updateUser" javaType="com.qicai.dto.admin.AdminUserDTO" column="updateUserId">
+			<id property="adminUserId" column="updateUserId"/>
+			<result property="nickname" column="nickname_u"/>
+			<result property="phone" column="phone_u"/>
+		</association>
+		
+		<collection property="orderZones" column="zoneId_o" ofType="com.qicai.dto.bisiness.ZoneSetDTO" >
+			<id property="roleId" column="zoneId_o" />
+			<result property="name" column="name_o" />
+		</collection>
+	</resultMap>
+	<insert id="save"  useGeneratedKeys="true" keyProperty="store.storeId">
+		insert into store(storeId,logo,storeName,storeAddress,storePhone,callPhone,msgPhone,
+		size,companyName,ruleUserName,ruleUserPhone,createDate,
+		status,zoneId,keeperId,createUserId)
+		values
+		(#{store.storeId},#{store.logo},#{store.storeName},#{store.storeAddress},#{store.storePhone},
+		#{store.callPhone},#{store.msgPhone},#{store.size},#{store.companyName},
+		#{store.ruleUserName},#{store.ruleUserPhone},#{store.createDate},
+		#{store.status},#{store.zoneId},#{store.keeperId}
+		,#{store.createUserId})
+	</insert>
+	<insert id="addStoreOrderZones">
+		<selectKey keyProperty="id" order="AFTER"  resultType="java.lang.Integer">  
+        SELECT LAST_INSERT_ID()  
+ 		 </selectKey> 
+		  insert into store_to_zone (storeId,zoneId)   
+	    values  
+	    <foreach collection="zoneIds"  item="zoneId" index="index" separator="," >  
+	        (#{storeId},#{zoneId})  
+	    </foreach> 
+	</insert>
+	<delete id="clearStoreOrderZones">
+		delete from store_to_zone where storeId=#{storeId}
+	</delete>
+	<update id="update">
+		update store set storeId=#{store.storeId}
+		
+		<if test="store.keeperId!=null">
+			,keeperId=#{store.keeperId}
+		</if>
+		<if test="store.zoneId!=null">
+			,zoneId=#{store.zoneId}
+		</if>
+		<if test="store.ruleUserPhone!=null">
+			,ruleUserPhone=#{store.ruleUserPhone}
+		</if>
+		<if test="store.ruleUserName!=null">
+			,ruleUserName=#{store.ruleUserName}
+		</if>
+		<if test="store.companyName!=null">
+			,companyName=#{store.companyName}
+		</if>
+		<if test="store.size!=null">
+			,size=#{store.size}
+		</if>
+		<if test="store.msgPhone!=null">
+			,msgPhone=#{store.msgPhone}
+		</if>
+		<if test="store.callPhone!=null">
+			,callPhone=#{store.callPhone}
+		</if>
+		<if test="store.storeAddress!=null">
+			,storeAddress=#{store.storeAddress}
+		</if>
+		<if test="store.storeName!=null">
+			,name=#{store.name}
+		</if>
+		
+		<if test="store.status!=null">
+			,status=#{store.status}
+		</if>
+		<if test="store.updateUserId!=null">
+			,updateUserId=#{store.updateUserId}
+		</if>
+		<if test="store.updateDate!=null">
+			,updateDate=#{store.updateDate}
+		</if>
+		where storeId=#{store.storeId};
+	</update>
+	<delete id="delete"></delete>
+	<select id="getListByParam" resultMap="storeDTO">
+		select s.storeName,s.createDate,s.status,s.balance,s.updateDate,
+		s.keeperId,au.nickname nickname_k,
+		zs.zoneId,zs.name
+		from store s 
+		left join admin_user au on s.keeperId=au.adminUserId
+		left join zone_set zs on zs.zoneId=s.zoneId
+		
+		where 1=1
+		<if test="page.param.status!=null">
+			and s.status=#{page.param.status}
+		</if>
+		<if test="page.param.zoneId!=null">
+			and s.zoneId=#{page.param.zoneId}
+		</if>
+		<if test="page.param.storeName!=null">
+			and s.storeName like '%${page.param.storeName}%'
+		</if>
+		<if test="page.param.keeperName!=null">
+			and au.nickname like '%${page.param.keeperName}%'
+		</if>
+		<if test="page.param.startDate!=null">
+			and s.createDate &gt; #{page.param.startDate}
+		</if>
+		<if test="page.param.endDate!=null">
+			and s.createDate  &lt; #{page.param.endDate}
+		</if>
+		order by s.createDate 
+		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
+		
+	</select>
+	<select id="getByParam" resultMap="storeDTO">
+		
+	</select>
+	<select id="getCountByParam" resultType="int">
+		select count(*)
+		from store s left join admin_user au on s.keeperId=au.adminUserId
+		where 1=1
+		<if test="store.status!=null">
+			and s.status=#{store.status}
+		</if>
+		<if test="store.zoneId!=null">
+			and s.zoneId=#{store.zoneId}
+		</if>
+		<if test="store.storeName!=null">
+			and s.storeName like '%${store.storeName}%'
+		</if>
+		<if test="store.keeperName!=null">
+			and au.nickname like '%${store.keeperName}%'
+		</if>
+		<if test="store.startDate!=null">
+			and s.createDate &gt; '%${store.startDate}%'
+		</if>
+		<if test="store.endDate!=null">
+			and s.createDate  &lt; '%${store.endDate}%'
+		</if>
+	
+	</select>
+</mapper>  

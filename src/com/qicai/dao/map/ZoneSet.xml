@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qicai.dao.ZoneSetDao">
+ <cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true" /> 
+	<resultMap type="com.qicai.dto.bisiness.ZoneSetDTO" id="zoneDTO">
+		<id property="zoneId" column="zoneId" />
+		<result property="name" column="name" />
+		<result property="createDate" column="createDate" />
+		<result property="updateDate" column="updateDate" />
+		<result property="status" column="status" />
+		<association property="parent" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="parentId">
+			<id property="zoneId" column="parentId"/>
+			<result property="name" column="p_name"/>
+		</association>
+		<association property="createUser" javaType="com.qicai.dto.admin.AdminUserDTO" column="createUserId">
+			<id property="adminUserId" column="createUserId"/>
+			<result property="nickname" column="nickname"/>
+			<result property="phone" column="phone"/>
+		</association>
+		<association property="updateUser" javaType="com.qicai.dto.admin.AdminUserDTO" column="updateUserId">
+			<id property="adminUserId" column="updateUserId"/>
+			<result property="nickname" column="nickname_u"/>
+			<result property="phone" column="phone_u"/>
+		</association>
+	</resultMap>
+	<insert id="save"  useGeneratedKeys="true" keyProperty="zone.zoneId">
+		insert into zone_set(zoneId,parentId,name,status,createDate,createUserId)
+		values
+		(#{zone.zoneId},#{zone.parentId},
+		#{zone.name},#{zone.status},#{zone.createDate},#{zone.createUserId})
+	</insert>
+	<update id="update">
+		update zone_set set zoneId=#{zone.zoneId}
+		<if test="zone.name!=null">
+			,name=#{zone.name}
+		</if>
+		<if test="zone.status!=null">
+			,status=#{zone.status}
+		</if>
+		<if test="zone.updateUserId!=null">
+			,updateUserId=#{zone.updateUserId}
+		</if>
+		<if test="zone.updateDate!=null">
+			,updateDate=#{zone.updateDate}
+		</if>
+		where zoneId=#{zone.zoneId};
+	</update>
+	<delete id="delete"></delete>
+	<select id="getListByParam" resultMap="zoneDTO">
+		select z.zoneId,z.name,z.status,z.createDate,z.createUserId,au.nickname,
+		au.phone,auu.nickname nickname_u,auu.phone phone_u, z.updateDate,
+		z.updateUserId,
+		z.parentId,zp.name p_name
+		from zone_set z
+		left join zone_set zp on z.parentId=zp.zoneId
+		left join admin_user au on z.createUserId=au.adminUserId
+		left join admin_user auu on z.updateUserId=auu.adminUserId
+		 where 1=1
+		<if test="zone.status!=null">
+			and z.status=#{zone.status}
+		</if>
+		<if test="zone.parentId!=null &amp;&amp; zone.parentId!=0">
+			and z.parentId=#{zone.parentId}
+		</if>
+		<if test="zone.parentId==0">
+			and z.parentId is null
+		</if>
+		order by z.createDate
+	</select>
+	<select id="getByParam" resultMap="zoneDTO">
+		select zoneId,name,status,createDate,createUserId from zone_set where 1=1
+		<if test="zone.status!=null">
+			and status=#{zone.status}
+		</if>
+		<if test="zone.zoneId!=null">
+			and zoneId=#{zone.zoneId}
+		</if>
+	</select>
+	<select id="getCountByParam" resultType="int"></select>
+</mapper>  

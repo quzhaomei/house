@@ -128,4 +128,9 @@ public class AdminUserServiceImpl implements AdminUserService {
 		return adminUserDao.mengHuLogin(adminUser);
 	}
 
+	@Override
+	public List<AdminUserDTO> getListByParamAndRole(AdminUser user, Integer roleId) {
+		return adminUserDao.getListByParamAndRole(user, roleId);
+	}
+
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qicai.dao.HouseTypeDao">
+ <cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true" /> 
+	<resultMap type="com.qicai.dto.bisiness.HouseTypeDTO" id="typeDTO">
+		<id property="typeId" column="typeId" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		
+		<result property="createDate" column="createDate" />
+		<result property="updateDate" column="updateDate" />
+		<result property="status" column="status" />
+		<association property="createUser" javaType="com.qicai.dto.admin.AdminUserDTO" column="createUserId">
+			<id property="adminUserId" column="createUserId"/>
+			<result property="nickname" column="nickname"/>
+			<result property="phone" column="phone"/>
+		</association>
+		<association property="updateUser" javaType="com.qicai.dto.admin.AdminUserDTO" column="updateUserId">
+			<id property="adminUserId" column="updateUserId"/>
+			<result property="nickname" column="nickname_u"/>
+			<result property="phone" column="phone_u"/>
+		</association>
+	</resultMap>
+	<insert id="save"  useGeneratedKeys="true" keyProperty="type.typeId">
+		insert into house_type(typeId,name,price,status,createDate,createUserId)
+		values
+		(#{type.typeId},
+		#{type.name},#{type.price},#{type.status},#{type.createDate},#{type.createUserId})
+	</insert>
+	<update id="update">
+		update house_type set typeId=#{type.typeId}
+		<if test="type.name!=null">
+			,name=#{type.name}
+		</if>
+		<if test="type.price!=null">
+			,price=#{type.price}
+		</if>
+		<if test="type.status!=null">
+			,status=#{type.status}
+		</if>
+		<if test="type.updateUserId!=null">
+			,updateUserId=#{type.updateUserId}
+		</if>
+		<if test="type.updateDate!=null">
+			,updateDate=#{type.updateDate}
+		</if>
+		where typeId=#{type.typeId};
+	</update>
+	<delete id="delete"></delete>
+	<select id="getListByParam" resultMap="typeDTO">
+		select z.typeId,z.price,z.name,z.status,z.createDate,z.createUserId,au.nickname,
+		au.phone,auu.nickname nickname_u,auu.phone phone_u, z.updateDate,
+		z.updateUserId 
+		from house_type z
+		left join admin_user au on z.createUserId=au.adminUserId
+		left join admin_user auu on z.updateUserId=auu.adminUserId
+		 where 1=1
+		<if test="type.status!=null">
+			and z.status=#{type.status}
+		</if>
+	</select>
+	<select id="getByParam" resultMap="typeDTO">
+		select typeId,z.price,name,status,createDate,createUserId from house_type z where 1=1
+		<if test="type.status!=null">
+			and status=#{type.status}
+		</if>
+		<if test="type.typeId!=null">
+			and typeId=#{type.typeId}
+		</if>
+	</select>
+	<select id="getCountByParam" resultType="int"></select>
+</mapper>  

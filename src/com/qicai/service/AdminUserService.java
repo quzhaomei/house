@@ -16,4 +16,6 @@ public interface AdminUserService extends BaseService<AdminUser, AdminUserDTO> {
 	AdminUserDTO getUserByParam(AdminUser adminUser);
 	
 	AdminUserDTO mengHuLogin(AdminUser adminUser);
+	
+	List<AdminUserDTO> getListByParamAndRole(AdminUser user,Integer roleId);//²éÑ¯Êý×é
 }

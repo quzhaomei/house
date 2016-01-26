@@ -11,8 +11,9 @@ import com.qicai.dto.admin.AdminUserDTO;
 public class StoreDTO {
 	private Integer storeId;
 	
-	private String balance;//余额
+	private Integer balance;//余额
 	private List<ZoneSetDTO> orderZones;//订单区域
+	private List<HouseTypeDTO> houseTypes;//订单房型
 	private AdminUserDTO keeper;//负责人
 	private ZoneSetDTO zone;//所属区域
 	private String logo;
@@ -41,6 +42,12 @@ public class StoreDTO {
 	private Date updateDate;
 	
 	
+	public List<HouseTypeDTO> getHouseTypes() {
+		return houseTypes;
+	}
+	public void setHouseTypes(List<HouseTypeDTO> houseTypes) {
+		this.houseTypes = houseTypes;
+	}
 	public AdminUserDTO getKeeper() {
 		return keeper;
 	}
@@ -71,10 +78,11 @@ public class StoreDTO {
 	public void setStoreId(Integer storeId) {
 		this.storeId = storeId;
 	}
-	public String getBalance() {
+	
+	public Integer getBalance() {
 		return balance;
 	}
-	public void setBalance(String balance) {
+	public void setBalance(Integer balance) {
 		this.balance = balance;
 	}
 	public String getLogo() {

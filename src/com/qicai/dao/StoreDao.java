@@ -19,4 +19,8 @@ public interface StoreDao {
 	void addStoreOrderZones(@Param(value="storeId")Integer storeId,
 			@Param(value="zoneIds")List<Integer> zoneIds);
 	void clearStoreOrderZones(@Param(value="storeId")Integer storeId);
+	
+	void addStoreOrderTypes(@Param(value="storeId")Integer storeId,
+			@Param(value="typeIds")List<Integer> zoneIds);
+	void clearStoreOrderTypes(@Param(value="storeId")Integer storeId);
 }

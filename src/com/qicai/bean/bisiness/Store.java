@@ -8,7 +8,7 @@ import java.util.Date;
 public class Store {
 	private Integer storeId;
 	
-	private String balance;//余额
+	private Integer balance;//余额
 	private Integer zoneId;//属于区域
 	private Integer keeperId;//负责人
 	private String logo;
@@ -66,10 +66,11 @@ public class Store {
 	public void setStoreId(Integer storeId) {
 		this.storeId = storeId;
 	}
-	public String getBalance() {
+	
+	public Integer getBalance() {
 		return balance;
 	}
-	public void setBalance(String balance) {
+	public void setBalance(Integer balance) {
 		this.balance = balance;
 	}
 	public Integer getZoneId() {
@@ -175,6 +176,11 @@ public class Store {
 	public void setSize(Integer size) {
 		this.size = size;
 	}
-	
+	public Store(Integer storeId) {
+		super();
+		this.storeId = storeId;
+	}
+	public Store() {
+	}
 	
 }

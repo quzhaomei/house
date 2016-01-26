@@ -12,7 +12,8 @@
 <c:import url="public/p-css.jsp"></c:import>
 <style type="text/css">
 .logo-pre{border:1px solid #888;width:100px;height:100px;
-position:absolute;right:150px;top:50px;}
+}
+.logo-pre img{width:100px;height:100px;}
 .controls .checkbox{margin-right:10px;}
 </style>
 </head>
@@ -34,13 +35,13 @@ position:absolute;right:150px;top:50px;}
 				<ul class="breadcrumb">
 					<li><i class="icon-home"></i> <a href="index.html">首页</a></li>
 				 	<li><i class="icon-angle-right"></i><a href="index.html">店铺列表 </a></li>
-				 	<li><i class="icon-angle-right"></i><a href="#">添加店铺</a></li>
+				 	<li><i class="icon-angle-right"></i><a href="#">更新店铺</a></li>
 				</ul>
 
 				<div class="row-fluid sortable">
 				<div class="box span12">
 					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon edit"></i><span class="break"></span>新增店铺</h2>
+						<h2><i class="halflings-icon edit"></i><span class="break"></span>更新店铺</h2>
 						<div class="box-icon">
 							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
 							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
@@ -48,21 +49,26 @@ position:absolute;right:150px;top:50px;}
 					</div>
 					<div class="box-content">
 						<form class="form-horizontal" action="#" method="post">
-						<div class="logo-pre" id="logo-pre"></div>
+							<input type="hidden" value="${store.storeId }" id="storeId"/>
 							<fieldset>
 							  <div class="control-group">
 								<label class="control-label" for="storeName">店铺名称</label>
 								<div class="controls">
 								  <div class="input-prepend">
-									<input id="storeName" maxlength="20" placeholder="请输入店铺名称" type="text">
+									<input id="storeName" maxlength="20" value="${store.storeName }" placeholder="请输入店铺名称" type="text">
 								  </div>
 								</div>
 							  </div>
 							    <div class="control-group">
-							  <label class="control-label" for="logo">店铺logo</label>
-							  <div class="controls" id="logo">
-								<input class="input-file uniform_on" name="imgFile" id="logo_file" type="file" accept="image/*">
-							  	<input type="hidden" id="logo_path"> 
+							  <label class="control-label">店铺logo</label>
+							  <div class="controls" id="logo" title="点击更换logo">
+								  <div class="logo-pre" id="logo-pre">
+								  <label for="logo_file">
+								  <img  src="${store.logo }"/>
+								  </label>
+								  </div>
+								<input class="input-file uniform_on" style="display:none;" name="imgFile" id="logo_file" type="file" accept="image/*">
+							  	<input type="hidden" id="logo_path" value="${store.logo }"> 
 							  </div>
 							</div>   
 							 
@@ -72,7 +78,7 @@ position:absolute;right:150px;top:50px;}
 								  <select id="zoneId" data-rel="chosen">
 									  <option value="0">请选择店铺区域</option>
 									<c:forEach items="${zones }" var="temp">
-										<option value="${temp.zoneId }">${temp.name }</option>
+										<option value="${temp.zoneId }" ${temp.zoneId==store.zone.zoneId?"selected='selected'":"" } >${temp.name }</option>
 									</c:forEach>
 								  </select>
 								</div>
@@ -82,9 +88,20 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label">接单区域</label>
 								
 								<div class="controls" id="orderZoneIds">
-								 
+								
+								 	<c:forEach items="${parentZones }" var="temp">
+										<label class="checkbox inline">
+										<input type="checkbox" name="orderZoneId"
+										<c:forEach items="${store.orderZones }" var="type">
+										 ${type.zoneId==temp.zoneId?"checked='checked'":"" } 
+									  </c:forEach>
+										 
+										 value="${temp.zoneId }"> ${temp.name }
+									  </label>
+									</c:forEach>
 								 
 								</div>
+								
 							  </div>
 							  
 							   <div class="control-group">
@@ -92,21 +109,27 @@ position:absolute;right:150px;top:50px;}
 								
 								<div class="controls" id="orderTypeIds">
 									<c:forEach items="${types }" var="temp">
-										 <label class="checkbox inline">
-										<input type="checkbox" name="typeId" value="${temp.typeId }"> ${temp.name }
+										<label class="checkbox inline">
+										<input type="checkbox" name="typeId"
+										<c:forEach items="${store.houseTypes }" var="type">
+										 ${type.typeId==temp.typeId?"checked='checked'":"" } 
+									  </c:forEach>
+										 
+										 value="${temp.typeId }"> ${temp.name }
 									  </label>
 									</c:forEach>
 								</div>
 							  </div>
 							  
+							  
 							   <div class="control-group">
 								<label class="control-label">接单开关</label>
 								<div class="controls">
 								  <label class="checkbox inline">
-									<input type="radio" name="ch" class="status" value="0" checked="checked"> 关
+									<input type="radio" name="ch" class="status" ${store.status==0?" checked='checked'":"" } value="0" > 关
 								  </label>
 								  <label class="checkbox inline">
-									<input type="radio" name="ch" class="status" value="1"> 开
+									<input type="radio" name="ch" class="status" ${store.status==1?" checked='checked'":"" } value="1"> 开
 								  </label>
 								</div>
 							  </div>
@@ -115,7 +138,7 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label" for="storePhone">店铺电话</label>
 								<div class="controls">
 								  <div class="input-prepend">
-									<input id="storePhone" maxlength="11"  type="text" placeholder="请输入店铺电话">
+									<input id="storePhone" maxlength="11"  value="${store.storePhone }" type="text" placeholder="请输入店铺电话">
 								  </div>
 								</div>
 							  </div>
@@ -127,7 +150,7 @@ position:absolute;right:150px;top:50px;}
 								  <select data-rel="chosen" id="keeperId">
 									<option value="0">请选择店铺负责人</option>
 									<c:forEach items="${keepers }" var="temp">
-										<option value="${temp.adminUserId }">${temp.nickname }</option>
+										<option value="${temp.adminUserId }" ${store.keeper.adminUserId==temp.adminUserId?"selected='selected'":"" }>${temp.nickname }</option>
 									</c:forEach>
 								  </select>
 								</div>
@@ -137,7 +160,7 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label" for="storeAddress">店铺详细地址</label>
 								<div class="controls">
 								  <div class="input-prepend">
-									<input id="storeAddress" maxlength="50" type="text" placeholder="请输入店铺详细地址">
+									<input id="storeAddress" maxlength="50" value="${store.storeAddress }" type="text" placeholder="请输入店铺详细地址">
 								  </div>
 								</div>
 							  </div>
@@ -147,7 +170,7 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label" for="size">订单控量</label>
 								<div class="controls">
 								  <div class="input-prepend input-append">
-									<input id="size" maxlength="10" placeholder="请输入店铺每月订单控量" type="text">
+									<input id="size" maxlength="10"  value="${store.size }" placeholder="请输入店铺每月订单控量" type="text">
 								  </div>
 								</div>
 							  </div>
@@ -156,7 +179,7 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label" for="companyName">公司名称</label>
 								<div class="controls">
 								  <div class="input-prepend input-append">
-									<input id="companyName" maxlength="20" placeholder="请输入公司名字" type="text">
+									<input id="companyName" maxlength="20" value="${store.companyName }" placeholder="请输入公司名字" type="text">
 								  </div>
 								</div>
 							  </div>
@@ -165,7 +188,7 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label" for="ruleUserName">法人姓名</label>
 								<div class="controls">
 								  <div class="input-prepend input-append">
-									<input id="ruleUserName" maxlength="10" placeholder="请输入公司法人姓名" type="text">
+									<input id="ruleUserName" maxlength="10" value="${store.ruleUserName }" placeholder="请输入公司法人姓名" type="text">
 								  </div>
 								</div>
 							  </div>
@@ -174,7 +197,7 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label" for="ruleUserPhone">法人电话</label>
 								<div class="controls">
 								  <div class="input-prepend input-append">
-									<input id="ruleUserPhone" maxlength="11" placeholder="请输入公司法人电话" type="text">
+									<input id="ruleUserPhone" maxlength="11" value="${store.ruleUserPhone }" placeholder="请输入公司法人电话" type="text">
 								  </div>
 								</div>
 							  </div>
@@ -183,7 +206,7 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label" for="callPhone">对接电话</label>
 								<div class="controls">
 								  <div class="input-prepend input-append">
-									<input id="callPhone" maxlength="11" placeholder="请输入对接电话" type="text">
+									<input id="callPhone" maxlength="11" value="${store.callPhone }" placeholder="请输入对接电话" type="text">
 								  </div>
 								</div>
 							  </div>
@@ -192,14 +215,14 @@ position:absolute;right:150px;top:50px;}
 								<label class="control-label" for="msgPhone">短信电话</label>
 								<div class="controls">
 								  <div class="input-prepend input-append">
-									<input id="msgPhone" maxlength="11" placeholder="请输入短信电话" type="text">
+									<input id="msgPhone" maxlength="11" value="${store.msgPhone }" placeholder="请输入短信电话" type="text">
 								  </div>
 								</div>
 							  </div>
 							  
 							  <div class="form-actions">
 								<button type="button" class="btn btn-primary btn-add-store">确认</button>
-								<button class="btn">取消</button>
+								<button class="btn btn-cancel">取消</button>
 							  </div>
 							</fieldset>
 						</form>
@@ -226,10 +249,10 @@ position:absolute;right:150px;top:50px;}
 	$(function(){
 		//添加店铺操作
 		$(".btn-add-store").on("click",function(){
+			var storeId=$("#storeId").val();
 			var storeName=$("#storeName").val();//店铺名字
 			var logo=$("#logo_path").val();//logo
 			var zoneId=$("#zoneId").val();//店铺所在区域
-			
 			var orderZoneIds=[];//接单区域
 			$("#orderZoneIds input[name='orderZoneId']:checked").each(function(){
 				orderZoneIds.push(this.value);
@@ -295,13 +318,13 @@ position:absolute;right:150px;top:50px;}
 				return;
 			}
 			var param={};
-			param.operator="add";
+			param.operator="update";
+			param.storeId=storeId;
 			param.storeName=storeName;
 			param.logo=logo;
 			param.zoneId=zoneId;
 			param.orderZoneIds=orderZoneIds;
 			param.orderTypeIds=orderTypeIds;
-			
 			param.status=status;
 			param.storePhone=storePhone;
 			param.keeperId=keeperId;
@@ -314,7 +337,7 @@ position:absolute;right:150px;top:50px;}
 			param.callPhone=callPhone;
 			
 			$(this).attr("disabled","disabled");
-			$.post("add.html",param,function(json){
+			$.post("update.html",param,function(json){
 				if(json.status==1){
 					layer.msg(json.message);
 					window.location.href="index.html";
@@ -335,11 +358,10 @@ position:absolute;right:150px;top:50px;}
 				var param={};
 				param.operator="findOrderZone";
 				param.zoneId=zoneId;
-				$.post("add.html",param,function(json){
+				$.post("update.html",param,function(json){
 					if(json){
 						$("#orderZoneIds").css("color","green");
 						$(json).each(function(){
-							
 								var $span=$("<span>").append(	$("<input>").attr("type","checkbox")
 										.attr("name","orderZoneId").val(this.zoneId));
 								
@@ -382,8 +404,8 @@ position:absolute;right:150px;top:50px;}
 							$("#logo-pre img").attr("src",data.url);
 						}else{
 							$("#logo-pre").append(
-									$("<img>").attr("src",data.url).
-									css({"width":"100px","height":"100px"})
+									$("<img>").attr("src",data.url)
+									
 							);
 						}
 						$("#logo_path").val(data.url);
@@ -393,6 +415,10 @@ position:absolute;right:150px;top:50px;}
 					alert(e);
 				}
 			});
+		});
+		
+		$(".btn-cancel").on("click",function(){
+			window.location.href="index.html";
 		});
 		
 	});

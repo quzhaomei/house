@@ -20,20 +20,29 @@ public class StoreServiceImpl implements StoreService {
 	private StoreDao storeDao;
 
 	@Override
-	public void save(Store store, List<Integer> zoneIds) {
+	public void save(Store store, List<Integer> zoneIds,List<Integer> typeIds) {
 		storeDao.save(store);
 		if(zoneIds!=null&&zoneIds.size()>=1){
 			storeDao.addStoreOrderZones(store.getStoreId(), zoneIds);
 		}
+		if(typeIds!=null&&typeIds.size()>=1){
+			storeDao.addStoreOrderTypes(store.getStoreId(), typeIds);
+		}
 	}
 
 	@Override
-	public void update(Store store, List<Integer> zoneIds) {
+	public void update(Store store, List<Integer> zoneIds,List<Integer> typeIds) {
 		storeDao.update(store);
 		if(zoneIds!=null){
 			storeDao.clearStoreOrderZones(store.getStoreId());
-			if(zoneIds.size()==0){
+			if(zoneIds.size()>0){
 				storeDao.addStoreOrderZones(store.getStoreId(), zoneIds);
+			}
+		}
+		if(typeIds!=null){
+			storeDao.clearStoreOrderTypes(store.getStoreId());
+			if(zoneIds.size()>0){
+				storeDao.addStoreOrderTypes(store.getStoreId(), typeIds);
 			}
 		}
 	}
@@ -54,7 +63,8 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public StoreDTO getByParam(Store store) {
-		return null;
+		
+		return storeDao.getByParam(store);
 	}
 
 	@Override

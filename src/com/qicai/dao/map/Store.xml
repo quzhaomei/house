@@ -8,6 +8,7 @@
 		<result property="logo" column="logo" />
 		<result property="storeName" column="storeName" />
 		<result property="storeAddress" column="storeAddress" />
+		<result property="storePhone" column="storePhone" />
 		<result property="callPhone" column="callPhone" />
 		<result property="msgPhone" column="msgPhone" />
 		<result property="size" column="size" />
@@ -41,8 +42,12 @@
 		</association>
 		
 		<collection property="orderZones" column="zoneId_o" ofType="com.qicai.dto.bisiness.ZoneSetDTO" >
-			<id property="roleId" column="zoneId_o" />
+			<id property="zoneId" column="zoneId_o" />
 			<result property="name" column="name_o" />
+		</collection>
+		<collection property="houseTypes" column="typeId" ofType="com.qicai.dto.bisiness.HouseTypeDTO" >
+			<id property="typeId" column="typeId" />
+			<result property="name" column="name_type" />
 		</collection>
 	</resultMap>
 	<insert id="save"  useGeneratedKeys="true" keyProperty="store.storeId">
@@ -69,11 +74,31 @@
 	<delete id="clearStoreOrderZones">
 		delete from store_to_zone where storeId=#{storeId}
 	</delete>
+	
+	<insert id="addStoreOrderTypes">
+		<selectKey keyProperty="id" order="AFTER"  resultType="java.lang.Integer">  
+        SELECT LAST_INSERT_ID()  
+ 		 </selectKey> 
+		  insert into store_to_type (storeId,typeId)   
+	    values  
+	    <foreach collection="typeIds"  item="typeId" index="index" separator="," >  
+	        (#{storeId},#{typeId})  
+	    </foreach> 
+	</insert>
+	<delete id="clearStoreOrderTypes">
+		delete from store_to_type where storeId=#{storeId}
+	</delete>
+	
 	<update id="update">
 		update store set storeId=#{store.storeId}
-		
+		<if test="store.balance!=null">
+			,balance=#{store.balance}
+		</if>
 		<if test="store.keeperId!=null">
 			,keeperId=#{store.keeperId}
+		</if>
+		<if test="store.logo!=null">
+			,logo=#{store.logo}
 		</if>
 		<if test="store.zoneId!=null">
 			,zoneId=#{store.zoneId}
@@ -100,7 +125,10 @@
 			,storeAddress=#{store.storeAddress}
 		</if>
 		<if test="store.storeName!=null">
-			,name=#{store.name}
+			,storeName=#{store.storeName}
+		</if>
+		<if test="store.storePhone!=null">
+			,storePhone=#{store.storePhone}
 		</if>
 		
 		<if test="store.status!=null">
@@ -116,7 +144,7 @@
 	</update>
 	<delete id="delete"></delete>
 	<select id="getListByParam" resultMap="storeDTO">
-		select s.storeName,s.createDate,s.status,s.balance,s.updateDate,
+		select s.storeId,s.storeName,s.createDate,s.status,s.balance,s.updateDate,
 		s.keeperId,au.nickname nickname_k,
 		zs.zoneId,zs.name
 		from store s 
@@ -147,6 +175,25 @@
 		
 	</select>
 	<select id="getByParam" resultMap="storeDTO">
+	select s.storeId,zs.zoneId,
+		zs.name,
+		zss.zoneId zoneId_o,zss.name name_o,
+		ht.typeId,ht.name name_type,
+		s.status,s.size,s.storeName,s.logo,s.keeperId,s.storePhone,au.nickname nickname_k,
+		s.storeAddress,s.callPhone,s.msgPhone,s.companyName,s.balance,
+		s.ruleUserName,s.ruleUserPhone
+		from store s 
+		left join zone_set zs on zs.zoneId=s.zoneId
+		left join store_to_zone zts on zts.storeId=s.storeId
+		left join zone_set zss on zss.zoneId=zts.zoneId
+		
+		left join store_to_type ztt on ztt.storeId=s.storeId
+		left join house_type ht on ht.typeId=ztt.typeId
+		left join admin_user au on au.adminUserId=s.keeperId
+		where 1=1 
+		<if test="store.storeId!=null">
+			and s.storeId=#{store.storeId}
+		</if>
 		
 	</select>
 	<select id="getCountByParam" resultType="int">
@@ -171,6 +218,7 @@
 		<if test="store.endDate!=null">
 			and s.createDate  &lt; '%${store.endDate}%'
 		</if>
+		
 	
 	</select>
 </mapper>  

@@ -38,16 +38,10 @@
 				<div class="box span12">
 					<div class="box-header" data-original-title>
 						<h2>
-								<i class="halflings-icon user"></i><span class="break"></span>店铺管理
+								<i class="halflings-icon user"></i><span class="break"></span>店铺充值管理
 							</h2>
 							<div class="box-icon">
 							
-							<ad:power uri="../store/add.html">
-								<a href="add.html?operator=toAdd" class="addHouse"><i
-									class="halflings-icon plus"></i>
-									 </a> 
-								</ad:power>
-									 
 									 <a href="#"
 									class="btn-minimize"><i class="halflings-icon chevron-up"></i>
 								</a> <a href="#" class="btn-close"><i
@@ -106,6 +100,7 @@
 								  <th width=15%>更新时间</th>
 								  <th width=8%>店铺状态</th>
 								  <th width=10%>负责人</th>
+								  <th width=10%>账户余额</th>
 								  <th width=20%>操作</th>
 							  </tr>
 						  </thead>   
@@ -134,19 +129,17 @@
 								<td>
 									${temp.keeper.nickname }
 								</td>
+								<td>
+									￥<fmt:formatNumber value="${temp.balance }" ></fmt:formatNumber>  
+								</td>
 								
 								<td class="center">
-									<ad:power uri="../store/update.html">
-									<a class="btn btn-info btn-mini editHouse" href="update.html?storeId=${temp.storeId }&&operator=findById">
-										<i class="halflings-icon white edit "></i>  修改
+									<ad:power uri="../balance/update.html">
+									<a class="btn btn-danger btn-mini editHouse" href="update.html?storeId=${temp.storeId }&&operator=findById">
+										<i class="halflings-icon white edit "></i>  账户充值
 									</a>
 									</ad:power>
 									
-									<ad:power uri="../store/status.html">
-									<a class="btn btn-danger btn-mini changeStatu" href="#" storeId="${temp.storeId }" status="${temp.status }" >
-										<i class="halflings-icon white refresh"></i> 切换状态
-									</a>
-									</ad:power>
 								</td>
 							</tr>
 						  </c:forEach>
@@ -171,42 +164,7 @@
 	<c:import url="public/p-footer.jsp"></c:import>
 	<c:import url="public/p-javascript.jsp"></c:import>
 	<script type="text/javascript">
-	var bak;
 	$(function(){
-		//删除
-		$(".changeStatu").click(function(){
-			var status=$(this).attr("status");
-			var storeId=$(this).attr("storeId");
-			var param={};
-			param.storeId=storeId;
-			param.operator="edit";
-			var tip="";
-			if(status=="0"){//激活
-				param.status="1";
-				tip="确认激活吗?";
-			}else if(status=="1"){//冻结
-				param.status="0";
-				tip="确认冻结吗";
-			}
-			layer.confirm(tip, {
-				title:"状态切换",
-			    btn: ["确定","返回"], //按钮
-			    shade: false //不显示遮罩
-			}, function(){
-				$.post("status.html",param,function(data){
-				if(data.status==1){
-					layer.msg(data.message,{ icon: 1,time: 1000 },function(){
-						window.location.reload();
-					});
-				}else{
-					layer.msg(data.message);
-				}
-			},"json");
-			
-			}, function(){
-				
-			});
-		});
 		
 		$(".btn-search").on("click",function(){
 			$("#pageIndex").val(1);

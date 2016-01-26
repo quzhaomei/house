@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 
 import com.qicai.dto.admin.AdminUserDTO;
 import com.qicai.service.AdminUserService;
+import com.qicai.service.BalanceHistoryService;
 import com.qicai.service.DesignApplyService;
 import com.qicai.service.HouseTypeService;
 import com.qicai.service.MenuManagerService;
@@ -83,4 +84,7 @@ public class BaseController {
 	
 	@Resource
 	protected StoreService storeService;//房型设置
+	
+	@Resource
+	protected BalanceHistoryService balanceHistoryService;//账户消费记录
 }

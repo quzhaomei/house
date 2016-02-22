@@ -10,7 +10,7 @@ import java.util.Date;
 public class BalanceHistory {
 	private String historyId;
 	private Integer storeId;//商户ID
-	private Integer type;//0-充值，1-消费
+	private Integer type;//0-充值，1-消费，2-赠送
 	private Integer value;//账户值
 	private Integer orderId;//订单ID；
 	private String message;//消费备注

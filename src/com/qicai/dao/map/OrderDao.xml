@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qicai.dao.OrderDao">
+	<cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true" />
+	<resultMap type="com.qicai.dto.bisiness.OrderDTO" id="orderDTO">
+		<id property="orderId" column="orderId" />
+		<result property="type" column="type" />
+		<result property="status" column="status" />
+		<result property="createDate" column="createDate" />
+		<result property="operatorLog" column="operatorLog" />
+
+		<result property="zonename" column="zonename" />
+		<result property="typename" column="typename" />
+		<result property="value" column="value" />
+
+		<association property="require" javaType="com.qicai.dto.bisiness.RequireDTO"
+			column="requiredId">
+			<id property="requiredId" column="requiredId" />
+			<result property="username" column="username" />
+			<result property="userphone" column="userphone" />
+			<result property="houseLocation" column="houseLocation" />
+			<result property="createDate" column="createDate_r" />
+			
+		</association>
+		<association property="store" javaType="com.qicai.dto.bisiness.StoreDTO"
+			column="storeId">
+			<id property="storeId" column="storeId" />
+			<id property="storeName" column="storeName" />
+		</association>
+		<association property="createUser" javaType="com.qicai.dto.admin.AdminUserDTO"
+			column="adminUserId">
+			<id property="adminUserId" column="adminUserId" />
+			<id property="nickname" column="nickname" />
+		</association>
+	</resultMap>
+
+	<insert id="save" useGeneratedKeys="true" keyProperty="order.orderId">
+		INSERT
+		INTO `order`
+		(`orderId`, `storeId`, `requiredId`, `type`,
+		`status`,
+		`createDate`, `createUserId`, `operatorLog`)
+		VALUES
+		(#{order.orderId},#{order.storeId},#{order.requiredId},#{order.type},
+		#{order.status},#{order.createDate},#{order.createUserId},#{order.operatorLog})
+	</insert>
+
+	<update id="update">
+		update `order` set orderId=#{order.orderId}
+		<if test="order.status!=null">
+			, status=#{order.status}
+		</if>
+		<if test="order.operatorLog!=null">
+			, operatorLog=#{order.operatorLog}
+		</if>
+		where orderId=#{order.orderId}
+	</update>
+
+	<select id="getByParam" resultMap="orderDTO">
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
+		s.storeName,r.requiredId,au.adminUserId,au.nickname
+		from `order` o
+		left
+		join store s on s.storeId=o.storeId
+		left join `require` r on
+		r.requiredId=o.requiredId
+		left join admin_user au on
+		au.adminUserId=o.createUserId
+		where 1=1
+		<if test="order.orderId!=null">
+			and o.orderId=#{order.orderId}
+		</if>
+		<if test="order.type!=null">
+			and o.type=#{order.type}
+		</if>
+		<if test="order.status!=null">
+			and o.status=#{order.status}
+		</if>
+		<if test="order.storeId!=null">
+			and o.storeId=#{order.storeId}
+		</if>
+		<if test="order.requiredId!=null">
+			and o.requiredId=#{order.requiredId}
+		</if>
+
+	</select>
+
+	<select id="getByKeeperId" resultMap="orderDTO">
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
+		s.storeName,r.requiredId,au.adminUserId,au.nickname,
+		ht.name
+		typename,zs.name zonename,ht.price value
+
+		from `order` o
+		left join store s on s.storeId=o.storeId
+		left join `require`
+		r on r.requiredId=o.requiredId
+		left join admin_user au on
+		au.adminUserId=o.createUserId
+		left join zone_set zs on
+		zs.zoneId=r.zoneId
+		left join house_type ht on ht.typeId=r.houseTypeId
+		where 1=1
+		<if test="keeperId!=null">
+			and s.keeperId=#{keeperId}
+		</if>
+		<if test="order.orderId!=null">
+			and o.orderId=#{order.orderId}
+		</if>
+		<if test="order.type!=null">
+			and o.type=#{order.type}
+		</if>
+		<if test="order.status!=null">
+			and o.status=#{order.status}
+		</if>
+		<if test="order.storeId!=null">
+			and o.storeId=#{order.storeId}
+		</if>
+		<if test="order.requiredId!=null">
+			and o.requiredId=#{order.requiredId}
+		</if>
+	</select>
+	
+	<select id="list" resultMap="orderDTO">
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
+		s.storeName,r.requiredId,
+		r.userphone,r.username,
+		r.houseLocation,r.createDate createDate_r,
+		au.adminUserId,au.nickname,
+		ht.name typename,zs.name zonename,ht.price value
+		from `order` o
+		left join store
+		s on s.storeId=o.storeId
+		left join `require` r on
+		r.requiredId=o.requiredId
+		left join admin_user au on
+		au.adminUserId=o.createUserId
+		left join zone_set zs on
+		zs.zoneId=r.zoneId
+		left join house_type ht on ht.typeId=r.houseTypeId
+		where 1=1
+		<if test="order.username!=null">
+			and au.nickname like '%${order.username}%'
+		</if>
+		<if test="order.storeName!=null">
+			and s.storeName like '%${order.storeName}%'
+		</if>
+		<if test="order.startDate!=null">
+			and o.createDate &gt; #{order.startDate}
+		</if>
+		<if test="order.endDate!=null">
+			and o.createDate &lt; #{order.endDate}
+		</if>
+		<if test="order.orderId!=null">
+			and o.orderId=#{order.orderId}
+		</if>
+		<if test="order.type!=null">
+			and o.type=#{order.type}
+		</if>
+		<if test="order.status!=null">
+			and o.status=#{order.status}
+		</if>
+		<if test="order.storeId!=null">
+			and o.storeId=#{order.storeId}
+		</if>
+		<if test="order.requiredId!=null">
+			and o.requiredId=#{order.requiredId}
+		</if>
+		order by o.createDate asc
+	</select>
+	
+	<select id="getListByParam" resultMap="orderDTO">
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
+		s.storeName,r.requiredId,au.adminUserId,au.nickname,
+		ht.name
+		typename,zs.name zonename,ht.price value
+		from `order` o
+		left join store
+		s on s.storeId=o.storeId
+		left join `require` r on
+		r.requiredId=o.requiredId
+		left join admin_user au on
+		au.adminUserId=o.createUserId
+		left join zone_set zs on
+		zs.zoneId=r.zoneId
+		left join house_type ht on ht.typeId=r.houseTypeId
+		where 1=1
+		<if test="page.param.username!=null">
+			and au.nickname like '%${page.param.username}%'
+		</if>
+		<if test="page.param.storeName!=null">
+			and s.storeName like '%${page.param.storeName}%'
+		</if>
+		<if test="page.param.startDate!=null">
+			and o.createDate &gt; #{page.param.startDate}
+		</if>
+		<if test="page.param.endDate!=null">
+			and o.createDate &lt; #{page.param.endDate}
+		</if>
+		<if test="page.param.orderId!=null">
+			and o.orderId=#{page.param.orderId}
+		</if>
+		<if test="page.param.type!=null">
+			and o.type=#{page.param.type}
+		</if>
+		<if test="page.param.status!=null">
+			and o.status=#{page.param.status}
+		</if>
+		<if test="page.param.storeId!=null">
+			and o.storeId=#{page.param.storeId}
+		</if>
+		<if test="page.param.requiredId!=null">
+			and o.requiredId=#{page.param.requiredId}
+		</if>
+		order by o.createDate desc
+		limit
+		${page.pageSize*(page.pageIndex-1)},${page.pageSize}
+	</select>
+	<select id="getCountByParam" resultType="int">
+		select count(*)
+		from `order` o
+		left join store s on s.storeId=o.storeId
+		left join `require` r on r.requiredId=o.requiredId
+		left join admin_user
+		au on au.adminUserId=o.createUserId
+		where 1=1
+		<if test="order.username!=null">
+			and au.nickname like '%${order.username}%'
+		</if>
+		<if test="order.storeName!=null">
+			and s.storeName like '%${order.storeName}%'
+		</if>
+		<if test="order.startDate!=null">
+			and o.createDate &gt; #{order.startDate}
+		</if>
+		<if test="order.endDate!=null">
+			and o.createDate &lt; #{order.endDate}
+		</if>
+		<if test="order.orderId!=null">
+			and o.orderId=#{order.orderId}
+		</if>
+		<if test="order.type!=null">
+			and o.type=#{order.type}
+		</if>
+		<if test="order.status!=null">
+			and o.status=#{order.status}
+		</if>
+		<if test="order.storeId!=null">
+			and o.storeId=#{order.storeId}
+		</if>
+		<if test="order.requiredId!=null">
+			and o.requiredId=#{order.requiredId}
+		</if>
+		
+
+	</select>
+
+	<select id="getListByKeeperId" resultMap="orderDTO">
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
+		s.storeName,r.requiredId,au.adminUserId,au.nickname,
+		ht.name
+		typename,zs.name zonename,ht.price value
+
+		from `order` o
+		left join store s on s.storeId=o.storeId
+		left join `require`
+		r on r.requiredId=o.requiredId
+		left join admin_user au on
+		au.adminUserId=o.createUserId
+		left join zone_set zs on
+		zs.zoneId=r.zoneId
+		left join house_type ht on ht.typeId=r.houseTypeId
+		where 1=1
+		<if test="keeperId!=null">
+			and s.keeperId=#{keeperId}
+		</if>
+		<if test="page.param.orderId!=null">
+			and o.orderId=#{page.param.orderId}
+		</if>
+		<if test="page.param.type!=null">
+			and o.type=#{page.param.type}
+		</if>
+		<if test="page.param.status!=null">
+			and o.status=#{page.param.status}
+		</if>
+		<if test="page.param.storeId!=null">
+			and o.storeId=#{page.param.storeId}
+		</if>
+		<if test="page.param.requiredId!=null">
+			and o.requiredId=#{page.param.requiredId}
+		</if>
+		<if test="page.param.startDate!=null">
+			and o.createDate &gt; #{page.param.startDate}
+		</if>
+		<if test="page.param.endDate!=null">
+			and o.createDate &lt; #{page.param.endDate}
+		</if>
+		order by o.createDate desc
+		limit
+		${page.pageSize*(page.pageIndex-1)},${page.pageSize}
+	</select>
+	<select id="getCountByKeeperId" resultType="int">
+		select count(*)
+		from `order` o
+		left join store s on s.storeId=o.storeId
+		left join `require` r on r.requiredId=o.requiredId
+		left join admin_user
+		au on au.adminUserId=o.createUserId
+		where 1=1
+		<if test="keeperId!=null">
+			and s.keeperId=#{keeperId}
+		</if>
+		<if test="order.orderId!=null">
+			and o.orderId=#{order.orderId}
+		</if>
+		<if test="order.type!=null">
+			and o.type=#{order.type}
+		</if>
+		<if test="order.status!=null">
+			and o.status=#{order.status}
+		</if>
+		<if test="order.storeId!=null">
+			and o.storeId=#{order.storeId}
+		</if>
+		<if test="order.requiredId!=null">
+			and o.requiredId=#{order.requiredId}
+		</if>
+		<if test="order.startDate!=null">
+			and o.createDate &gt; #{order.startDate}
+		</if>
+		<if test="order.endDate!=null">
+			and o.createDate &lt; #{order.endDate}
+		</if>
+
+	</select>
+</mapper>  

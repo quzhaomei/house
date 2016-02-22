@@ -35,6 +35,13 @@
 		</collection>
 	</resultMap>
 	
+	<resultMap type="com.qicai.dto.bisiness.ServiceUserDTO" id="serviceDTO">
+		<id property="userId" column="userId" />
+		<result property="userphone" column="userphone"/>
+		<result property="lastDate" column="lastDate"/>
+		<result property="monthCount" column="monthCount"/>
+		<result property="totalCount" column="totalCount"/>
+	</resultMap>
 	<insert id="save" useGeneratedKeys="true" keyProperty="user.adminUserId">
 		insert into admin_user
 		(adminUserId,loginname,type,orinal,position,password,nickname,phone,email,description,createDate,createUserId,status)
@@ -173,5 +180,33 @@
 			<if test="user.type!=null">
 				and type=#{user.type}
 			</if>
+	</select>
+	<select id="getServiceByParam" resultMap="serviceDTO">
+		SELECT au.nickname,au.adminUserId userId,au.phone userphone,
+		(select max(serviceDate) from `require` r where r.serviceUserId=au.adminUserId ) lastDate,
+		(select count(*) from `require` r where r.serviceUserId=au.adminUserId ) totalCount,
+		(select count(*) from `require` r where r.serviceUserId=au.adminUserId and r.serviceDate>
+		(select DATE_ADD(curdate(),interval -day(curdate())+1 day)) ) monthCount
+		FROM admin_user au left join user_to_role utr on utr.userId=au.adminUserId
+		where utr.roleId=#{roleId} 
+		<if test="page.param.nickname!=null">
+			and au.nickname like '%${page.param.nickname}%'
+		</if>
+		<if test="page.param.phone!=null">
+			and au.phone like '${page.param.phone}%'
+		</if>
+		order by monthCount desc
+		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
+	</select>
+	<select id="getServiceCount" resultType="int">
+		SELECT count(*)
+		from admin_user au left join user_to_role utr on utr.userId=au.adminUserId 
+		where utr.roleId=#{roleId} 
+		<if test="user.nickname!=null">
+			and au.nickname like '%${user.nickname}%'
+		</if>
+		<if test="user.phone!=null">
+			and au.phone like '${user.phone}%'
+		</if>
 	</select>
 </mapper>  

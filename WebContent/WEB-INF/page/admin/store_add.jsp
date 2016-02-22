@@ -199,7 +199,7 @@ position:absolute;right:150px;top:50px;}
 							  
 							  <div class="form-actions">
 								<button type="button" class="btn btn-primary btn-add-store">确认</button>
-								<button class="btn">取消</button>
+								<button type="button" onclick="history.go(-1)" class="btn">取消</button>
 							  </div>
 							</fieldset>
 						</form>

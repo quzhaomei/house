@@ -6,25 +6,178 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>量房申请</title>
+	<title>量房信息确认</title>
      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
      <link rel="apple-touch-icon" href="apple-touch-icon.png">
-     <link rel="stylesheet" href="../mini_2/css/fonts.css">
-     <link rel="stylesheet" href="../mini_2/css/flaticon.css">
-     <link rel="stylesheet" href="../mini_2/css/main.css">
+     <link rel="stylesheet" href="css/fonts.css">
+     <link rel="stylesheet" href="css/flaticon.css">
+     <link rel="stylesheet" href="css/main.css">
+      <link rel="stylesheet" href="js/jquery-ui.css">
+      <style>
+      .ui-datepicker-title select{display:inline-block;}
+      </style>
+      
 </head>
-<body class="bg_white with_bottombar" id="apply">
+<body class="bg_white with_bottombar measure" id="apply">
 	
 		<header>
-			<img src="../mini_2/images/measure/head.jpg">
+			<img src="images/measure/head.jpg">
 		</header>
-		<div class="feature row">
-			<div class="col-4"><i class="flaticon-businessman bg_green"><span class="free">免费</span></i><span>上门量房</span></div>
-			<div class="col-4"><i class="flaticon-draft bg_red"><span class="free">免费</span></i><span>家装设计</span></div>
-			<div class="col-4"><i class="flaticon-comments bg_orange"></i><span>在线咨询</span></div>
+	
+
+	
+		<div class="formarea pad_narrow apply withicon">
+			<fieldset class="b_info">
+			<c:choose>
+				<c:when test="${require.status==1||equire.status==2 }">
+					<h1>
+					请核对您的量房信息
+					<div class="notice">
+					确认无误后请您点击“确认提交”，如信息有误，您可以在此修改后再确认，我们会更新您的信息，并在最短时间内为您安排上门量房。
+					</div>
+					</h1>
+				</c:when>
+				<c:when test="${require.status==3 }">
+					<h1>
+					信息正在审核中…
+					<div class="notice">
+					您修改的信息，正由后台人员审核中！
+					</div>
+					</h1>
+				</c:when>
+				<c:when test="${require.status>=4 }">
+					<h1>
+					确认成功！
+					<div class="notice">
+					您的需求预约已经确认成功！请等待工作人员派单。
+					</div>
+					</h1>
+				</c:when>
+			</c:choose>
+			
+			
+			
+
+			<div class="form_row">
+				<i class="icon-user"></i>
+				<input type="text" maxlength="20" readonly="readonly"  data-rel="username" name="name" placeholder="${require.username }" bak="${require.username }">
+			</div>
+		
+			
+			<div class="form_row">
+				<i class="icon-iphone"></i>
+				<input type="text" maxlength="11" readonly="readonly" data-rel="userphone" name="tel" placeholder="${require.userphone }" bak="${require.userphone }">
+			</div>
+
+			
+			<div class="form_row" >
+				<i class="icon-box"></i>
+				<input type="text" name="estate" placeholder="${require.houseInfo }"  data-rel="houseInfo" bak="${require.houseInfo }">
+			</div>
+
+			<div class="form_row">
+				<i class="icon-map"></i>
+				<select name="city" id="city">
+					<c:forEach items="${zones }" var="zone">
+						<option value="${zone.zoneId }" ${parentId==zone.zoneId?"selected='selected'":"" }>${zone.name }</option>
+					</c:forEach>
+				</select>
+				<select name="area" id="area" data-rel="zoneId" bak="${require.zone.zoneId }"  >
+					<c:forEach items="${children }" var="temp">
+						<option value="${temp.zoneId }" ${require.zone.zoneId==temp.zoneId?"selected='selected'":"" }>${temp.name }</option>
+					</c:forEach>
+				</select>
+			</div>
+
+			
+
+
+			<div class="form_row">
+				<input type="text" name="address"  data-rel="houseLocation" id="address" placeholder="${require.houseLocation }" bak="${require.houseLocation }">
+			</div>
+
+			<div class="form_row">
+				<i class="icon-box"></i>
+				<select name="type" id="type" data-rel="type" bak="${require.houseType.typeId }">
+				<c:forEach items="${types }" var="type">
+					<option value="${type.typeId }" ${type.typeId==require.houseType.typeId?
+					"selected='selected'":"" }>${type.name }</option>
+				</c:forEach>
+				</select>
+
+			</div>
+
+			<div class="form_row">
+				<i class="icon-box"></i>
+				<input type="text" name="square" data-rel="houseDes" placeholder="${require.houseDes }" bak="${require.houseDes }">
+			</div>
+
+			<div class="form_row">
+				<i class="icon-box"></i>
+				<select name="status" id="status" data-rel="isNew" bak="${require.isNew }">
+				<option value="0" ${require.isNew==0?"selected='selected'":"" }>现房</option>
+				<option value="1" ${require.isNew==1?"selected='selected'":"" }>期房</option>
+				</select>
+
+			</div>
+
+			<div class="form_row">
+				<i class="icon-box"></i>
+				<input type="text" name="square" data-rel="budget" id="budget" placeholder="${require.budget }" bak="${require.budget }">
+			</div>
+
+			<div class="form_row">
+				<i class="icon-box"></i>
+				<select name="housetime" id="housetime" data-rel="isReady" bak="${require.isReady }">
+				<option value="1" ${require.isReady==1?"selected='selected'":"" }>已拿房</option>
+				<option value="0" ${require.isReady==0?"selected='selected'":"" }>未拿房</option>
+				</select>
+			</div>
+
+			<div class="form_row" id="readyTime" style="${require.isReady==1?"display:none;":""}">
+				<i class="icon-box"></i>
+				
+				<input type="text" name="square" data-rel="readyDate" bak="<fmt:formatDate value="${require.readyDate }" pattern="yyyy-MM-dd"/>" class="datepicker" value="<fmt:formatDate value="${require.readyDate }" pattern="yyyy-MM-dd"/>" >
+			</div>
+
+
+			<div class="form_row">
+			<p>电话预约时间:</p>
+				<textarea name="calltime" id="calltime" data-rel="phoneTimeBak" bak="${fn:escapeXml(require.phoneTime) }"
+				rows="3">${require.phoneTime }</textarea>
+			</div>
+			
+			<div class="form_row">
+			<p>量房时间:</p>
+				<textarea name="calltime" id="calltime" data-rel="designTime" bak="${fn:escapeXml(require.designTime) }"
+				rows="3">${require.designTime }</textarea>
+			</div>
+
+			<div class="form_row">
+			<p>其他留言:</p>
+				<textarea name="comments" id="comments" data-rel="customerTips" bak="${fn:escapeXml(require.customerTips) }"
+				rows="7">${require.customerTips }</textarea>
+			</div>
+
+			</fieldset>
+
+
+		
+			
+
+				
+				<div class="notice">我们承诺：凯特猫家装提供该项免费服务，绝不产生任何费用，为了您的利益和我们的口碑，您的隐私我们将严格保密。</div>
+				
+		<c:if test="${require.status<4 }">
+			<div class="bottombar bg_red">
+				 <button type="button" id="sendResult" class="bttn_full">确认并提交量房信息</button>
+			</div>
+		</c:if>
 		</div>
 
-		<div class="brandlist pad_10">
+
+
+			<div class="brandlist pad_10">
 			<fieldset class="b_info">
 
 			<h1>
@@ -35,142 +188,104 @@
 			</span>
 			</h1>
 			<div class="contents row">
-					<div class="col-3"> <img src="../mini_2/images/measure/01.jpg"> </div>
-					<div class="col-3"><img src="../mini_2/images/measure/02.jpg"></div>
-					<div class="col-3"><img src="../mini_2/images/measure/03.jpg"></div>
-					<div class="col-3"><img src="../mini_2/images/measure/04.jpg"></div>
-					<div class="col-3"><img src="../mini_2/images/measure/05.jpg"></div>
-					<div class="col-3"><img src="../mini_2/images/measure/06.jpg"></div>
-					<div class="col-3"><img src="../mini_2/images/measure/07.jpg"></div>
+					<div class="col-3"> <img src="images/measure/01.jpg"> </div>
+					<div class="col-3"><img src="images/measure/02.jpg"></div>
+					<div class="col-3"><img src="images/measure/03.jpg"></div>
+					<div class="col-3"><img src="images/measure/04.jpg"></div>
+					<div class="col-3"><img src="images/measure/05.jpg"></div>
+					<div class="col-3"><img src="images/measure/06.jpg"></div>
+					<div class="col-3"><img src="images/measure/07.jpg"></div>
 			</div>
 			</fieldset>
 		</div>
-		
-		
-		<div class="formarea pad_narrow apply withicon">
-			<fieldset class="b_info">
-			<h1>
-			免费家装设计申请
-			<span class="eng">
-				我们已为<strong>100000</strong>名用户提供服务
+
+
+
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
  
-			</span>
-			</h1>
-			
-
-			<div class="form_row">
-				<i class="icon-user"></i>
-				<input type="text" name="name" id="username" maxlength="10" placeholder="姓名">
-			</div>
-		
-			
-			<div class="form_row">
-				<i class="icon-iphone"></i>
-				<input type="text" name="tel" id="phone" maxlength="11" placeholder="请输入手机">
-			</div>
-
-				<div class="form_row">
-				<i class="icon-map"></i>
-				<select name="area" id="location">
-				<option value="-1">您的所在区域</option>
-				<option value="上海">上海</option>
-				<option value="北京">北京</option>
-				<option value="深圳">深圳</option>
-				<option value="广州4">广州</option>
-				</select>
-
-			</div>
-
-			<div class="form_row">
-				<i class="icon-box"></i>
-				<select name="square" id="size">
-				<option value="-1">家居面积</option>
-				<option value="一房二房">一房二房</option>
-				<option value="三房四房">三房四房</option>
-				<option value="复式别墅">复式别墅</option>
-				</select>
-
-			</div>
-
-
-			
-			</fieldset>
-
-
-		
-			
-
+<script type="text/javascript">
+$(function(){
+	$("#city").on("change",function(){
+		var parentId=$(this).val();
+		var param={};
+		param.parentId=parentId;
+		$.post("findZones.html",param,function(json){
+			if(json.status==1){
+				$("#area").empty();
 				
-				<div class="notice">我们承诺：凯特猫家装提供该项免费服务，绝不产生任何费用，为了您的利益和我们的口碑，您的隐私我们将严格保密。</div>
-				
-
-			<div class="bottombar bg_red">
-				 <button type="button" class="bttn_full" id="sub-btn">预约免费设计 领取礼包</button>
-			</div>
-
-		</div>
-
-
-		
-			
-	
-
-
-	<!-- <div id="navicon">
-		
-	</div> -->
-
-	<!-- <div id="navmenu" class="olay_dark">
-		
-	</div> -->
-	
-
-
-
-<script src="../mini_2/js/jquery.min.js"></script>
-<script src="../mini_2/js/main.js"></script>
-<script>
-	$(document).ready(function() {
-		$("#sub-btn").on("click",function(){
-			var username=$("#username").val();
-			var phone=$("#phone").val();
-			var location=$("#location").val();
-			var size=$("#size").val();
-			if(!username){
-				alert("请输入您的姓名！");
-				return;
-			}else if(!phone){
-				alert("请输入您的手机号码！");
-				return;
-			}else if(!/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(phone)){
-				alert("请输入正确的手机号码");
-				return;
-			}else if(location=="-1"){
-				alert("请选择您所在的区域！");
-				return;
-			}else if(size=="-1"){
-				alert("请选择您的家居面积")
-				return;
+				$(json.data).each(function(){
+					$("#area").append(new Option(this.name,this.zoneId));
+				});
 			}
-			var _this=this;
-			$(_this).attr("disabled","disabled");
+			
+		},"json");
+	});
+	
+	$("#housetime").on("change",function(){
+		var isReady=$(this).val();
+		if(isReady==1){
+			$("#readyTime").hide();
+		}else{
+			$("#readyTime").show();
+		}
+	});
+	
+	 $.datepicker.regional['zh-CN'] ={
+			 clearText: '清除', clearStatus: '清除已选日期',  
+			 closeText: '关闭', closeStatus: '不改变当前选择',  
+			 prevText: '<上月', prevStatus: '显示上月',  
+			 nextText: '下月>', nextStatus: '显示下月',  
+			 currentText: '今天', currentStatus: '显示本月',  
+			 monthNames: ['一月','二月','三月','四月','五月','六月',  
+			 '七月','八月','九月','十月','十一月','十二月'],  
+			 monthNamesShort: ['一','二','三','四','五','六',  
+			 '七','八','九','十','十一','十二'],  
+			 monthStatus: '选择月份', yearStatus: '选择年份',  
+			 weekHeader: '周', weekStatus: '年内周次',  
+			 dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],  
+			 dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],  
+			 dayNamesMin: ['日','一','二','三','四','五','六'],  
+			 dayStatus: '设置 DD 为一周起始', dateStatus: '选择 m月 d日, DD',  
+			 dateFormat: 'yy-mm-dd', firstDay: 1,  
+			 initStatus: '请选择日期', isRTL: false  }
+		 $.datepicker.setDefaults($.datepicker.regional['zh-CN']);  
+
+		$('.datepicker').datepicker({changeYear:true,changeMonth:true});
+		
+		
+	$("#sendResult").on("click",function(){
 			var param={};
-			param.username=username;
-			param.phone=phone;
-			param.location=location;
-			param.size=size;
-			$.post("saveDesignApply.html",param,function(json){
-				$(_this).removeAttr("disabled","disabled");
-				if(json.status==0){
-					alert(json.message);
-				}else if(json.status==1){
-					alert(json.message);
+		$("[data-rel]").each(function(){
+			param.operator="change";//代表改变了
+			param.userphone="${userphone}";
+			param.requiredId="${requiredId}";
+			param.sign="${sign}";
+			
+			var name=$(this).attr("data-rel");
+			var value=$(this).val();
+			var bak=$(this).attr("bak");
+			if(value&&value!=bak){
+				param[name]=value;
+			}
+		});
+		var budget=$("#budget").val();
+		if(budget&&!budget.match(/^\d+$/)){
+			alert("量房预算请输入一个整数金额!");
+			return;
+		}
+		if(confirm("是否确认提交？")){
+			$.post("requireUpdate.html",param,function(data){
+				if(data.status==1){
+					alert("确认成功！");
 					window.location.reload();
+				}else{
+					alert(data.message);
 				}
 			},"json");
-		});
-
-	});
+		}
+	})
+});
 </script>
 </body>
 </html>

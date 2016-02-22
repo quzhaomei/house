@@ -45,4 +45,9 @@ public class HouseTypeServiceImpl implements HouseTypeService{
 	public List<HouseTypeDTO> getAllHouseType() {
 		return houseTypeDao.getListByParam(new HouseType());
 	}
+
+	@Override
+	public List<HouseTypeDTO> getListByParam(HouseType type) {
+		return houseTypeDao.getListByParam(type);
+	}
 }

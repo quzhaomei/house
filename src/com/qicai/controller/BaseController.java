@@ -11,6 +11,8 @@ import com.qicai.service.BalanceHistoryService;
 import com.qicai.service.DesignApplyService;
 import com.qicai.service.HouseTypeService;
 import com.qicai.service.MenuManagerService;
+import com.qicai.service.OrderService;
+import com.qicai.service.RequireService;
 import com.qicai.service.RoleManagerService;
 import com.qicai.service.RoleToMenusService;
 import com.qicai.service.StoreService;
@@ -52,6 +54,7 @@ public class BaseController {
 	public static final String  AJAX="ajax";//ajax访问。
 	
 	public static final Integer  KEEPER_ROLE_ID=3;//商户负责人ID
+	public static final Integer  SERVICE_ROLE_ID=6;//业务员ID
 	/**工具方法,获取当前登陆的管理员信息**/
 	protected AdminUserDTO getLoginAdminUser(HttpServletRequest request){
 		return (AdminUserDTO) request.getSession().getAttribute(ADMIN_USER_SESSION);
@@ -87,4 +90,10 @@ public class BaseController {
 	
 	@Resource
 	protected BalanceHistoryService balanceHistoryService;//账户消费记录
+	
+	@Resource
+	protected RequireService requireService;//需求预约
+	
+	@Resource
+	protected OrderService orderService;//订单预约
 }

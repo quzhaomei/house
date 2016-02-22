@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.qicai.bean.admin.AdminUser;
 import com.qicai.dto.PageDTO;
 import com.qicai.dto.admin.AdminUserDTO;
+import com.qicai.dto.bisiness.ServiceUserDTO;
 
 /**
  *
@@ -25,4 +26,8 @@ public interface AdminUserDao {
 	
 	List<AdminUserDTO> getListByParamAndRole(@Param("user")AdminUser user,
 			@Param("roleId")Integer roleId);//查询数组
+	
+	//分页获取所有业务员
+	List<ServiceUserDTO> getServiceByParam(@Param(value="page")PageDTO<AdminUser> page,@Param(value="roleId")Integer roleId);//查询数组
+	int getServiceCount(@Param(value="user")AdminUser user,@Param(value="roleId")Integer roleId);
 }

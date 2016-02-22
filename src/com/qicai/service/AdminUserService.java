@@ -5,6 +5,7 @@ import java.util.List;
 import com.qicai.bean.admin.AdminUser;
 import com.qicai.dto.PageDTO;
 import com.qicai.dto.admin.AdminUserDTO;
+import com.qicai.dto.bisiness.ServiceUserDTO;
 
 public interface AdminUserService extends BaseService<AdminUser, AdminUserDTO> {
 	void saveUserAndRole(AdminUser user,List<Integer> roleIds) throws Exception;
@@ -18,4 +19,6 @@ public interface AdminUserService extends BaseService<AdminUser, AdminUserDTO> {
 	AdminUserDTO mengHuLogin(AdminUser adminUser);
 	
 	List<AdminUserDTO> getListByParamAndRole(AdminUser user,Integer roleId);//²éÑ¯Êý×é
+	
+	PageDTO<List<ServiceUserDTO>> getServiceByParam(PageDTO<AdminUser> page,Integer roleId);
 }

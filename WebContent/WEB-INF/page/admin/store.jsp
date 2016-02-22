@@ -66,7 +66,7 @@
 								<option value="-1">所有</option>
 								<c:forEach items="${zones }" var="temp">
 									<option value="${temp.zoneId }"
-									 ${params.zoneId==temp.zoneId?"selected='selected'":"" }>${temp.name }</option>
+									 ${param.zoneId==temp.zoneId?"selected='selected'":"" }>${temp.name }</option>
 								</c:forEach>
 							</select>
 							 </td>
@@ -74,20 +74,20 @@
 							<td width="40%;">
 								<select rel="chosen" name="status">
 								<option value="-1">全部</option>
-								<option value="0" ${params.status==0?"selected='selected'":"" }>暂停</option>
-								<option value="1" ${params.status==1?"selected='selected'":"" }>接单</option>
+								<option value="0" ${param.status==0?"selected='selected'":"" }>暂停</option>
+								<option value="1" ${param.status==1?"selected='selected'":"" }>接单</option>
 							</select>
 							</td>
 						</tr>
 						<tr>
-							<td>店铺名称</td><td><input type="text" value="${params.storeName }" name="storeName" maxlength="20" placeholder="请输入店铺名称"/></td>
-							<td>负责人</td><td><input type="text" value="${params.keeperName }" name="keeperName" maxlength="20" placeholder="请输入店铺负责人"/></td>
+							<td>店铺名称</td><td><input type="text" value="${param.storeName }" name="storeName" maxlength="20" placeholder="请输入店铺名称"/></td>
+							<td>负责人</td><td><input type="text" value="${param.keeperName }" name="keeperName" maxlength="20" placeholder="请输入店铺负责人"/></td>
 						</tr>
 						<tr>
 							<td>开店时间</td><td>
-							<input type="text" name="startDate" value='<fmt:formatDate value="${params.startDate }" pattern="yyyy-MM-dd"/>' class="datepicker span4" />
+							<input type="text" name="startDate" value="${param.startDate }" class="datepicker span4" />
 									-
-							<input type="text" name="endDate" value="<fmt:formatDate value="${params.endDate }" pattern="yyyy-MM-dd"/>" class="datepicker span4"/></td>
+							<input type="text" name="endDate" value="${param.endDate }" class="datepicker span4"/></td>
 							<td>&nbsp;</td><td>
 							<button type="button" class="btn btn-small btn-search">
 							<i class="halflings-icon search white"></i> 查询</button>
@@ -100,16 +100,19 @@
 						  <thead>
 							  <tr>
 								  <th width=5%>序列</th>
-								  <th width=10%>地区</th>
-								  <th width=10%>店铺名称</th>
-								  <th width=15%>开店时间 </th>
-								  <th width=15%>更新时间</th>
+								  <th width=5%>地区</th>
+								  <th width=15%>店铺名称</th>
+								  <th width=13%>开店时间 </th>
+								  <th width=13%>更新时间</th>
 								  <th width=8%>店铺状态</th>
 								  <th width=10%>负责人</th>
 								  <th width=20%>操作</th>
 							  </tr>
 						  </thead>   
 						  <tbody>
+						  <c:if test="${empty pageResult.param}">
+						  	<tr><td colspan="8" style="text-align:center;color:red;font-size:15px;">暂无数据</td></tr>
+						  </c:if>
 						  <c:forEach items="${pageResult.param }" var="temp" varStatus="status">
 						  	<tr>
 								<td>${status.count+(pageResult.pageIndex-1)*(pageResult.pageSize) }</td>
@@ -124,7 +127,7 @@
 								<td class="center">
 									<c:choose>
 										<c:when test="${temp.status==0 }">
-											<span class="label">暂停</span>
+											<span class="label">暂停接单</span>
 										</c:when>
 										<c:when test="${temp.status==1 }">
 											<span class="label label-success">接单中</span>
@@ -136,6 +139,11 @@
 								</td>
 								
 								<td class="center">
+								<ad:power uri="../store/list.html">
+									<a class="btn btn-mini editHouse" href="list.html?storeId=${temp.storeId }">
+										<i class="halflings-icon white search "></i>  详细
+									</a>
+									</ad:power>
 									<ad:power uri="../store/update.html">
 									<a class="btn btn-info btn-mini editHouse" href="update.html?storeId=${temp.storeId }&&operator=findById">
 										<i class="halflings-icon white edit "></i>  修改
@@ -183,10 +191,10 @@
 			var tip="";
 			if(status=="0"){//激活
 				param.status="1";
-				tip="确认激活吗?";
+				tip="确认开始接单吗?";
 			}else if(status=="1"){//冻结
 				param.status="0";
-				tip="确认冻结吗";
+				tip="确认暂停接单吗";
 			}
 			layer.confirm(tip, {
 				title:"状态切换",

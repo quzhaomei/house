@@ -42,7 +42,7 @@
 							</h2>
 							<div class="box-icon">
 							
-							<ad:power uri="../houseSet/add.html">
+							<ad:power uri="../houseType/add.html">
 								<a href="#" class="addHouse"><i
 									class="halflings-icon plus"></i>
 									 </a> 
@@ -98,13 +98,13 @@
 								</td>
 								
 								<td class="center">
-									<ad:power uri="../houseSet/update.html">
+									<ad:power uri="../houseType/update.html">
 									<a class="btn btn-info btn-mini editHouse" href="#" typeId="${temp.typeId }">
 										<i class="halflings-icon white edit "></i>  修改
 									</a>
 									</ad:power>
 									
-									<ad:power uri="../houseSet/status.html">
+									<ad:power uri="../houseType/status.html">
 									<a class="btn btn-danger btn-mini changeStatu" href="#" typeId="${temp.typeId }" status="${temp.status }" >
 										<i class="halflings-icon white refresh"></i> 切换状态
 									</a>
@@ -230,7 +230,7 @@
 		);
 		
 		//删除
-		$(".changeStatu").click(function(){
+		$("#content").on("click",".changeStatu",function(){
 			var status=$(this).attr("status");
 			var typeId=$(this).attr("typeId");
 			var param={};
@@ -278,7 +278,7 @@
 		<div class="modal-body">
 			<p><small class="text-success">新建房型</small></p>
 				<div class="input-prepend" title="房型名称">
-				<span class="add-on"><i class="halflings-icon user"></i> 区 域 名 称 </span>
+				<span class="add-on"><i class="halflings-icon user"></i> 房型 名 称 </span>
 				<input class="input-large span5" id="add_name"  type="text" placeholder="请输入新建房型名称" maxlength="50" >
 				</div>	
 				<div class="input-prepend" title="房型名称">
@@ -296,14 +296,14 @@
 	<div class="modal hide fade" id="updateModal">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">×</button>
-			<h3>量房房型设置</h3>
+			<h3>房型设置</h3>
 		</div>
 		<div class="modal-body">
 			<p><small class="text-success">更新房型</small></p>			
 					<table>
 					<tr>
 					<td>
-						<span class="add-on"><i class="halflings-icon user"></i> 区 域 名 称 </span>
+						<span class="add-on"><i class="halflings-icon user"></i> 房型 名 称 </span>
 						<input type="hidden" id="update_typeId" >
 					</td>
 					<td>
@@ -312,7 +312,7 @@
 					</tr>
 					<tr>
 					<td>
-						<span class="add-on"><i class="halflings-icon user"></i> 房 型 佣 金 </span>
+						<span class="add-on"><i class="halflings-icon user"></i> 房型 佣 金 </span>
 					</td>
 					<td>
 						<input class="input-large span5" id="update_price"  type="text" placeholder="请输入房型佣金" maxlength="10" >

@@ -22,7 +22,8 @@ public class ShortUrlUtil {
 		PostMethod method=new PostMethod(action);
 		method.addParameters(new NameValuePair[]{
 				new NameValuePair("url", longUrl),
-				new NameValuePair("alias", alias)}
+				new NameValuePair("alias", alias)
+				}
 					);
 		HttpClient client=new HttpClient();
 		try {

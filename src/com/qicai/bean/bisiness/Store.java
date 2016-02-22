@@ -41,7 +41,22 @@ public class Store {
 	private String keeperName;
 	private Date startDate;
 	private Date endDate;
+	private Integer serviceTypeId;
+	private Integer serviceZoneId;
 	
+	
+	public Integer getServiceTypeId() {
+		return serviceTypeId;
+	}
+	public void setServiceTypeId(Integer serviceTypeId) {
+		this.serviceTypeId = serviceTypeId;
+	}
+	public Integer getServiceZoneId() {
+		return serviceZoneId;
+	}
+	public void setServiceZoneId(Integer serviceZoneId) {
+		this.serviceZoneId = serviceZoneId;
+	}
 	public Date getStartDate() {
 		return startDate;
 	}

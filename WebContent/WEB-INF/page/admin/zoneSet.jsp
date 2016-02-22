@@ -224,7 +224,7 @@
 		);
 		
 		//删除
-		$(".changeStatu").click(function(){
+			$("#content").on("click",".changeStatu",function(){
 			var status=$(this).attr("status");
 			var zoneId=$(this).attr("zoneId");
 			var param={};

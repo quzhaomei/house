@@ -14,6 +14,7 @@ import com.qicai.dao.UserToRoleDao;
 import com.qicai.dto.PageDTO;
 import com.qicai.dto.admin.AdminUserDTO;
 import com.qicai.dto.admin.RoleManagerDTO;
+import com.qicai.dto.bisiness.ServiceUserDTO;
 import com.qicai.service.AdminUserService;
 
 @Service(value="adminUserService")
@@ -131,6 +132,20 @@ public class AdminUserServiceImpl implements AdminUserService {
 	@Override
 	public List<AdminUserDTO> getListByParamAndRole(AdminUser user, Integer roleId) {
 		return adminUserDao.getListByParamAndRole(user, roleId);
+	}
+
+	@Override
+	public PageDTO<List<ServiceUserDTO>> getServiceByParam(PageDTO<AdminUser> page, Integer roleId) {
+		List<ServiceUserDTO> dateList = adminUserDao.getServiceByParam(page,roleId);
+		PageDTO<List<ServiceUserDTO>> pageDate = new PageDTO<List<ServiceUserDTO>>();
+		pageDate.setParam(dateList);
+		pageDate.setPageIndex(page.getPageIndex());
+		pageDate.setPageSize(page.getPageSize());
+		Integer count = adminUserDao.getServiceCount(page.getParam(), roleId);
+		count = count % page.getPageSize() == 0 ? count / page.getPageSize()
+				: count / page.getPageSize() + 1;
+		pageDate.setTotalPage(count);
+		return pageDate;
 	}
 
 }

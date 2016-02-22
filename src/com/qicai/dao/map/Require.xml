@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qicai.dao.RequireDao">
+ <cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true" /> 
+	<resultMap type="com.qicai.dto.bisiness.RequireDTO" id="requireDTO">
+		<id property="requiredId" column="requiredId" />
+		<result property="userId" column="userId" />
+		<result property="username" column="username" />
+		<result property="userphone" column="userphone" />
+		<result property="budget" column="budget" />
+		
+		<result property="houseDes" column="houseDes" />
+		<result property="isNew" column="isNew" />
+		<result property="houseInfo" column="houseInfo" />
+		<result property="isReady" column="isReady" />
+		<result property="readyDate" column="readyDate" />
+		<result property="houseLocation" column="houseLocation" />
+		<result property="designTime" column="designTime" />
+		<result property="phoneTime" column="phoneTime" />
+		<result property="customerTips" column="customerTips" />
+		
+		<result property="orderCount" column="orderCount" />
+		
+		<result property="budgetBak" column="budgetBak" />
+		<result property="houseDesBak" column="houseDesBak" />
+		<result property="isNewBak" column="isNewBak" />
+		<result property="houseInfoBak" column="houseInfoBak" />
+		<result property="isReadyBak" column="isReadyBak" />
+		<result property="readyDateBak" column="readyDateBak" />
+		<result property="houseLocationBak" column="houseLocationBak" />
+		<result property="designTimeBak" column="designTimeBak" />
+		<result property="phoneTimeBak" column="phoneTimeBak" />
+		<result property="customerTipsBak" column="customerTipsBak" />
+		
+		
+		<result property="createDate" column="createDate" />
+		<result property="serviceDate" column="serviceDate" />
+		<result property="status" column="status" />
+		<result property="callbackTips" column="callbackTips" />
+		<result property="serviceTips" column="serviceTips" />
+		<result property="operatorLog" column="operatorLog" />
+		
+		
+		<association property="zone" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="zoneId">
+			<id property="zoneId" column="zoneId"/>
+			<result property="name" column="zonename"/>
+		</association>
+		<association property="houseType" javaType="com.qicai.dto.bisiness.HouseTypeDTO" column="typeId">
+			<id property="typeId" column="typeId"/>
+			<result property="name" column="typename"/>
+			<result property="price" column="price"/>
+		</association>
+		
+		<association property="zoneBak" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="zoneIdBak">
+			<id property="zoneId" column="zoneIdBak"/>
+			<result property="name" column="zonenameBak"/>
+		</association>
+		<association property="houseTypeBak" javaType="com.qicai.dto.bisiness.HouseTypeDTO" column="typeIdBak">
+			<id property="typeId" column="typeIdBak"/>
+			<result property="name" column="typenameBak"/>
+		</association>
+		
+		<association property="serviceUser" javaType="com.qicai.dto.admin.AdminUserDTO" column="serviceUserId">
+			<id property="adminUserId" column="serviceUserId"/>
+			<result property="nickname" column="nickname_s"/>
+		</association>
+		
+		<association property="createUser" javaType="com.qicai.dto.admin.AdminUserDTO" column="createUserId">
+			<id property="adminUserId" column="createUserId"/>
+			<result property="nickname" column="nickname"/>
+		</association>
+	</resultMap>
+	<insert id="save"  useGeneratedKeys="true" keyProperty="require.requiredId">
+		INSERT INTO `require`(`requiredId`, `userId`, `username`, `userphone`,
+		 `houseTypeId`, `zoneId`, `budget`, `houseDes`, `isNew`, `houseInfo`, `isReady`, 
+		 `readyDate`, `houseLocation`, `designTime`, `phoneTime`, `customerTips`,
+		 `createDate`, `createUserId`,`status`, `operatorLog`) 
+		 values(#{require.requiredId},#{require.userId},#{require.username}
+		 ,#{require.userphone},#{require.houseTypeId},#{require.zoneId},#{require.budget}
+		 ,#{require.houseDes},#{require.isNew},#{require.houseInfo}
+		 ,#{require.isReady},#{require.readyDate},#{require.houseLocation}
+		 ,#{require.designTime},#{require.phoneTime},#{require.customerTips},#{require.createDate}
+		 ,#{require.createUserId},#{require.status},#{require.operatorLog})
+	</insert>
+	<select id="update" flushCache="true" >
+	update  `require` set requiredId=#{require.requiredId}
+	<if test="require.serviceUserId!=null">
+			,serviceUserId=#{require.serviceUserId}
+		</if>
+		<if test="require.serviceDate!=null">
+			,serviceDate=#{require.serviceDate}
+		</if>
+		<if test="require.operatorLog!=null">
+			,operatorLog=#{require.operatorLog}
+		</if>
+		<if test="require.status!=null">
+			,status=#{require.status}
+		</if>
+		<if test="require.customerTips!=null">
+			,customerTips=#{require.customerTips}
+		</if>
+		
+		<if test="require.callbackTips!=null">
+			,callbackTips=#{require.callbackTips}
+		</if>
+		<if test="require.serviceTips!=null">
+			,serviceTips=#{require.serviceTips}
+		</if>
+		
+		<if test="require.phoneTime!=null">
+			,phoneTime=#{require.phoneTime}
+		</if>
+		<if test="require.designTime!=null">
+			,designTime=#{require.designTime}
+		</if>
+		<if test="require.houseLocation!=null">
+			,houseLocation=#{require.houseLocation}
+		</if>
+		<if test="require.readyDate!=null">
+			,readyDate=#{require.readyDate}
+		</if>
+		<if test="require.isReady!=null">
+			,isReady=#{require.isReady}
+		</if>
+		<if test="require.isReady==1"><!-- 时间 -->
+			,readyDate=null
+		</if>
+		<if test="require.houseInfo!=null">
+			,houseInfo=#{require.houseInfo}
+		</if>
+		<if test="require.isNew!=null">
+			,isNew=#{require.isNew}
+		</if>
+		<if test="require.houseDes!=null">
+			,houseDes=#{require.houseDes}
+		</if>
+		<if test="require.budget!=null">
+			,budget=#{require.budget}
+		</if>
+		<if test="require.zoneId!=null">
+			,zoneId=#{require.zoneId}
+		</if>
+		<if test="require.houseTypeId!=null">
+			,houseTypeId=#{require.houseTypeId}
+		</if>
+		<if test="require.userphone!=null">
+			,userphone=#{require.userphone}
+		</if>
+		<if test="require.username!=null">
+			,username=#{require.username}
+		</if>
+		
+		<if test="require.budgetBak!=null">
+			,budgetBak=#{require.budgetBak}
+		</if>
+		<if test="require.houseInfoBak!=null">
+			,houseInfoBak=#{require.houseInfoBak}
+		</if>
+		<if test="require.houseTypeIdBak!=null">
+			,houseTypeIdBak=#{require.houseTypeIdBak}
+		</if>
+		<if test="require.zoneIdBak!=null">
+			,zoneIdBak=#{require.zoneIdBak}
+		</if>
+		<if test="require.houseDesBak!=null">
+			,houseDesBak=#{require.houseDesBak}
+		</if>
+		<if test="require.isNewBak!=null">
+			,isNewBak=#{require.isNewBak}
+		</if>
+		<if test="require.isReadyBak!=null">
+			,isReadyBak=#{require.isReadyBak}
+		</if>
+		<if test="require.readyDateBak!=null">
+			,readyDateBak=#{require.readyDateBak}
+		</if>
+		<if test="require.houseLocationBak!=null">
+			,houseLocationBak=#{require.houseLocationBak}
+		</if>
+		<if test="require.designTimeBak!=null">
+			,designTimeBak=#{require.designTimeBak}
+		</if>
+		<if test="require.phoneTimeBak!=null">
+			,phoneTimeBak=#{require.phoneTimeBak}
+		</if>
+		<if test="require.customerTipsBak!=null">
+			,customerTipsBak=#{require.customerTipsBak}
+		</if>
+		
+		where requiredId=#{require.requiredId}
+	
+	</select>
+	<select id="getByParam" resultMap="requireDTO">
+		SELECT r.requiredId,r.userId,r.username,r.userphone,r.zoneId,r.houseTypeId typeId,
+		r.budget,r.budgetBak,
+		 r.houseDes,r.isNew,r.houseInfo,r.isReady,r.readyDate,r.houseLocation,r.designTime, 
+		 r.phoneTime,r.customerTips,r.houseTypeIdBak typeIdBak,r.zoneIdBak,r.houseDesBak, r.isNewBak,
+		 r.houseInfoBak,r.isReadyBak,r.houseLocationBak,r.designTimeBak,r.phoneTimeBak,r.readyDateBak,
+		 r.customerTipsBak,r.createDate,r.callbackTips,r.serviceTips,r.status,r.operatorLog, 
+		 r.createUserId,r.serviceUserId, zs.name zonename,ht.name typename, ht.price,
+		zsb.name zonenameBak,htb.name typenameBak, 
+		 ca.nickname,sa.nickname nickname_s 
+		 FROM `require` r 
+		 left join zone_set zs on zs.zoneId=r.zoneId 
+		 left join house_type ht on ht.typeId=r.houseTypeId 
+		 left join admin_user ca on ca.adminUserId=r.createUserId 
+		 left join admin_user sa on sa.adminUserId=r.serviceUserId
+		 
+		  left join zone_set zsb on zsb.zoneId=r.zoneIdBak 
+		 left join house_type htb on htb.typeId=r.houseTypeIdBak 
+		 
+		 where 1=1
+		 <if test="require.requiredId!=null">
+		 	and r.requiredId=#{require.requiredId}
+		 </if>
+		  <if test="require.userphone!=null">
+		 	and r.userphone=#{require.userphone}
+		 </if>
+	</select>
+	<select id="getListByParam" resultMap="requireDTO">
+		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
+		r.budget,r.budgetBak,r.houseInfo,
+		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
+		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount
+		from `require` r left join 
+		zone_set zs on zs.zoneId=r.zoneId
+		 where 1=1
+		<if test="page.param.serviceUserId!=null">
+		and r.serviceUserId=#{page.param.serviceUserId}
+		</if>
+		<if test="page.param.userId!=null">
+		and r.userId=#{page.param.userId}
+		</if>
+		<if test="page.param.status!=null">
+		and r.status=#{page.param.status}
+		</if>
+		<if test="page.param.username!=null">
+		and r.username like '%${page.param.username}%'
+		</if>
+		<if test="page.param.userphone!=null">
+		and r.userphone like '${page.param.userphone}%'
+		</if>
+		<if test="page.param.startDate!=null">
+		and r.createDate &gt; #{page.param.startDate}
+		</if>
+		<if test="page.param.endDate!=null">
+		and r.createDate &lt; #{page.param.endDate}
+		</if>
+		<if test="page.param.serviceStartDate!=null">
+		and r.serviceDate &gt; #{page.param.serviceStartDate}
+		</if>
+		<if test="page.param.serviceEndDate!=null">
+		and r.serviceDate &lt; #{page.param.serviceEndDate}
+		</if>
+		 order by r.createDate desc
+		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
+	</select>
+	<select id="getCountByParam" resultType="int">
+		select count(*)
+		from `require` where 1=1
+		<if test="require.serviceUserId!=null">
+		and serviceUserId=#{require.serviceUserId}
+		</if>
+		<if test="require.status!=null">
+		and status=#{require.status}
+		</if>
+		<if test="require.userId!=null">
+		and userId=#{require.userId}
+		</if>
+		<if test="require.username!=null">
+		and username like '%${require.username}%'
+		</if>
+		<if test="require.userphone!=null">
+		and userphone like '${require.userphone}%'
+		</if>
+		<if test="require.startDate!=null">
+		and createDate &gt; #{require.startDate}
+		</if>
+		<if test="require.endDate!=null">
+		and createDate &lt; #{require.endDate}
+		</if>
+		<if test="require.serviceStartDate!=null">
+		and serviceDate &gt; #{require.serviceStartDate}
+		</if>
+		<if test="require.serviceEndDate!=null">
+		and serviceDate &lt; #{require.serviceEndDate}
+		</if>
+	</select>
+	
+	<select id="list" resultMap="requireDTO">
+		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
+		r.budget,r.budgetBak,
+		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
+		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount
+		from `require` r left join 
+		zone_set zs on zs.zoneId=r.zoneId
+		 where 1=1
+		<if test="require.userphone!=null">
+		and r.userphone=#{require.userphone}
+		</if>
+		<if test="require.userId!=null">
+		and r.userId=#{require.userId}
+		</if>
+		<if test="require.status!=null">
+		and r.status=#{require.status}
+		</if>
+		order by r.requiredId
+	</select>
+	
+</mapper>  

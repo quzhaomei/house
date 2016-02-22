@@ -50,6 +50,28 @@
 			<result property="name" column="name_type" />
 		</collection>
 	</resultMap>
+	
+	<resultMap type="com.qicai.dto.bisiness.ServiceStoreDTO" id="serviceStoreDTO">
+		<id property="storeId" column="storeId" />
+		<result property="balance" column="balance"/>
+		<result property="storeName" column="storeName"/>
+		<result property="size" column="size"/>
+		<result property="monthCount" column="monthCount"/>
+		<result property="monthFreeCount" column="monthFreeCount"/>
+		
+		<collection property="zoneCount" column="zoneId" ofType="com.qicai.dto.bisiness.ZoneCountDTO" >
+			<id property="typeId" column="zoneId" />
+			<result property="zoneName" column="zoneName" />
+			<result property="count" column="zoneCount" />
+		</collection>
+		
+		<collection property="typeCount" column="typeId" ofType="com.qicai.dto.bisiness.TypeCountDTO" >
+			<id property="typeId" column="typeId" />
+			<result property="typeName" column="typeName" />
+			<result property="count" column="typeCount" />
+		</collection>
+		
+	</resultMap>
 	<insert id="save"  useGeneratedKeys="true" keyProperty="store.storeId">
 		insert into store(storeId,logo,storeName,storeAddress,storePhone,callPhone,msgPhone,
 		size,companyName,ruleUserName,ruleUserPhone,createDate,
@@ -89,7 +111,7 @@
 		delete from store_to_type where storeId=#{storeId}
 	</delete>
 	
-	<update id="update">
+	<update id="update" flushCache="true">
 		update store set storeId=#{store.storeId}
 		<if test="store.balance!=null">
 			,balance=#{store.balance}
@@ -140,9 +162,49 @@
 		<if test="store.updateDate!=null">
 			,updateDate=#{store.updateDate}
 		</if>
-		where storeId=#{store.storeId};
+		where storeId=#{store.storeId}
 	</update>
 	<delete id="delete"></delete>
+	
+	<select id="getServiceListByParam" resultMap="serviceStoreDTO" useCache="false">
+		select s.storeId,s.balance,s.storeName,s.size
+,(select count(*) from `order` o where o.storeId=s.storeId
+ and o.type=1 and o.createDate &gt;=(select DATE_ADD(curdate(),interval -day(curdate())+1 day)) ) monthCount
+,(select count(*) from `order` o where o.storeId=s.storeId
+ and o.type=2 and o.createDate &gt;=(select DATE_ADD(curdate(),interval -day(curdate())+1 day)) ) monthFreeCount
+from store s 
+			left join store_to_type stt on stt.storeId=s.storeId
+			left join store_to_zone stz on stz.storeId=s.storeId
+			where s.status=1
+			<if test="page.param.storeName!=null">
+				and s.storeName like '%${page.param.storeName}%'
+			</if>
+			<if test="page.param.serviceTypeId!=null">
+				and stt.typeId=#{page.param.serviceTypeId}
+			</if>
+			
+			<if test="page.param.serviceZoneId!=null">
+				and stz.zoneId=#{page.param.serviceZoneId}
+			</if>
+			order by s.storeId
+			limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
+	</select>
+	<select id="getServiceCountByParam" resultType="int" useCache="false">
+		select count(*) from store s 
+			left join store_to_type stt on stt.storeId=s.storeId
+			left join store_to_zone stz on stz.storeId=s.storeId
+			where s.status=1
+			<if test="store.storeName!=null">
+				and s.storeName like '%${store.storeName}%'
+			</if>
+			<if test="store.serviceTypeId!=null">
+				and stt.typeId=#{store.serviceTypeId}
+			</if>
+			<if test="store.serviceZoneId!=null">
+				and stz.zoneId=#{store.serviceZoneId}
+			</if>
+	</select>
+	
 	<select id="getListByParam" resultMap="storeDTO">
 		select s.storeId,s.storeName,s.createDate,s.status,s.balance,s.updateDate,
 		s.keeperId,au.nickname nickname_k,
@@ -154,6 +216,9 @@
 		where 1=1
 		<if test="page.param.status!=null">
 			and s.status=#{page.param.status}
+		</if>
+		<if test="page.param.keeperId!=null">
+			and s.keeperId=#{page.param.keeperId}
 		</if>
 		<if test="page.param.zoneId!=null">
 			and s.zoneId=#{page.param.zoneId}
@@ -174,7 +239,7 @@
 		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
 		
 	</select>
-	<select id="getByParam" resultMap="storeDTO">
+	<select id="getByParam" resultMap="storeDTO" useCache="false">
 	select s.storeId,zs.zoneId,
 		zs.name,
 		zss.zoneId zoneId_o,zss.name name_o,
@@ -200,6 +265,9 @@
 		select count(*)
 		from store s left join admin_user au on s.keeperId=au.adminUserId
 		where 1=1
+		<if test="store.keeperId!=null">
+			and s.keeperId=#{store.keeperId}
+		</if>
 		<if test="store.status!=null">
 			and s.status=#{store.status}
 		</if>

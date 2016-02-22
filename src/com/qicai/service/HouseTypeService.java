@@ -11,5 +11,7 @@ public interface HouseTypeService extends BaseService<HouseType, HouseTypeDTO>{
 	 * @return ²Ëµ¥list
 	 */
 	List<HouseTypeDTO> getAllHouseType();
+	
+	List<HouseTypeDTO> getListByParam(HouseType type);
 
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.qicai.bean.bisiness.Store;
 import com.qicai.dao.StoreDao;
 import com.qicai.dto.PageDTO;
+import com.qicai.dto.bisiness.ServiceStoreDTO;
 import com.qicai.dto.bisiness.StoreDTO;
 import com.qicai.service.StoreService;
 
@@ -41,7 +42,7 @@ public class StoreServiceImpl implements StoreService {
 		}
 		if(typeIds!=null){
 			storeDao.clearStoreOrderTypes(store.getStoreId());
-			if(zoneIds.size()>0){
+			if(typeIds.size()>0){
 				storeDao.addStoreOrderTypes(store.getStoreId(), typeIds);
 			}
 		}
@@ -70,5 +71,19 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public int getCountByParam(Store store) {
 		return 0;
+	}
+
+	@Override
+	public PageDTO<List<ServiceStoreDTO>> getServiceListByParam(PageDTO<Store> page) {
+		List<ServiceStoreDTO> dateList = storeDao.getServiceListByParam(page);
+		PageDTO<List<ServiceStoreDTO>> pageDate = new PageDTO<List<ServiceStoreDTO>>();
+		pageDate.setParam(dateList);
+		pageDate.setPageIndex(page.getPageIndex());
+		pageDate.setPageSize(page.getPageSize());
+		Integer count = storeDao.getServiceCountByParam(page.getParam());
+		count = count % page.getPageSize() == 0 ? count / page.getPageSize()
+				: count / page.getPageSize() + 1;
+		pageDate.setTotalPage(count);
+		return pageDate;
 	}
 }

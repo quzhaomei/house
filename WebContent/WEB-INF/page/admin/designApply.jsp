@@ -256,7 +256,6 @@ display: inline-block;
 			});
 		});
 	</script>
-	</script>
 </body>
 <div class="modal hide fade" id="addModal">
 		<div class="modal-header">

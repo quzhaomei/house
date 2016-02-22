@@ -30,7 +30,12 @@ public class BalanceHistoryServiceImpl implements BalanceHistoryService {
 		balanceHistoryDao.save(history);
 		
 		StoreDTO store=storeDao.getByParam(new Store(history.getStoreId()));
-		Integer value=store.getBalance()+history.getValue();
+		Integer value=0;
+		if(history.getType()==0){//充值
+			value=store.getBalance()+history.getValue();
+		}else{//消费或赠送
+			value=store.getBalance()-history.getValue();
+		}
 		Store updateStore =new Store(history.getStoreId());
 		updateStore.setBalance(value);
 		storeDao.update(updateStore);

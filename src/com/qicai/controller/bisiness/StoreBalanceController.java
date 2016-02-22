@@ -34,6 +34,7 @@ import com.qicai.util.JSONUtil;
 public class StoreBalanceController extends BaseController {
 	protected  SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
 	// 首页查询所有店铺
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/index")
 	public String index(HttpServletRequest request,
 			HttpServletResponse response, Model model) {
@@ -80,7 +81,9 @@ public class StoreBalanceController extends BaseController {
 				}
 				if(endDate!=null&&endDate.length()==10){
 					try {
-						selectParam.setEndDate(format.parse(endDate));
+						Date endTime=format.parse(endDate);
+						endTime.setDate(endTime.getDate()+1);
+						selectParam.setEndDate(endTime);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}

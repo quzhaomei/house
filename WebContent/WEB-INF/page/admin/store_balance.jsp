@@ -94,10 +94,10 @@
 						  <thead>
 							  <tr>
 								  <th width=5%>序列</th>
-								  <th width=10%>地区</th>
-								  <th width=10%>店铺名称</th>
-								  <th width=15%>开店时间 </th>
-								  <th width=15%>更新时间</th>
+								  <th width=8%>地区</th>
+								  <th width=18%>店铺名称</th>
+								  <th width=14%>开店时间 </th>
+								  <th width=14%>更新时间</th>
 								  <th width=8%>店铺状态</th>
 								  <th width=10%>负责人</th>
 								  <th width=10%>账户余额</th>
@@ -105,6 +105,9 @@
 							  </tr>
 						  </thead>   
 						  <tbody>
+						   <c:if test="${empty pageResult.param}">
+						  	<tr><td colspan="8" style="text-align:center;color:red;font-size:15px;">暂无数据</td></tr>
+						  </c:if>
 						  <c:forEach items="${pageResult.param }" var="temp" varStatus="status">
 						  	<tr>
 								<td>${status.count+(pageResult.pageIndex-1)*(pageResult.pageSize) }</td>

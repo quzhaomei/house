@@ -68,12 +68,20 @@
 		order by z.createDate
 	</select>
 	<select id="getByParam" resultMap="zoneDTO">
-		select zoneId,name,status,createDate,createUserId from zone_set where 1=1
+		select z.zoneId,z.name,z.status,z.createDate,z.createUserId,au.nickname,
+		au.phone,auu.nickname nickname_u,auu.phone phone_u, z.updateDate,
+		z.updateUserId,
+		z.parentId,zp.name p_name
+		from zone_set z
+		left join zone_set zp on z.parentId=zp.zoneId
+		left join admin_user au on z.createUserId=au.adminUserId
+		left join admin_user auu on z.updateUserId=auu.adminUserId
+		where 1=1
 		<if test="zone.status!=null">
-			and status=#{zone.status}
+			and z.status=#{zone.status}
 		</if>
 		<if test="zone.zoneId!=null">
-			and zoneId=#{zone.zoneId}
+			and z.zoneId=#{zone.zoneId}
 		</if>
 	</select>
 	<select id="getCountByParam" resultType="int"></select>

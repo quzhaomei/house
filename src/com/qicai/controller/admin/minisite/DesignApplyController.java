@@ -17,8 +17,8 @@ import com.qicai.controller.BaseController;
 import com.qicai.dto.JsonDTO;
 import com.qicai.dto.PageDTO;
 import com.qicai.util.HttpSendResult;
-import com.qicai.util.HttpSender;
 import com.qicai.util.JSONUtil;
+import com.qicai.util.MessageSender;
 import com.qicai.util.ShortUrlUtil;
 
 @Controller
@@ -73,7 +73,7 @@ public class DesignApplyController extends BaseController {
 					//去掉content中的标签
 					content=content.replaceAll("<[/]*url>", "");
 					//为null，发送测试数据
-					HttpSendResult result=HttpSender.sendMsg(toPhone, content);
+					HttpSendResult result=MessageSender.sendMsg(toPhone, content);
 					if(result.getIsSuccess()){//成功，则更新状态
 						apply.setStatus(1);
 						apply.setDescription(apply.getDescription()+

@@ -61,7 +61,7 @@
 							<table class="table">
 							<tr>
 							<td width=11% class="basic-title">需求ID</td><td>${require.requiredId }</td>
-							<td  width=9% class="basic-title">添加时间</td><td><fmt:formatDate value="${require.createDate }" pattern="yyyy-MM-DD HH:mm"/> </td>
+							<td  width=9% class="basic-title">添加时间</td><td><fmt:formatDate value="${require.createDate }" pattern="yyyy-MM-dd HH:mm"/> </td>
 							<td width=9%  class="basic-title">创建人员：</td><td>${require.createUser.nickname }</td>
 							<td class="basic-title">业务人员：</td><td>
 							<c:choose>

@@ -128,7 +128,7 @@
 							<tr>
 							<td class="basic-title">区域</td><td>${require.zone.name }</td>
 							<td class="basic-title">楼盘信息：</td><td>${require.houseInfo }</td>
-							<td class="basic-title">预算：</td><td>￥<fmt:formatNumber value="${require.budget }"></fmt:formatNumber> </td>
+							<td class="basic-title">预算：</td><td>${require.budget } </td>
 							<td colspan="4">&nbsp;</td>
 							</tr>
 							<tr>
@@ -137,6 +137,15 @@
 							<td class="basic-title">量房时间约定：</td><td colspan="9">${require.designTime }</td>
 							</tr><tr>
 							<td class="basic-title">电话时间约定</td><td colspan="9">${require.phoneTime }</td>
+							</tr>
+							<tr>
+							<td class="basic-title">装修方式：</td><td colspan="9">${require.designType }</td>
+							</tr>
+							<tr>
+							<td class="basic-title">装修风格：</td><td colspan="9">${require.designStyle }</td>
+							</tr>
+							<tr>
+							<td class="basic-title">房屋状态：</td><td colspan="9">${require.houseStatus }</td>
 							</tr>
 							</table>
 							<legend class="help-block"> 客户要求</legend>

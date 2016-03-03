@@ -129,15 +129,25 @@
 							<tr>
 							<td class="basic-title">区域</td><td>${require.zone.name }</td>
 							<td class="basic-title">楼盘信息：</td><td>${require.houseInfo }</td>
-							<td class="basic-title">预算：</td><td>￥ <fmt:formatNumber value="${require.budget }"></fmt:formatNumber> </td>
+							<td class="basic-title">房屋状态：</td><td> ${require.houseStatus }</td>
 							<td colspan="4">&nbsp;</td>
 							</tr>
 							<tr>
-							<td class="basic-title">房屋地址：</td><td colspan="9">${require.houseLocation }</td>
-							</tr><tr>
 							<td class="basic-title">量房时间约定：</td><td colspan="9">${require.designTime }</td>
 							</tr><tr>
 							<td class="basic-title">电话时间约定</td><td colspan="9">${require.phoneTime }</td>
+							</tr>
+							<tr>
+							<td class="basic-title">装修类型</td><td colspan="9">${require.designType }</td>
+							</tr>
+							<tr>
+							<td class="basic-title">装修风格</td><td colspan="9">${require.designStyle }</td>
+							</tr>
+							<tr>
+							<td class="basic-title">预算</td><td colspan="9"><input id="budget" class="col-10" type="text" maxlength="200" value="${require.budget }" placeholder="请输入装修预算"/></td>
+							</tr>
+							<tr>
+							<td class="basic-title">房屋地址：</td><td colspan="9"><input id="houseLocation" class="col-10" type="text" maxlength="200" value="${require.houseLocation }" placeholder="请输入房屋具体地址"/></td>
 							</tr>
 							</table>
 							<legend class="help-block"> 客户要求</legend>
@@ -183,11 +193,17 @@
 			var requiredId=$("#requiredId").val();//需求ID
 			var callbackTips=$("#callbackTips").val();
 			var serviceTips=$("#serviceTips").val();
+			
+			var budget=$("#budget").val();
+			var houseLocation=$("#houseLocation").val();
 			var param={};
 			param.operator="message";
 			param.requiredId=requiredId;
 			param.callbackTips=callbackTips;
 			param.serviceTips=serviceTips;
+			
+			param.budget=budget;
+			param.houseLocation=houseLocation;
 			$.post("message.html",param,function(json){
 				if(json.status==1){
 					window.location.href="list.html?requiredId="+requiredId;

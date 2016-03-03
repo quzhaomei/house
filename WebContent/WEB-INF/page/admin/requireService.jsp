@@ -127,7 +127,7 @@
 							  			</ad:power>
 							  		<ad:power uri="../requireService/message.html">	
 							  			<a class="btn btn-mini yellow" href="message.html?operator=to_message&requiredId=${temp.requiredId }">
-							  			备注</a>
+							  			备注-更新</a>
 							  			</ad:power>
 							  			<ad:power uri="../requireService/call.html">	
 							  			<a class="btn btn-mini yellow call-customer" href="#"

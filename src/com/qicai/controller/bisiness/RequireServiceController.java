@@ -28,6 +28,8 @@ import com.qicai.dto.bisiness.ServiceStoreDTO;
 import com.qicai.dto.bisiness.StoreDTO;
 import com.qicai.dto.bisiness.ZoneSetDTO;
 import com.qicai.util.JSONUtil;
+import com.qicai.util.MessageSender;
+import com.qicai.util.PasswordUtil;
 import com.qicai.util.ShortUrlUtil;
 
 /**
@@ -244,10 +246,14 @@ public class RequireServiceController extends BaseController {
 				JsonDTO json = new JsonDTO();
 				String callbackTips = request.getParameter("callbackTips");
 				String serviceTips = request.getParameter("serviceTips");
+				String budget=request.getParameter("budget");
+				String houseLocation=request.getParameter("houseLocation");
 				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
 				if (require != null) {
 					Require updateParam = new Require();
 					updateParam.setRequiredId(Integer.parseInt(requiredId));
+					updateParam.setBudget(budget);
+					updateParam.setHouseLocation(houseLocation);
 					updateParam.setCallbackTips(callbackTips);
 					updateParam.setServiceTips(serviceTips);
 					try {
@@ -427,7 +433,11 @@ public class RequireServiceController extends BaseController {
 								+ getLoginAdminUser(request).getNickname() + " 进行派单给 " + store.getStoreName());
 						updateParam.setStatus(8);
 						requireService.update(updateParam);
-
+						//TODO 短信提示店铺接单
+						//发送短信
+						String content="您好,凯特猫家装后台有单,请注意查收！  ,回复TD退订。";
+						 MessageSender.sendMsg(store.getMsgPhone(), content);
+						
 					} catch (Exception e) {
 						json.setStatus(0).setMessage("派单过程中，系统出现异常");
 						e.printStackTrace();
@@ -455,7 +465,7 @@ public class RequireServiceController extends BaseController {
 	}
 
 	public static void main(String[] args) {
-		String url = "http://quzhaomei.xicp.net/house/requirePublish/index.html";
+		String url = "http://51getMore.cn/house/requirePublish/index.html";
 		url = ShortUrlUtil.getShotUrl(url);
 		System.out.println(url);
 	}

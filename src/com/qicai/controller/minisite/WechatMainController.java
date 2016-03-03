@@ -54,6 +54,11 @@ public class WechatMainController extends BaseController {
 
 		String userphone = request.getParameter("userphone");// 手机
 		String requiredId = request.getParameter("requiredId");// ID
+		
+		String designType = request.getParameter("designType");// 装修方式
+		String designStyle = request.getParameter("designStyle");// 装修风格
+		String houseStatus = request.getParameter("houseStatus");// 房屋状态
+		
 		String sign = request.getParameter("sign");
 		if (userphone != null && userphone.matches("\\d+") && requiredId != null && requiredId.matches("\\d+")
 				&& sign != null) {
@@ -74,13 +79,17 @@ public class WechatMainController extends BaseController {
 							param.setHouseInfoBak(houseInfo);
 							param.setHouseLocationBak(houseLocation);
 							param.setPhoneTimeBak(phoneTime);
+							
+							param.setDesignTypeBak(designType);
+							param.setDesignStyleBak(designStyle);
+							param.setHouseStatusBak(houseStatus);
+							
 							if(zoneId!=null&&zoneId.matches("\\d+"))
 								param.setZoneIdBak(Integer.parseInt(zoneId));
 							
 							if(type!=null&&type.matches("\\d+"))
 								param.setHouseTypeIdBak(Integer.parseInt(type));
-							if(budget!=null&&budget.matches("\\d+"))
-								param.setBudgetBak(Integer.parseInt(budget));
+								param.setBudgetBak(budget);
 							if(houseDes!=null)
 								param.setHouseDesBak(houseDes);
 							

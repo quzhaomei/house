@@ -11,9 +11,9 @@ public class Require {
 	private Integer userId;//用户唯一标识
 	private String username;//用户名  20
 	private String userphone;//电话号码  20
-	private Integer budget;//预算
 	
 	/**start-客户可以更改的信息*/
+	private String budget;//预算
 	private Integer houseTypeId;//房型ID；
 	private Integer zoneId;//房子所属区域
 	private String houseDes;//房子描述
@@ -25,6 +25,10 @@ public class Require {
 	private String designTime;//预约时间
 	private String phoneTime;//电话预约时间
 	private String customerTips;//客户备注
+	//新增
+	private String designType;//装修方式
+	private String designStyle;//装修风格
+	private String houseStatus;//房屋状态 毛坯房、老房翻新、局部装修、工装
 	/**start-客户可以更改的信息*/
 	/**start-客户更改记录*/
 	private Integer houseTypeIdBak;//房型ID；
@@ -38,7 +42,12 @@ public class Require {
 	private String designTimeBak;//预约时间
 	private String phoneTimeBak;//电话预约时间
 	private String customerTipsBak;//客户备注
-	private Integer budgetBak;//预算
+	private String budgetBak;//预算
+	
+	private String designTypeBak;//装修方式
+	private String designStyleBak;//装修风格
+	private String houseStatusBak;//房屋状态 毛坯房、老房翻新、局部装修、工装
+	
 	/**start-客户可以更改的信息*/
 	
 	
@@ -57,6 +66,7 @@ public class Require {
 	 * 7-待派单
 	 * 
 	 * 8-已派单
+	 * 
 	 */
 	private Integer status;
 	private String operatorLog;//操作记录，
@@ -76,18 +86,6 @@ public class Require {
 		this.requiredId = requiredId;
 	}
 	
-	public Integer getBudgetBak() {
-		return budgetBak;
-	}
-	public void setBudgetBak(Integer budgetBak) {
-		this.budgetBak = budgetBak;
-	}
-	public Integer getBudget() {
-		return budget;
-	}
-	public void setBudget(Integer budget) {
-		this.budget = budget;
-	}
 	public String getUsername() {
 		return username;
 	}
@@ -317,6 +315,56 @@ public class Require {
 	public Require(Integer requiredId) {
 		super();
 		this.requiredId = requiredId;
+	}
+	
+	public String getDesignType() {
+		return designType;
+	}
+	public void setDesignType(String designType) {
+		this.designType = designType;
+	}
+	public String getDesignStyle() {
+		return designStyle;
+	}
+	public void setDesignStyle(String designStyle) {
+		this.designStyle = designStyle;
+	}
+	public String getHouseStatus() {
+		return houseStatus;
+	}
+	public void setHouseStatus(String houseStatus) {
+		this.houseStatus = houseStatus;
+	}
+	public String getDesignTypeBak() {
+		return designTypeBak;
+	}
+	public void setDesignTypeBak(String designTypeBak) {
+		this.designTypeBak = designTypeBak;
+	}
+	public String getDesignStyleBak() {
+		return designStyleBak;
+	}
+	public void setDesignStyleBak(String designStyleBak) {
+		this.designStyleBak = designStyleBak;
+	}
+	public String getHouseStatusBak() {
+		return houseStatusBak;
+	}
+	public void setHouseStatusBak(String houseStatusBak) {
+		this.houseStatusBak = houseStatusBak;
+	}
+	
+	public String getBudget() {
+		return budget;
+	}
+	public void setBudget(String budget) {
+		this.budget = budget;
+	}
+	public String getBudgetBak() {
+		return budgetBak;
+	}
+	public void setBudgetBak(String budgetBak) {
+		this.budgetBak = budgetBak;
 	}
 	public Require() {
 	}

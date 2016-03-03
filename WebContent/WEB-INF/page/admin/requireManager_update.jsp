@@ -121,8 +121,7 @@
 								  <label class="control-label" for="budget">预算</label>
 								 <div class="controls">
 								  <div class="input-prepend">
-									<input id="budget" maxlength="10" value="${require.budget }" placeholder="装修预算" type="text"> 
-								  <span class="add-on">￥</span>
+									<input id="budget" maxlength="200" value="${require.budget }" placeholder="装修预算" type="text"> 
 								  </div>
 								</div>
 							</div> 
@@ -195,6 +194,37 @@
 								  </div>
 								</div>
 							  </div>
+							  
+							   <div class="control-group">
+								<label class="control-label" for="designType">装修方式</label>
+								<div class="controls">
+								  <div class="input-prepend">
+									<input id="designType" maxlength="200"  value="${require.designType }" type="text" placeholder="请输入合适的电话预约时间">
+								  </div>
+								</div>
+							  </div>
+							  
+							   <div class="control-group">
+								<label class="control-label" for="designStyle">装修风格</label>
+								<div class="controls">
+								  <div class="input-prepend">
+									<input id="designStyle" maxlength="200"  value="${require.designStyle }" type="text" placeholder="请输入合适的电话预约时间">
+								  </div>
+								</div>
+							  </div>
+							  
+							   <div class="control-group">
+								<label class="control-label" for="houseStatus">房屋状态</label>
+								<div class="controls">
+									<select id="houseStatus" data-rel="chosen">
+									  <option value="0">请选择房屋状态</option>
+									  	<option value="毛坯房" ${require.houseStatus=='毛坯房'?"selected='selected'":"" }>毛坯房</option>
+									  	<option value="老房翻新" ${require.houseStatus=='老房翻新'?"selected='selected'":"" }>老房翻新</option>
+									  	<option value="局部装修" ${require.houseStatus=='局部装修'?"selected='selected'":"" }>局部装修</option>
+									  	<option value="工装" ${require.houseStatus=='工装'?"selected='selected'":"" }>工装</option>
+								  </select>
+								</div>
+							  </div>
 							 
 							<legend class="help-block"> 客户附加信息</legend> 
 							  
@@ -261,6 +291,10 @@
 			var budget=$("#budget").val();
 			
 			var customerTips=$("#customerTips").val();//客户备注
+			
+			var designType=$("#designType").val();
+			var designStyle=$("#designStyle").val();
+			var houseStatus=$("#houseStatus").val();
 			//数据判断
 			if(!username){
 				layer.msg("客户名字不能为空");
@@ -280,9 +314,6 @@
 			}else if(!budget){
 				layer.msg("请输入预算");
 				return;
-			}else if(!budget.match(/^\d+$/)){
-				layer.msg("预算为一个数字");
-				return;
 			}else if(!houseInfo){
 				layer.msg("请输入楼盘信息");
 				return;
@@ -297,6 +328,15 @@
 				return;
 			}else if(!phoneTime){
 				layer.msg("请输入电话预约信息");
+				return;
+			}else if(!designType){
+				layer.msg("请输入装修方式");
+				return;
+			}else if(!designStyle){
+				layer.msg("请输入装修风格");
+				return;
+			}else if(!houseStatus&&houseStatus=="0"){
+				layer.msg("请输入房屋状态");
 				return;
 			}
 			
@@ -323,6 +363,10 @@
 			param.designTime=designTime;
 			param.phoneTime=phoneTime;
 			param.customerTips=customerTips;
+			
+			param.designType=designType;
+			param.designStyle=designStyle;
+			param.houseStatus=houseStatus;
 			
 			$(this).attr("disabled","disabled");
 			$.post("update.html",param,function(json){

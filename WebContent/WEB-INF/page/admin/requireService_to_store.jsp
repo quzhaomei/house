@@ -61,7 +61,7 @@
 							<table class="table">
 							<tr>
 							<td width=11% class="basic-title">需求ID</td><td>${require.requiredId }</td>
-							<td  width=9% class="basic-title">添加时间</td><td><fmt:formatDate value="${require.createDate }" pattern="yyyy-MM-DD HH:mm"/> </td>
+							<td  width=9% class="basic-title">添加时间</td><td><fmt:formatDate value="${require.createDate }" pattern="yyyy-MM-dd HH:mm"/> </td>
 							<td width=9%  class="basic-title">创建人员：</td><td>${require.createUser.nickname }</td>
 							<td class="basic-title">业务人员：</td><td>
 							<c:choose>
@@ -80,27 +80,27 @@
 								<c:when test="${require.status==0  }">
 									发起中
 								</c:when>
-								<c:when test="${require.status==7  }">
-									需求提交中
-								</c:when>
 								<c:when test="${require.status==1  }">
-									已分配
-								</c:when>
-								<c:when test="${require.status==2  }">
 									短信中
 								</c:when>
+								<c:when test="${require.status==2  }">
+									客户打开短信
+								</c:when>
 								<c:when test="${require.status==3  }">
-									客户打开连接
+									客户修改提交
 								</c:when>
 								<c:when test="${require.status==4  }">
-									客户修改并提交
+									确认完毕待发布
 								</c:when>
-								<c:when test="${require.status==5  }">
+								<c:when test="${require.status==6  }">
+									待分单
+								</c:when>
+								<c:when test="${require.status==7  }">
 									待派单
 								</c:when>
-								<c:otherwise>
+								<c:when test="${require.status==8  }">
 									已派单
-								</c:otherwise>
+								</c:when>
 							</c:choose>
 							</span>
 							</td>
@@ -128,8 +128,9 @@
 							<tr>
 							<td class="basic-title">区域</td><td>${require.zone.name }</td>
 							<td class="basic-title">楼盘信息：</td><td>${require.houseInfo }</td>
-							<td class="basic-title">预算：</td><td>￥<fmt:formatNumber value="${require.budget }"></fmt:formatNumber> </td>
-							<td colspan="4">&nbsp;</td>
+							<td class="basic-title">预算：</td><td>${require.budget }</td>
+							<td class="basic-title">房屋状态：</td><td>${require.houseStatus }</td>
+							<td colspan="2">&nbsp;</td>
 							</tr>
 							<tr>
 							<td class="basic-title">房屋地址：</td><td colspan="9">${require.houseLocation }</td>
@@ -137,6 +138,10 @@
 							<td class="basic-title">量房时间约定：</td><td colspan="9">${require.designTime }</td>
 							</tr><tr>
 							<td class="basic-title">电话时间约定</td><td colspan="9">${require.phoneTime }</td>
+							</tr><tr>
+							<td class="basic-title">装修方式</td><td colspan="9">${require.designType }</td>
+							</tr><tr>
+							<td class="basic-title">装修风格</td><td colspan="9">${require.designStyle }</td>
 							</tr>
 							</table>
 							<legend class="help-block"> 客户要求</legend>

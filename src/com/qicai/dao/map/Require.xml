@@ -40,6 +40,13 @@
 		<result property="serviceTips" column="serviceTips" />
 		<result property="operatorLog" column="operatorLog" />
 		
+		<result property="designType" column="designType" />
+		<result property="designStyle" column="designStyle" />
+		<result property="houseStatus" column="houseStatus" />
+		<result property="designTypeBak" column="designTypeBak" />
+		<result property="designStyleBak" column="designStyleBak" />
+		<result property="houseStatusBak" column="houseStatusBak" />
+		
 		
 		<association property="zone" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="zoneId">
 			<id property="zoneId" column="zoneId"/>
@@ -74,13 +81,15 @@
 		INSERT INTO `require`(`requiredId`, `userId`, `username`, `userphone`,
 		 `houseTypeId`, `zoneId`, `budget`, `houseDes`, `isNew`, `houseInfo`, `isReady`, 
 		 `readyDate`, `houseLocation`, `designTime`, `phoneTime`, `customerTips`,
-		 `createDate`, `createUserId`,`status`, `operatorLog`) 
+		 `createDate`, `createUserId`,`status`, `operatorLog`,
+		 `designType`,`designStyle`,`houseStatus`) 
 		 values(#{require.requiredId},#{require.userId},#{require.username}
 		 ,#{require.userphone},#{require.houseTypeId},#{require.zoneId},#{require.budget}
 		 ,#{require.houseDes},#{require.isNew},#{require.houseInfo}
 		 ,#{require.isReady},#{require.readyDate},#{require.houseLocation}
 		 ,#{require.designTime},#{require.phoneTime},#{require.customerTips},#{require.createDate}
-		 ,#{require.createUserId},#{require.status},#{require.operatorLog})
+		 ,#{require.createUserId},#{require.status},#{require.operatorLog},
+		 #{require.designType},#{require.designStyle},#{require.houseStatus})
 	</insert>
 	<select id="update" flushCache="true" >
 	update  `require` set requiredId=#{require.requiredId}
@@ -150,6 +159,25 @@
 			,username=#{require.username}
 		</if>
 		
+		<if test="require.designType!=null">
+			,designType=#{require.designType}
+		</if>
+		<if test="require.designStyle!=null">
+			,designStyle=#{require.designStyle}
+		</if>
+		<if test="require.houseStatus!=null">
+			,houseStatus=#{require.houseStatus}
+		</if>
+		<if test="require.designTypeBak!=null">
+			,designTypeBak=#{require.designTypeBak}
+		</if>
+		<if test="require.designStyle!=null">
+			,designStyleBak=#{require.designStyleBak}
+		</if>
+		<if test="require.houseStatus!=null">
+			,houseStatusBak=#{require.houseStatusBak}
+		</if>
+		
 		<if test="require.budgetBak!=null">
 			,budgetBak=#{require.budgetBak}
 		</if>
@@ -192,7 +220,8 @@
 	</select>
 	<select id="getByParam" resultMap="requireDTO">
 		SELECT r.requiredId,r.userId,r.username,r.userphone,r.zoneId,r.houseTypeId typeId,
-		r.budget,r.budgetBak,
+		r.budget,r.budgetBak,r.designType,r.designTypeBak,r.designStyle,r.designStyleBak
+		,r.houseStatus,r.houseStatusBak,
 		 r.houseDes,r.isNew,r.houseInfo,r.isReady,r.readyDate,r.houseLocation,r.designTime, 
 		 r.phoneTime,r.customerTips,r.houseTypeIdBak typeIdBak,r.zoneIdBak,r.houseDesBak, r.isNewBak,
 		 r.houseInfoBak,r.isReadyBak,r.houseLocationBak,r.designTimeBak,r.phoneTimeBak,r.readyDateBak,

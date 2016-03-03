@@ -114,7 +114,7 @@
 								  <label class="control-label" for="budget">预算</label>
 								 <div class="controls">
 								  <div class="input-prepend">
-									<input id="budget" maxlength="10" placeholder="请输入预算" type="text"> 
+									<input id="budget" maxlength="200" placeholder="请输入预算" type="text"> 
 								  </div>
 								</div>
 							</div> 
@@ -185,6 +185,37 @@
 								  <div class="input-prepend">
 									<input id="phoneTime" maxlength="50"  type="text" placeholder="请输入合适的电话预约时间">
 								  </div>
+								</div>
+							  </div>
+							  
+							   <div class="control-group">
+								<label class="control-label" for="designType">装修方式</label>
+								<div class="controls">
+								  <div class="input-prepend">
+									<input id="designType" maxlength="100"  type="text" placeholder="请输入装修方式">
+								  </div>
+								</div>
+							  </div>
+							  
+							   <div class="control-group">
+								<label class="control-label" for="designStyle">装修风格</label>
+								<div class="controls">
+								  <div class="input-prepend">
+									<input id="designStyle" maxlength="100"  type="text" placeholder="请输入装修风格">
+								  </div>
+								</div>
+							  </div>
+							  
+							   <div class="control-group">
+								<label class="control-label" for="houseStatus">房屋状态</label>
+								<div class="controls">
+									<select id="houseStatus" data-rel="chosen">
+									  <option value="0">请选择房屋状态</option>
+									  	<option value="毛坯房">毛坯房</option>
+									  	<option value="老房翻新">老房翻新</option>
+									  	<option value="局部装修">局部装修</option>
+									  	<option value="工装">工装</option>
+								  </select>
 								</div>
 							  </div>
 							 
@@ -267,6 +298,9 @@
 			
 			var customerTips=$("#customerTips").val();//客户备注
 			
+			var designType=$("#designType").val();
+			var designStyle=$("#designStyle").val();
+			var houseStatus=$("#houseStatus").val();
 			//数据判断
 			if(!username){
 				layer.msg("客户名字不能为空");
@@ -286,9 +320,6 @@
 			}else if(!budget){
 				layer.msg("请输入预算");
 				return;
-			}else if(!budget.match(/^\d+$/)){
-				layer.msg("预算请输入一个数字");
-				return;
 			}else if(!houseInfo){
 				layer.msg("请输入楼盘信息");
 				return;
@@ -304,7 +335,17 @@
 			}else if(!phoneTime){
 				layer.msg("请输入电话预约信息");
 				return;
+			}else if(!designType){
+				layer.msg("请输入装修方式");
+				return;
+			}else if(!designStyle){
+				layer.msg("请输入装修风格");
+				return;
+			}else if(!houseStatus||houseStatus=="0"){
+				layer.msg("请选择房屋状态");
+				return;
 			}
+			
 			
 			var param={};
 			param.operator="add";
@@ -323,6 +364,10 @@
 			param.designTime=designTime;
 			param.phoneTime=phoneTime;
 			param.customerTips=customerTips;
+			
+			param.designType=designType;
+			param.designStyle=designStyle;
+			param.houseStatus=houseStatus;
 			
 			$(this).attr("disabled","disabled");
 			$.post("add.html",param,function(json){

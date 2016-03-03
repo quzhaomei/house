@@ -162,7 +162,7 @@ public class KeeperOrderController extends BaseController {
 						balanceHistoryService.save(history);
 						json.setStatus(1).setMessage("接单成功");
 						//短信通知
-						String content="您好，您的免费量房预约已成功，"+data.getStoreName()+"装修公司将尽快与您预约量房，请保持手机畅通，谢谢！[凯特猫家装]";
+						String content="您好，您的免费量房预约已成功，"+data.getStoreName()+"装修公司将尽快与您预约量房，请保持手机畅通，谢谢！ 回复TD退订。";
 						System.out.println(content);
 						MessageSender.sendMsg(require.getUserphone(), content);
 						

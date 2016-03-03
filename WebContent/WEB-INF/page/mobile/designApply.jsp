@@ -152,6 +152,28 @@
 				<textarea name="calltime" id="calltime" data-rel="designTime" bak="${fn:escapeXml(require.designTime) }"
 				rows="3">${require.designTime }</textarea>
 			</div>
+			<div class="form_row">
+				<i class="icon-box"></i>
+				<select name="houseStatus" id="houseStatus" data-rel="houseStatus" bak="${require.houseStatus }">
+									  	<option value="毛坯房" ${require.houseStatus=='毛坯房'?"selected='selected'":"" }>毛坯房</option>
+									  	<option value="老房翻新" ${require.houseStatus=='老房翻新'?"selected='selected'":"" }>老房翻新</option>
+									  	<option value="局部装修" ${require.houseStatus=='局部装修'?"selected='selected'":"" }>局部装修</option>
+									  	<option value="工装" ${require.houseStatus=='工装'?"selected='selected'":"" }>工装</option>
+				</select>
+			</div>
+			
+			<div class="form_row">
+			<p>装修方式:</p>
+				<textarea name="calltime" id="calltime" data-rel="designType" bak="${fn:escapeXml(require.designType) }"
+				rows="3">${require.designType }</textarea>
+			</div>
+			<div class="form_row">
+			<p>装修风格:</p>
+				<textarea name="calltime" id="calltime" data-rel="designStyle" bak="${fn:escapeXml(require.designStyle) }"
+				rows="3">${require.designStyle }</textarea>
+			</div>
+			
+			
 
 			<div class="form_row">
 			<p>其他留言:</p>
@@ -269,11 +291,6 @@ $(function(){
 				param[name]=value;
 			}
 		});
-		var budget=$("#budget").val();
-		if(budget&&!budget.match(/^\d+$/)){
-			alert("量房预算请输入一个整数金额!");
-			return;
-		}
 		if(confirm("是否确认提交？")){
 			$.post("requireUpdate.html",param,function(data){
 				if(data.status==1){

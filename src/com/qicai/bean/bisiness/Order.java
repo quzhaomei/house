@@ -10,10 +10,11 @@ public class Order {
 	private Integer storeId;
 	private Integer requiredId;
 	private Integer type;//1-消费，2-赠送
-	private Integer status;//0 分配中，1-店铺已接收
 	private Date createDate;
 	private Integer createUserId;
 	private String operatorLog;
+	
+	private Integer status;//0 分配中，1-店铺已接收
 	
 	
 	/**查询辅助条件*/

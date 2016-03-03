@@ -13,7 +13,7 @@ public class RequireDTO {
 	private Integer userId;//用户唯一标识
 	private String username;//用户名  20
 	private String userphone;//电话号码  20
-	private Integer budget;//预算
+	private String budget;//预算
 	
 	/**start-客户可以更改的信息*/
 	private HouseTypeDTO houseType;//房型ID；
@@ -27,9 +27,13 @@ public class RequireDTO {
 	private String designTime;//预约时间
 	private String phoneTime;//电话预约时间
 	private String customerTips;//客户备注
+	
+	private String designType;//装修方式
+	private String designStyle;//装修风格
+	private String houseStatus;//房屋状态 毛坯房、老房翻新、局部装修、工装
 	/**start-客户可以更改的信息*/
 	/**start-客户更改记录*/
-	private Integer budgetBak;//预算
+	private String budgetBak;//预算
 	private HouseTypeDTO houseTypeBak;//房型ID；
 	private ZoneSetDTO zoneBak;//房子所属区域
 	
@@ -42,6 +46,10 @@ public class RequireDTO {
 	private String designTimeBak;//预约时间
 	private String phoneTimeBak;//电话预约时间
 	private String customerTipsBak;//客户备注
+	
+	private String designTypeBak;//装修方式
+	private String designStyleBak;//装修风格
+	private String houseStatusBak;//房屋状态 毛坯房、老房翻新、局部装修、工装
 	/**start-客户可以更改的信息*/
 	
 	private Integer orderCount;//派单数目
@@ -73,17 +81,17 @@ public class RequireDTO {
 		this.requiredId = requiredId;
 	}
 	
-	public Integer getBudget() {
+	
+	public String getBudget() {
 		return budget;
 	}
-	public void setBudget(Integer budget) {
+	public void setBudget(String budget) {
 		this.budget = budget;
 	}
-	
-	public Integer getBudgetBak() {
+	public String getBudgetBak() {
 		return budgetBak;
 	}
-	public void setBudgetBak(Integer budgetBak) {
+	public void setBudgetBak(String budgetBak) {
 		this.budgetBak = budgetBak;
 	}
 	public Integer getHouseDesBak() {
@@ -300,6 +308,42 @@ public class RequireDTO {
 	public void setOperatorLog(String operatorLog) {
 		this.operatorLog = operatorLog;
 	}
-
+	public String getDesignType() {
+		return designType;
+	}
+	public void setDesignType(String designType) {
+		this.designType = designType;
+	}
+	public String getDesignStyle() {
+		return designStyle;
+	}
+	public void setDesignStyle(String designStyle) {
+		this.designStyle = designStyle;
+	}
+	public String getHouseStatus() {
+		return houseStatus;
+	}
+	public void setHouseStatus(String houseStatus) {
+		this.houseStatus = houseStatus;
+	}
+	public String getDesignTypeBak() {
+		return designTypeBak;
+	}
+	public void setDesignTypeBak(String designTypeBak) {
+		this.designTypeBak = designTypeBak;
+	}
+	public String getDesignStyleBak() {
+		return designStyleBak;
+	}
+	public void setDesignStyleBak(String designStyleBak) {
+		this.designStyleBak = designStyleBak;
+	}
+	public String getHouseStatusBak() {
+		return houseStatusBak;
+	}
+	public void setHouseStatusBak(String houseStatusBak) {
+		this.houseStatusBak = houseStatusBak;
+	}
+	
 	
 }

@@ -182,11 +182,15 @@ public class RequirePublishController extends BaseController {
 			String designTime = request.getParameter("designTime");
 			String phoneTime = request.getParameter("phoneTime");
 			String customerTips = request.getParameter("customerTips");
+			
+			String designType = request.getParameter("designType");//装修方式
+			String designStyle = request.getParameter("designStyle");//装修风格
+			String houseStatus = request.getParameter("houseStatus");//房屋状态
 			// 数据校验
 			if (username != null && username.length() <= 20 && userphone != null && userphone.matches("\\d+")
 					&& zoneId != null && zoneId.matches("\\d+") && typeId != null && typeId.matches("\\d+")
 					&& houseDes != null && isNew != null && isNew.matches("\\d+") && budget != null
-					&& budget.matches("\\d+") && houseInfo != null && houseLocation != null && designTime != null
+					 && houseInfo != null && houseLocation != null && designTime != null
 					&& phoneTime != null && isReady.matches("[01]")
 					&& (("1".equals(isReady) || readyDate != null && readyDate.length() == 10))) {
 				Require saveParam = new Require();
@@ -201,10 +205,10 @@ public class RequirePublishController extends BaseController {
 				}
 
 				saveParam.setUsername(username);
-
+				
 				saveParam.setZoneId(Integer.parseInt(zoneId));
 				saveParam.setHouseTypeId(Integer.parseInt(typeId));
-				saveParam.setBudget(Integer.parseInt(budget));
+				saveParam.setBudget(budget);
 				saveParam.setHouseDes(houseDes);
 				saveParam.setHouseInfo(houseInfo);
 				saveParam.setIsNew(Integer.parseInt(isNew));
@@ -220,15 +224,33 @@ public class RequirePublishController extends BaseController {
 				saveParam.setDesignTime(designTime);
 				saveParam.setPhoneTime(phoneTime);
 				saveParam.setCustomerTips(customerTips);
-				saveParam.setStatus(0);// 后台新建预约中
+				saveParam.setStatus(1);// 后台新建预约中->发送短信
 				saveParam.setCreateDate(new Date());
 				saveParam.setCreateUserId(getLoginAdminUser(request).getAdminUserId());
 
 				saveParam.setOperatorLog(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
 						+ getLoginAdminUser(request).getNickname() + " 创建预约");
-
+				
+				saveParam.setDesignType(designType);
+				saveParam.setDesignStyle(designStyle);
+				saveParam.setHouseStatus(houseStatus);
 				try {
 					requireService.save(saveParam);
+					
+					//发送短信
+					String sign = PasswordUtil.MD5(userphone + saveParam.getRequiredId());
+					String host = request.getRequestURL().toString();
+					host = host.substring(0, host.lastIndexOf("/"));
+					host = host.substring(0, host.lastIndexOf("/"));
+					host += "/mobile/requireConfirm.html?requiredId=" 
+					+ saveParam.getRequiredId()+"&userphone="+
+					userphone+"&sign="+sign;
+					String url=host;
+					System.out.println(url);
+					//TODO 创建时 发送链接
+					String content="尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 "+url+" ,回复TD退订。";
+					 MessageSender.sendMsg(userphone, content);
+					 
 					json.setStatus(1).setMessage("预约需求成功");
 				} catch (Exception e) {
 					json.setStatus(0).setMessage("添加过程中。系统出现异常");
@@ -296,8 +318,12 @@ public class RequirePublishController extends BaseController {
 			String designTime = request.getParameter("designTime");
 			String phoneTime = request.getParameter("phoneTime");
 			String customerTips = request.getParameter("customerTips");
+			
+			String designType=request.getParameter("designType");
+			String designStyle=request.getParameter("designStyle");
+			String houseStatus=request.getParameter("houseStatus");
 			// 数据校验
-			if (requiredId != null && requiredId.matches("\\d+") && budget != null && budget.matches("\\d+")
+			if (requiredId != null && requiredId.matches("\\d+") && budget != null 
 					&& username != null && username.length() <= 20 && userphone != null && userphone.matches("\\d+")
 					&& (zoneId == null || zoneId != null && zoneId.matches("\\d+")) && typeId != null
 					&& typeId.matches("\\d+") && houseDes != null && isNew != null && isNew.matches("\\d+")
@@ -312,7 +338,7 @@ public class RequirePublishController extends BaseController {
 				if (zoneId != null && zoneId.matches("\\d+")) {
 					updateParam.setZoneId(Integer.parseInt(zoneId));
 				}
-				updateParam.setBudget(Integer.parseInt(budget));
+				updateParam.setBudget(budget);
 				updateParam.setHouseTypeId(Integer.parseInt(typeId));
 				updateParam.setHouseDes(houseDes);
 				updateParam.setHouseInfo(houseInfo);
@@ -329,12 +355,17 @@ public class RequirePublishController extends BaseController {
 				updateParam.setDesignTime(designTime);
 				updateParam.setPhoneTime(phoneTime);
 				updateParam.setCustomerTips(customerTips);
-
+				
+				updateParam.setDesignStyle(designStyle);
+				updateParam.setDesignType(designType);
+				updateParam.setHouseStatus(houseStatus);
 				try {
 					requireService.update(updateParam);
 					json.setStatus(1).setMessage("预约更新成功");
+					
+					
 				} catch (Exception e) {
-					json.setStatus(0).setMessage("添加过程中。系统出现异常");
+					json.setStatus(0).setMessage("更新过程中。系统出现异常");
 					e.printStackTrace();
 				}
 
@@ -412,7 +443,7 @@ public class RequirePublishController extends BaseController {
 					+ Integer.parseInt(requiredId)+"&userphone="+
 							require.getUserphone()+"&sign="+sign;
 					String url=host;
-//					System.out.println(url);
+					System.out.println(url);
 					//TODO
 					String content="尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 "+url+" ,回复TD退订。";
 					HttpSendResult result= MessageSender.sendMsg(require.getUserphone(), content);
@@ -496,6 +527,10 @@ public class RequirePublishController extends BaseController {
 			
 			String callbackTips=request.getParameter("callbackTips");
 			String serviceTips=request.getParameter("serviceTips");
+			
+			String designType=request.getParameter("designType");
+			String designStyle=request.getParameter("designStyle");
+			String houseStatus=request.getParameter("houseStatus");
 			// 数据校验
 			if (requiredId!=null&&requiredId.matches("\\d+")&&
 					username != null && username.length() <= 20 && userphone != null && userphone.matches("\\d+")
@@ -503,7 +538,7 @@ public class RequirePublishController extends BaseController {
 					&& houseDes != null  && isNew != null && isNew.matches("\\d+")
 					&& houseInfo != null && houseLocation != null && designTime != null && phoneTime != null
 					&& isReady.matches("[01]")
-					&& (budget==null||budget.matches("\\d+"))
+				
 					&& (("1".equals(isReady) || readyDate != null && readyDate.length() == 10))) {
 				RequireDTO old=requireService.getByParam(new Require(Integer.parseInt(requiredId)));
 				if(old==null||old.getStatus()!=3){
@@ -518,13 +553,17 @@ public class RequirePublishController extends BaseController {
 					updateParam.setZoneId(Integer.parseInt(zoneId));
 				}
 				if(budget!=null){
-					updateParam.setBudget(Integer.parseInt(budget));
+					updateParam.setBudget(budget);
 				}
 				updateParam.setHouseTypeId(Integer.parseInt(typeId));
 				updateParam.setHouseDes(houseDes);
 				updateParam.setHouseInfo(houseInfo);
 				updateParam.setIsNew(Integer.parseInt(isNew));
 				updateParam.setIsReady(Integer.parseInt(isReady));
+				
+				updateParam.setHouseStatus(houseStatus);
+				updateParam.setDesignStyle(designStyle);
+				updateParam.setDesignType(designType);
 				if (readyDate != null && readyDate.length() == 10) {
 					try {
 						updateParam.setReadyDate(format.parse(readyDate));

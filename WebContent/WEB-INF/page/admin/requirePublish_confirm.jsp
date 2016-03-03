@@ -138,7 +138,7 @@
 								  <label class="control-label" for="budget">预算</label>
 								 <div class="controls">
 								  <div class="input-prepend">
-									<input id="budget" maxlength="10" value="${require.budget }" placeholder="量房预算" type="text">
+									<input id="budget" maxlength="10" value="${require.budget }" placeholder="预算" type="text">
 									<span class="add-on">￥</span> 
 								  </div>
 								  
@@ -249,6 +249,49 @@
 								  
 								</div>
 							  </div>
+							  
+							  <div class="control-group">
+								<label class="control-label" for="designType">装修方式</label>
+								<div class="controls">
+								  <div class="input-prepend">
+									<input id="designType" maxlength="200"  value="${require.designType }" type="text" placeholder="请输入装修方式">
+								  </div>
+								  
+								   <c:if test="${!empty require.designTypeBak }">
+								  	<span class="label label-important">客户更改为：${require.designTypeBak }</span>
+								  </c:if>
+								  
+								</div>
+							  </div>
+							  <div class="control-group">
+								<label class="control-label" for="designStyle">装修风格</label>
+								<div class="controls">
+								  <div class="input-prepend">
+									<input id="designStyle" maxlength="200"  value="${require.designStyle }" type="text" placeholder="请输入装修风格">
+								  </div>
+								  
+								   <c:if test="${!empty require.designStyleBak }">
+								  	<span class="label label-important">客户更改为：${require.designStyleBak }</span>
+								  </c:if>
+								  
+								</div>
+							  </div>
+							  
+							   <div class="control-group">
+								<label class="control-label" for="houseStatus">房屋状态</label>
+								<div class="controls">
+								  <select name="houseStatus" id="houseStatus" data-rel="houseStatus" bak="${require.houseStatus }">
+									  	<option value="毛坯房" ${require.houseStatus=='毛坯房'?"selected='selected'":"" }>毛坯房</option>
+									  	<option value="老房翻新" ${require.houseStatus=='老房翻新'?"selected='selected'":"" }>老房翻新</option>
+									  	<option value="局部装修" ${require.houseStatus=='局部装修'?"selected='selected'":"" }>局部装修</option>
+									  	<option value="工装" ${require.houseStatus=='工装'?"selected='selected'":"" }>工装</option>
+								</select>
+								   <c:if test="${!empty require.houseStatusBak }">
+								  	<span class="label label-important">客户更改为：${require.houseStatusBak }</span>
+								  </c:if>
+								  
+								</div>
+							  </div>
 							 
 							<legend class="help-block"> 客户附加信息</legend> 
 							  
@@ -267,7 +310,7 @@
 								</div>
 							  </div>
 							  
-							  	<legend class="help-block"> 客服提示</legend>
+						<!-- 	  	<legend class="help-block"> 客服提示</legend>
 							  	
 							  	<div class="control-group">
 								<label class="control-label" for="callbackTips">回访备注</label>
@@ -292,6 +335,7 @@
 								  </div>
 								</div>
 							  </div>
+							   -->
 							  <div class="form-actions">
 								<button type="button" class="btn btn-primary btn-add-require">确认</button>
 								<button class="btn" onclick="history.go(-1)">取消</button>
@@ -348,6 +392,10 @@
 			
 			var callbackTips=$("#callbackTips").val();//回访备注
 			var serviceTips=$("#serviceTips").val();//商户备注
+			
+			var designType=$("#designType").val();
+			var designStyle=$("#designStyle").val();
+			var houseStatus=$("#houseStatus").val();
 			//数据判断
 			if(!username){
 				layer.msg("客户名字不能为空");
@@ -368,10 +416,7 @@
 				layer.msg("请输入楼盘信息");
 				return;
 			}else if(!budget){
-				layer.msg("请输入量房预算");
-				return;
-			}else if(!budget.match(/^\d+$/)){
-				layer.msg("量房预算为整数");
+				layer.msg("请输入预算");
 				return;
 			}else if(isReady==0&&!readyDate){
 				layer.msg("请选择交房时间");
@@ -384,6 +429,15 @@
 				return;
 			}else if(!phoneTime){
 				layer.msg("请输入电话预约信息");
+				return;
+			}else if(!designType){
+				layer.msg("请输入量房类型");
+				return;
+			}else if(!designStyle){
+				layer.msg("请输入量房风格");
+				return;
+			}else if(!houseStatus){
+				layer.msg("请输入房屋状态");
 				return;
 			}
 			
@@ -414,6 +468,10 @@
 			param.callbackTips=callbackTips;
 			param.serviceTips=serviceTips;
 			param.budget=budget;
+			
+			param.designType=designType;
+			param.designStyle=designStyle;
+			param.houseStatus=houseStatus;
 			
 			$(this).attr("disabled","disabled");
 			$.post("confirm.html",param,function(json){

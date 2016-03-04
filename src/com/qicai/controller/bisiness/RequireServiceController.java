@@ -435,7 +435,7 @@ public class RequireServiceController extends BaseController {
 						requireService.update(updateParam);
 						//TODO 短信提示店铺接单
 						//发送短信
-						String content="您好,凯特猫家装后台有单,请注意查收！  ,回复TD退订。";
+						String content="您好,凯特猫家装后台有单,请注意查收！回复TD退订。";
 						 MessageSender.sendMsg(store.getMsgPhone(), content);
 						
 					} catch (Exception e) {

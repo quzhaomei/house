@@ -279,7 +279,7 @@ $(function(){
 	$("#sendResult").on("click",function(){
 			var param={};
 		$("[data-rel]").each(function(){
-			param.operator="change";//代表改变了
+			
 			param.userphone="${userphone}";
 			param.requiredId="${requiredId}";
 			param.sign="${sign}";
@@ -289,6 +289,7 @@ $(function(){
 			var bak=$(this).attr("bak");
 			if(value&&value!=bak){
 				param[name]=value;
+				param.operator="change";//代表改变了
 			}
 		});
 		if(confirm("是否确认提交？")){

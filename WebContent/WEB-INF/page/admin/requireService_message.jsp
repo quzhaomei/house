@@ -133,8 +133,6 @@
 							<td colspan="4">&nbsp;</td>
 							</tr>
 							<tr>
-							<td class="basic-title">量房时间约定：</td><td colspan="9">${require.designTime }</td>
-							</tr><tr>
 							<td class="basic-title">电话时间约定</td><td colspan="9">${require.phoneTime }</td>
 							</tr>
 							<tr>
@@ -142,6 +140,9 @@
 							</tr>
 							<tr>
 							<td class="basic-title">装修风格</td><td colspan="9">${require.designStyle }</td>
+							</tr>
+							<tr>
+							<td class="basic-title">量房时间约定：</td><td colspan="9"><input id="designTime" class="col-10" type="text" maxlength="200" value="${require.designTime }" placeholder="请输入量房时间约定"/></td>
 							</tr>
 							<tr>
 							<td class="basic-title">预算</td><td colspan="9"><input id="budget" class="col-10" type="text" maxlength="200" value="${require.budget }" placeholder="请输入装修预算"/></td>
@@ -194,8 +195,10 @@
 			var callbackTips=$("#callbackTips").val();
 			var serviceTips=$("#serviceTips").val();
 			
+			
 			var budget=$("#budget").val();
 			var houseLocation=$("#houseLocation").val();
+			var designTime=$("#designTime").val();
 			var param={};
 			param.operator="message";
 			param.requiredId=requiredId;
@@ -204,6 +207,7 @@
 			
 			param.budget=budget;
 			param.houseLocation=houseLocation;
+			param.designTime=designTime;
 			$.post("message.html",param,function(json){
 				if(json.status==1){
 					window.location.href="list.html?requiredId="+requiredId;

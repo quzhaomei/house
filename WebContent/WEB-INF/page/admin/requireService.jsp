@@ -11,7 +11,33 @@
 <title>系统后台管理</title>
 <c:import url="public/p-css.jsp"></c:import>
 <style type="text/css">
+<style type="text/css">
 .modal-body{max-height: 580px;}
+
+.layui-layer-content{
+padding:5px 5px;
+}
+.status{
+text-align: center;
+margin:5px 0;
+}
+.status a{
+margin:3px 8px;
+}
+.statuInfo{
+margin:0px 20px;
+width:90%;
+height:95px;
+}
+.stLine{
+margin:10px 20px;
+padding-bottom:5px;
+border-bottom:1px solid #aaa;
+font-weight: bold;
+}
+.modal-footer a.btn{
+position: relative !important;
+}
 </style>
 </head>
 
@@ -61,6 +87,8 @@
 								<option value="-1" ${param.status=="-1"?"selected='selected'":"" }>全部</option>
 								<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单</option>
 								<option value="8" ${param.status=="8"?"selected='selected'":"" }>已派单</option>
+								<option value="40" ${param.status=="40"?"selected='selected'":"" }>关闭</option>
+								<option value="41" ${param.status=="41"?"selected='selected'":"" }>待跟进库</option>
 							</select></td>
 						</tr>
 						<tr>
@@ -115,13 +143,22 @@
 						  				<c:when test="${temp.status==8}">
 						  				<span class="label label-success">已派单</span>
 						  				</c:when>
+						  				<c:when test="${temp.status==40}">
+						  				<span class="label label-success">关闭</span>
+						  				</c:when>
+						  				<c:when test="${temp.status==41}">
+						  				<span class="label label-success">待跟进库</span>
+						  				</c:when>
 						  			</c:choose>
 						  		</td>
 						  		<td>
 						  		<ad:power uri="../requireService/list.html">
 						  		<a class="btn btn-mini" href="list.html?requiredId=${temp.requiredId }">详情</a>
 						  		</ad:power>
-						  			<ad:power uri="../requireService/toStore.html">
+						  		
+						  		<c:choose>
+						  			<c:when test="${temp.status!=40&&temp.status!=41 }">
+						  				<ad:power uri="../requireService/toStore.html">
 							  			<a class="btn btn-mini green" href="toStore.html?operator=to_store&requiredId=${temp.requiredId }">
 							  			去派单</a>
 							  			</ad:power>
@@ -142,6 +179,14 @@
 							  			</c:if>
 							  			</ad:power>
 							  			
+							  			<ad:power uri="../requireService/message.html">	
+							  			<a class="btn btn-mini btn-danger otherStatus" href="#" requiredId="${temp.requiredId }"
+							  			status="${temp.status}">
+							  			状态冻结</a>
+							  			</ad:power>
+						  			</c:when>
+						  		</c:choose>
+						  			
 						  		 </td>
 						  		</tr>
 						  	</c:forEach>
@@ -205,8 +250,100 @@
 			$.post(url,function(json){
 				layer.msg(json.message);
 			},"json")
-		})
+		});
 		
+		//切换状态
+		$(".otherStatus").on("click",function(){
+			var requiredId=$(this).attr("requiredId");
+			if(!requiredId){layer.msg("数据缺失！");return;}
+			var param={};
+			param.operator="toOtherStatus";
+			param.requiredId=requiredId;
+			$.post("message.html",param,function(json){
+				var callbackTips=json.callbackTips;
+				var status=json.status;
+				layer.open({
+				    type: 1,
+				    scrollbar: false,
+				    title:"切换订单状态",
+				    shadeClose:true,
+				    skin: 'layui-layer-rim', //加上边框
+				    area: ['520px', 'auto'], //宽高
+				    content: '<input type="hidden" id="statusTemp"/><div class="status"><a class="btn  status btn-mini " status="40" href="javascript:;">'+ 
+						' 关闭订单</a><a class="btn  status btn-mini" status="41" href="javascript:;">'+ 
+						' 待跟进库</a></div>'+ 
+						' <p class="stLine"  id="nextcallTime-p">下次回访时间： <input type="text" readeronly="readeronly" id="nextcallTime" placeholder="请填写下次回访时间"/></p>'+
+						' <p class="stLine">备注： <small>修改状态的时候，请更改回访备注</small></p><textarea class="statuInfo"></textarea>'+
+						'<div class="modal-footer"><a href="#" class="btn btn-sm layui-layer-close" data-dismiss="modal">返回</a> <a href="#" class="btn btn-primary btn-sm status-submit">更新</a>'+
+						'</div>',
+					success:function(){
+						$("div.status a.btn[status='"+status+"']").addClass("btn-success");
+						$("#statusTemp").attr("status",status).attr("requiredId",requiredId);
+						$(".statuInfo").val(callbackTips);
+						$("#nextcallTime").datepicker({changeYear:true,changeMonth:true});
+						if(status==41){
+							$("#nextcallTime-p").show();
+							$("#nextcallTime").val(json.nextCallTimeStr);
+						}else{
+							$("#nextcallTime-p").hide();
+						}
+					}
+				});
+			},"json");
+		});
+		
+		$("body").on("click","div.status a.btn",function(){
+			var status=$(this).attr("status");
+			
+			if($(this).hasClass("btn-success")){
+				return;
+			}
+			$("div.status a.btn").removeClass("btn-success");
+			$(this).addClass("btn-success");
+			if(status=="41"){
+				$("#nextcallTime-p").show();
+			}else{
+				$("#nextcallTime-p").hide();
+			}
+		});
+		
+		$("body").on("click","a.status-submit",function(){
+			var oldstatus=$("#statusTemp").attr("status");
+			var requiredId=$("#statusTemp").attr("requiredId");
+			var newstatus=$("div.status a.btn[status].btn-success").attr("status");
+			var info=$(".statuInfo").val();
+			var nextcallTime=$("#nextcallTime").val();
+			if(!newstatus){
+				layer.msg("请选择状态");
+				return;
+			}
+			if(oldstatus==newstatus){
+				layer.msg("状态未检测到变化！");
+				return;
+			}
+			
+			var param={};
+			param.status=newstatus;
+			if(info){param.info=info;}
+			param.requiredId=requiredId;
+			param.operator="otherStatus";
+			if(newstatus=="41"&&!nextcallTime){
+				layer.msg("请填写下次回访时间");
+				return;
+			}
+			if(newstatus=="41"){
+				param.nextcallTime=nextcallTime;
+			}
+			$.post("message.html",param,function(data){
+				if(data.status=="1"){
+					layer.msg(data.message);
+					$("#myform").submit();
+				}else{
+					layer.msg(data.message);
+				}
+				
+			},"json");
+		});
 	});
 	</script>
 </body>

@@ -67,18 +67,53 @@ public class Require {
 	 * 
 	 * 8-已派单
 	 * 
+	 * 
+	 * 40关闭，41待跟进库
 	 */
+	
 	private Integer status;
 	private String operatorLog;//操作记录，
 	
+	/**新字段*/
+	private Date nextCallTime;//下次回访的时间
+	private Date fileTime;//归档时间
 	
+	
+	
+	public Date getNextCallTime() {
+		return nextCallTime;
+	}
+	public void setNextCallTime(Date nextCallTime) {
+		this.nextCallTime = nextCallTime;
+	}
+	public Date getFileTime() {
+		return fileTime;
+	}
+	public void setFileTime(Date fileTime) {
+		this.fileTime = fileTime;
+	}
 	/**查询辅助条件*/
 	private Date startDate;
 	private Date endDate;
 	private Date serviceStartDate;
 	private Date serviceEndDate;
 	
+	private Date startFileTime;
+	private Date endFileTime;
 	
+	
+	public Date getStartFileTime() {
+		return startFileTime;
+	}
+	public void setStartFileTime(Date startFileTime) {
+		this.startFileTime = startFileTime;
+	}
+	public Date getEndFileTime() {
+		return endFileTime;
+	}
+	public void setEndFileTime(Date endFileTime) {
+		this.endFileTime = endFileTime;
+	}
 	public Integer getRequiredId() {
 		return requiredId;
 	}

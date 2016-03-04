@@ -69,9 +69,33 @@ public class RequireDTO {
 	 * 6-待分单
 	 * 
 	 * 7-待派单
-	 * 
+	 * 40关闭，41待跟进库
 	 * 8-已派单
 	 */
+	
+	private Date nextCallTime;//下次回访的时间
+	private String nextCallTimeStr;
+	private Date fileTime;//归档时间
+	
+	
+	public String getNextCallTimeStr() {
+		return nextCallTimeStr;
+	}
+	public void setNextCallTimeStr(String nextCallTimeStr) {
+		this.nextCallTimeStr = nextCallTimeStr;
+	}
+	public Date getNextCallTime() {
+		return nextCallTime;
+	}
+	public void setNextCallTime(Date nextCallTime) {
+		this.nextCallTime = nextCallTime;
+	}
+	public Date getFileTime() {
+		return fileTime;
+	}
+	public void setFileTime(Date fileTime) {
+		this.fileTime = fileTime;
+	}
 	private Integer status;
 	private String operatorLog;//操作记录，
 	public Integer getRequiredId() {

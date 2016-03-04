@@ -248,6 +248,7 @@ public class RequireServiceController extends BaseController {
 				String serviceTips = request.getParameter("serviceTips");
 				String budget=request.getParameter("budget");
 				String houseLocation=request.getParameter("houseLocation");
+				String designTime=request.getParameter("designTime");
 				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
 				if (require != null) {
 					Require updateParam = new Require();
@@ -256,11 +257,12 @@ public class RequireServiceController extends BaseController {
 					updateParam.setHouseLocation(houseLocation);
 					updateParam.setCallbackTips(callbackTips);
 					updateParam.setServiceTips(serviceTips);
+					updateParam.setDesignTime(designTime);
 					try {
 						requireService.update(updateParam);
-						json.setStatus(1).setMessage("更新需求备注成功！");
+						json.setStatus(1).setMessage("更新需求成功！");
 					} catch (Exception e) {
-						json.setStatus(0).setMessage("更新备注过程中，系统出现异常！");
+						json.setStatus(0).setMessage("更新过程中，系统出现异常！");
 						e.printStackTrace();
 					}
 				} else {
@@ -268,8 +270,57 @@ public class RequireServiceController extends BaseController {
 				}
 				model.addAttribute("json", JSONUtil.object2json(json));
 				return JSON;
+			}else if("toOtherStatus".equals(operator)){
+				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				if(require.getNextCallTime()!=null){
+					require.setNextCallTimeStr(new SimpleDateFormat("yyyy-MM-dd").format(require.getNextCallTime()));
+				}
+				model.addAttribute("json", JSONUtil.object2json(require));
+				return JSON;
+			}else if("otherStatus".equals(operator)){
+				JsonDTO json=new JsonDTO();
+				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				String status=request.getParameter("status");
+				String info=request.getParameter("info");
+				String nextcallTime=request.getParameter("nextcallTime");
+				if(status!=null&&status.matches("\\d+")&&require!=null){
+					Require updateParam=new Require();
+					updateParam.setRequiredId(Integer.parseInt(requiredId));
+					updateParam.setCallbackTips(info);
+					updateParam.setStatus(Integer.parseInt(status));
+					String logOp=null;
+					if(Integer.parseInt(status)==40){
+						updateParam.setFileTime(new Date());
+						logOp="关闭";
+					}else if(Integer.parseInt(status)==41){
+						updateParam.setFileTime(new Date());
+						try {
+							updateParam.setNextCallTime(new SimpleDateFormat("yyyy-MM-dd").parse(nextcallTime));
+							
+						} catch (ParseException e) {
+							
+							e.printStackTrace();
+						}
+						logOp="待跟进库";
+					}
+					updateParam.setOperatorLog(require.getOperatorLog() + " <br/> "
+							+ new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+							+ getLoginAdminUser(request).getNickname() + " 对订单进行了 " +logOp+" 操作");
+					try {
+						requireService.update(updateParam);
+						json.setStatus(1).setMessage("更新成功");
+					} catch (Exception e) {
+						json.setStatus(0).setMessage("更新过程中，系统出现异常");
+						e.printStackTrace();
+					}
+					
+				}else{
+					json.setStatus(0).setMessage("数据异常");
+				}
+				model.addAttribute("json", JSONUtil.object2json(json));
+				return JSON;
 			}
-
+			
 		}
 		return "";
 	}

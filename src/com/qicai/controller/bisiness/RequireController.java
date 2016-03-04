@@ -49,6 +49,10 @@ public class RequireController extends BaseController {
 				String userId=request.getParameter("userId");
 				String serviceStartDate=request.getParameter("serviceStartDate");
 				String serviceEndDate=request.getParameter("serviceEndDate");
+				
+				String callbackTips=request.getParameter("callbackTips");
+				String startFileTime=request.getParameter("startFileTime");
+				String endFileTime=request.getParameter("endFileTime");
 				if (pageIndex == null) {
 					pageIndex = "1";
 				}
@@ -98,6 +102,24 @@ public class RequireController extends BaseController {
 								Date serviceEndTime=format.parse(serviceEndDate);
 								serviceEndTime.setDate(serviceEndTime.getDate()+1);
 								selectParam.setServiceEndDate(serviceEndTime);
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+						}
+						
+						selectParam.setCallbackTips(callbackTips);
+						if(startFileTime!=null&&startFileTime.length()==10){
+							try {
+								selectParam.setStartFileTime(format.parse(startFileTime));
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+						}
+						if(endFileTime!=null&&endFileTime.length()==10){
+							try {
+								Date serviceEndTime=format.parse(endFileTime);
+								serviceEndTime.setDate(serviceEndTime.getDate()+1);
+								selectParam.setEndFileTime(serviceEndTime);
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}

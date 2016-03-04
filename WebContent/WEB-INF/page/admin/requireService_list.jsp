@@ -101,6 +101,12 @@
 								<c:when test="${require.status==8  }">
 									已派单
 								</c:when>
+								<c:when test="${require.status==40  }">
+									订单关闭
+								</c:when>
+								<c:when test="${require.status==41  }">
+									待跟进库
+								</c:when>
 							</c:choose>
 							</span>
 							</td>
@@ -146,12 +152,23 @@
 							</table>
 							<legend class="help-block"> 客户要求</legend>
 							<p class="basic-info">${require.customerTips }</p>
-							<legend class="help-block"> 回访备注</legend>
-							<p class="basic-info">${require.callbackTips }</p>
 							<legend class="help-block"> 商家提示</legend>
 							<p class="basic-info">${require.serviceTips }</p>
 							<legend class="help-block">操作日志</legend>
 							<p class="basic-info">${require.operatorLog }</p>
+							
+							<c:if test="${require.status==40 }">
+								<legend class="help-block"> 关闭原因</legend>
+								<p class="basic-info">${require.callbackTips }</p>
+								<p class="basic-info">归档时间：<fmt:formatDate value="${require.fileTime }" pattern="yyyy-MM-dd"/></p>
+							</c:if>
+							<c:if test="${require.status==41 }">
+								<legend class="help-block"> 进库原因</legend>
+								<p class="basic-info">${require.callbackTips }</p>
+								<p class="basic-info">
+								归档时间：<fmt:formatDate value="${require.fileTime }" pattern="yyyy-MM-dd HH:mm"/>
+								<br/>下次回访时间:<fmt:formatDate value="${require.nextCallTime }" pattern="yyyy-MM-dd"/> </p>
+							</c:if>
 							</fieldset>
 							
 						</form>

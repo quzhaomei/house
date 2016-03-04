@@ -47,6 +47,9 @@
 		<result property="designStyleBak" column="designStyleBak" />
 		<result property="houseStatusBak" column="houseStatusBak" />
 		
+		<result property="nextCallTime" column="nextCallTime" />
+		<result property="fileTime" column="fileTime" />
+		
 		
 		<association property="zone" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="zoneId">
 			<id property="zoneId" column="zoneId"/>
@@ -214,6 +217,12 @@
 		<if test="require.customerTipsBak!=null">
 			,customerTipsBak=#{require.customerTipsBak}
 		</if>
+		<if test="require.fileTime!=null">
+			,fileTime=#{require.fileTime}
+		</if>
+		<if test="require.nextCallTime!=null">
+			,nextCallTime=#{require.nextCallTime}
+		</if>
 		
 		where requiredId=#{require.requiredId}
 	
@@ -221,7 +230,7 @@
 	<select id="getByParam" resultMap="requireDTO">
 		SELECT r.requiredId,r.userId,r.username,r.userphone,r.zoneId,r.houseTypeId typeId,
 		r.budget,r.budgetBak,r.designType,r.designTypeBak,r.designStyle,r.designStyleBak
-		,r.houseStatus,r.houseStatusBak,
+		,r.houseStatus,r.houseStatusBak,r.fileTime,r.nextCallTime,
 		 r.houseDes,r.isNew,r.houseInfo,r.isReady,r.readyDate,r.houseLocation,r.designTime, 
 		 r.phoneTime,r.customerTips,r.houseTypeIdBak typeIdBak,r.zoneIdBak,r.houseDesBak, r.isNewBak,
 		 r.houseInfoBak,r.isReadyBak,r.houseLocationBak,r.designTimeBak,r.phoneTimeBak,r.readyDateBak,
@@ -248,7 +257,7 @@
 	</select>
 	<select id="getListByParam" resultMap="requireDTO">
 		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
-		r.budget,r.budgetBak,r.houseInfo,
+		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount
 		from `require` r left join 
@@ -280,6 +289,16 @@
 		</if>
 		<if test="page.param.serviceEndDate!=null">
 		and r.serviceDate &lt; #{page.param.serviceEndDate}
+		</if>
+		
+		<if test="page.param.callbackTips!=null">
+		and r.callbackTips like '%${page.param.callbackTips}%'
+		</if>
+		<if test="page.param.startFileTime!=null">
+		and r.fileTime &gt; #{page.param.startFileTime}
+		</if>
+		<if test="page.param.endFileTime!=null">
+		and r.fileTime &lt; #{page.param.endFileTime}
 		</if>
 		 order by r.createDate desc
 		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
@@ -314,11 +333,21 @@
 		<if test="require.serviceEndDate!=null">
 		and serviceDate &lt; #{require.serviceEndDate}
 		</if>
+		
+		<if test="require.callbackTips!=null">
+		and callbackTips like '%${require.callbackTips}%'
+		</if>
+		<if test="require.startFileTime!=null">
+		and fileTime &gt; #{require.startFileTime}
+		</if>
+		<if test="require.endFileTime!=null">
+		and fileTime &lt; #{require.endFileTime}
+		</if>
 	</select>
 	
 	<select id="list" resultMap="requireDTO">
 		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
-		r.budget,r.budgetBak,
+		r.budget,r.budgetBak,r.fileTime,r.nextCallTime,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount
 		from `require` r left join 

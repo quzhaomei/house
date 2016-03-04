@@ -12,6 +12,7 @@
 <c:import url="public/p-css.jsp"></c:import>
 <style type="text/css">
 .modal-body{max-height: 580px;}
+tr.other-info{display:none;border-top:1px solid red;}
 </style>
 </head>
 
@@ -57,7 +58,7 @@
 						<tr>
 							<td width=7%>用户名称</td><td width=18%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
 							<td width=7% >用户Id</td><td width=18%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户ID"/></td>
-							<td width=5%>状态</td><td width=18%><select style="width:100px;" name="status" rel="chosen">
+							<td width=5%>状态</td><td width=18%><select style="width:100px;" name="status" id="chonsenstatus" rel="chosen">
 								<option value="-1" ${param.status=="-1"?"selected='selected'":"" }>全部</option>
 								<option value="0" ${param.status=="0"?"selected='selected'":"" }>发起中</option>
 								<option value="1" ${param.status=="1"?"selected='selected'":"" }>短信中</option>
@@ -67,6 +68,8 @@
 								<option value="6" ${param.status=="6"?"selected='selected'":"" }>待分单给客服</option>
 								<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单给商家</option>
 								<option value="8" ${param.status=="8"?"selected='selected'":"" }>已派单</option>
+								<option value="40" ${param.status=="40"?"selected='selected'":"" }>关闭</option>
+								<option value="41" ${param.status=="41"?"selected='selected'":"" }>待跟进库</option>
 							</select></td>
 						</tr>
 						<tr>
@@ -80,14 +83,27 @@
 							<input type="text" name="serviceStartDate" id="serviceStartDate" value='${param.serviceStartDate }' class="datepicker span5" />
 									-
 							<input type="text" name="serviceEndDate" id="serviceEndDate" value='${param.serviceEndDate }' class="datepicker span5"/>
-							</td>
-							<td colspan="2">
-							<span class="add-on">
+							</td><td colspan="2"><span class="add-on">
 							<button type="button" class="btn btn-small btn-search">
 							<i class="halflings-icon search white"></i> 查询</button>
-							</span>
-							</td>
+							</span></td>
 						</tr>
+						
+						<tr class="other-info">
+						
+							<td >关闭/入库 时间</td>
+							<td>
+							<input type="text" name="startFileTime" id="startFileTime"value='${param.startFileTime }' class="datepicker span5" />
+									-
+							<input type="text" name="endFileTime" id="endFileTime" value='${param.endFileTime }' class="datepicker span5"/>
+							</td>
+							<td >关闭/入库 原因</td>
+							<td><input type="text" name="callbackTips" id="callbackTips" value='${param.callbackTips }' class="span12" maxlength="200" /> </td>
+							
+							<td colspan="2">
+							&nbsp;</td>
+						</tr>
+						
 						</table>
 						</form>
 						
@@ -142,6 +158,14 @@
 						  				</c:when>
 						  				<c:when test="${temp.status==8}">
 						  				<span class="label">已派单</span>
+						  				</c:when>
+						  				
+						  				
+						  				<c:when test="${temp.status==40}">
+						  				<span class="label">关闭</span>
+						  				</c:when>
+						  				<c:when test="${temp.status==41}">
+						  				<span class="label">待跟进库</span>
 						  				</c:when>
 						  			</c:choose>
 						  		</td>
@@ -231,7 +255,18 @@
 			layer.msg($(_this).attr("title").replace(/#/g,"<br/>"), {time: 5000, icon:6});
 		});
 		
-		
+		$("#chonsenstatus").on("change",function(){
+			var value=$(this).val();
+			if(value=="40"||value=="41"){
+				$(".other-info").show();
+			}else{
+				$(".other-info").hide();
+				$("#callbackTips").val("");
+				$("#startFileTime").val("");
+				$("#endFileTime").val("");
+			}o
+		});
+		$("#chonsenstatus").change();
 	});
 	</script>
 </body>

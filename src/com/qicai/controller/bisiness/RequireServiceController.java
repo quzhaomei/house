@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.qicai.annotation.LimitTag;
 import com.qicai.bean.bisiness.HouseType;
+import com.qicai.bean.bisiness.HouseTypeToStore;
 import com.qicai.bean.bisiness.Order;
 import com.qicai.bean.bisiness.Require;
 import com.qicai.bean.bisiness.Store;
@@ -22,6 +23,7 @@ import com.qicai.controller.BaseController;
 import com.qicai.dto.JsonDTO;
 import com.qicai.dto.PageDTO;
 import com.qicai.dto.bisiness.HouseTypeDTO;
+import com.qicai.dto.bisiness.HouseTypeToStoreDTO;
 import com.qicai.dto.bisiness.OrderDTO;
 import com.qicai.dto.bisiness.RequireDTO;
 import com.qicai.dto.bisiness.ServiceStoreDTO;
@@ -29,7 +31,6 @@ import com.qicai.dto.bisiness.StoreDTO;
 import com.qicai.dto.bisiness.ZoneSetDTO;
 import com.qicai.util.JSONUtil;
 import com.qicai.util.MessageSender;
-import com.qicai.util.PasswordUtil;
 import com.qicai.util.ShortUrlUtil;
 
 /**
@@ -319,6 +320,33 @@ public class RequireServiceController extends BaseController {
 				}
 				model.addAttribute("json", JSONUtil.object2json(json));
 				return JSON;
+			}else if("openStatus".equals(operator)){//激活
+				JsonDTO json=new JsonDTO();
+				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				if(require!=null){
+					if(require.getStatus()==41){
+						Require updateParam=new Require();
+						updateParam.setRequiredId(Integer.parseInt(requiredId));
+						updateParam.setStatus(7);//待派单状态
+						updateParam.setOperatorLog(require.getOperatorLog() + " <br/> "
+								+ new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+								+ getLoginAdminUser(request).getNickname() + " 对订单进行了 激活到待派单 操作");
+						try {
+							requireService.update(updateParam);
+							json.setStatus(1).setMessage("更新成功");
+						} catch (Exception e) {
+							json.setStatus(0).setMessage("更新过程中，系统出现异常");
+							e.printStackTrace();
+						}
+						
+					}else{
+						json.setStatus(0).setMessage("状态异常");
+					}
+				}else{
+					json.setStatus(0).setMessage("该需求不存在！");
+				}
+				model.addAttribute("json", JSONUtil.object2json(json));
+				return "json";
 			}
 			
 		}
@@ -398,7 +426,20 @@ public class RequireServiceController extends BaseController {
 					page.setPageSize(Integer.parseInt(pageSize));
 					page.setPageIndex(Integer.parseInt(pageIndex));
 					PageDTO<List<ServiceStoreDTO>> pageDate = storeService.getServiceListByParam(page);
-
+					
+					List<ServiceStoreDTO> mainDate=pageDate.getParam();
+					for(ServiceStoreDTO temp:mainDate){
+						HouseTypeToStore param=new HouseTypeToStore();
+						param.setHouseTypeId(require.getHouseType().getTypeId());
+						param.setStoreId(temp.getStoreId());
+						HouseTypeToStoreDTO store=houseTypeToStoreService.getByParam(param);
+						if(store.getPrice()!=null){
+							temp.setPrice(store.getPrice());
+						}else{
+							temp.setPrice(require.getHouseType().getPrice());
+						}
+					}
+					
 					model.addAttribute("pageResult", pageDate);
 
 					// 查询前100条派单历史

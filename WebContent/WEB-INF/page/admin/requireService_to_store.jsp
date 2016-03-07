@@ -171,7 +171,7 @@
 							</fieldset>
 							<div>
 							<h2>店铺派单</h2>
-							订单单价：￥ ${require.houseType.price }
+							订单默认单价：￥ ${require.houseType.price }
 							<form class="form-horizontal" action="toStore.html#myform" method="post" id="myform" rel="admin-form">
 							<input name="operator" value="to_store" type="hidden"/>
 							<input name="pageIndex" id="pageIndex" type="hidden" value="${pageResult.pageIndex}"/>
@@ -221,6 +221,7 @@
 								<tr>
 								<td width="15%">商家名称</td><td width="15%">账户余额</td>
 								<td >每月订单控量</td>
+								<td >订单单价</td>
 								<td width="20%">本月发单情况</td>
 								<td>操作</td>
 								</tr>
@@ -228,6 +229,7 @@
 								<tr>
 								<td>${temp.storeName }</td><td>${temp.balance }</td>
 								<td>${temp.size }</td>
+								<td>${temp.price }</td>
 								<td>派单：${temp.monthCount } 份 ，赠送:${temp.monthFreeCount } 份</td>
 								<td>
 								<span class="btn btn-mini btn-success send-to-store" storeId="${temp.storeId}" type="1">派单</span>

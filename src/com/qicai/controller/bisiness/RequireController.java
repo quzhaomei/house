@@ -106,8 +106,8 @@ public class RequireController extends BaseController {
 								e.printStackTrace();
 							}
 						}
-						
-						selectParam.setCallbackTips(callbackTips);
+						if(callbackTips!=null&&!callbackTips.equals(""))
+							selectParam.setCallbackTips(callbackTips);
 						if(startFileTime!=null&&startFileTime.length()==10){
 							try {
 								selectParam.setStartFileTime(format.parse(startFileTime));

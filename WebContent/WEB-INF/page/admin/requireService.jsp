@@ -186,7 +186,13 @@ position: relative !important;
 							  			</ad:power>
 						  			</c:when>
 						  		</c:choose>
-						  			
+						  			<c:if test="${temp.status==41 }">
+						  				<ad:power uri="../requireService/message.html">	
+							  			<a class="btn btn-mini btn-danger useStatus" href="#" requiredId="${temp.requiredId }"
+							  			status="${temp.status}">
+							  			激活</a>
+							  			</ad:power>
+						  			</c:if>
 						  		 </td>
 						  		</tr>
 						  	</c:forEach>
@@ -290,6 +296,27 @@ position: relative !important;
 					}
 				});
 			},"json");
+		});
+		//带跟进库激活
+		$(".useStatus").on("click",function(){
+			var requiredId=$(this).attr("requiredId");
+			if(!requiredId){layer.msg("数据缺失！");return;}
+			var param={};
+			param.operator="openStatus";
+			param.requiredId=requiredId;
+
+			layer.confirm("确定激活吗？",function(index){
+				layer.close(index);
+				$.post("message.html",param,function(json){
+					if(json.status==1){
+						layer.msg(json.message);
+						$("#myform").submit();
+					}else{
+						layer.msg(json.message);
+					}
+					
+				},"json");
+			});
 		});
 		
 		$("body").on("click","div.status a.btn",function(){

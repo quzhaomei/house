@@ -59,13 +59,13 @@
 						  <thead>
 							  <tr>
 								  <th width=5%>序列</th>
-								  <th width=10%>房型名称</th>
-								  <th width=5%>佣金</th>
+								  <th width=14%>房型名称</th>
+								  <th width=8%>默认佣金</th>
 								  <th width=10%>创建用户</th>
-								  <th width=15%>创建时间</th>
+								  <th width=12%>创建时间</th>
 								  <th width=10%>更新者</th>
-								  <th width=15%>更新时间</th>
-								  <th width=10%>状态</th>
+								  <th width=12%>更新时间</th>
+								  <th width=5%>状态</th>
 								  <th width=20%>操作</th>
 							  </tr>
 						  </thead>   
@@ -101,6 +101,12 @@
 									<ad:power uri="../houseType/update.html">
 									<a class="btn btn-info btn-mini editHouse" href="#" typeId="${temp.typeId }">
 										<i class="halflings-icon white edit "></i>  修改
+									</a>
+									</ad:power>
+									
+									<ad:power uri="../houseType/update.html">
+									<a class="btn btn-info btn-mini" href="update.html?operator=toStoreSet&typeId=${temp.typeId }" >
+										<i class="halflings-icon white edit "></i>  店铺佣金设置
 									</a>
 									</ad:power>
 									
@@ -282,8 +288,8 @@
 				<input class="input-large span5" id="add_name"  type="text" placeholder="请输入新建房型名称" maxlength="50" >
 				</div>	
 				<div class="input-prepend" title="房型名称">
-				<span class="add-on"><i class="halflings-icon user"></i> 佣金 </span>
-				<input class="input-large span5" id="add_price"  type="text" placeholder="请输入房型佣金" maxlength="10" >
+				<span class="add-on"><i class="halflings-icon user"></i> 默认 佣金 </span>
+				<input class="input-large span5" id="add_price"  type="text" placeholder="请输入房默认佣金" maxlength="10" >
 				</div>	
 		</div>
 		<div class="modal-footer">
@@ -312,10 +318,10 @@
 					</tr>
 					<tr>
 					<td>
-						<span class="add-on"><i class="halflings-icon user"></i> 房型 佣 金 </span>
+						<span class="add-on"><i class="halflings-icon user"></i> 默认 佣 金 </span>
 					</td>
 					<td>
-						<input class="input-large span5" id="update_price"  type="text" placeholder="请输入房型佣金" maxlength="10" >
+						<input class="input-large span5" id="update_price"  type="text" placeholder="请输入默认佣金" maxlength="10" >
 					</td>
 					</tr>
 					<tr>

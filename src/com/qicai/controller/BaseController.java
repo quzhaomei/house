@@ -10,6 +10,7 @@ import com.qicai.service.AdminUserService;
 import com.qicai.service.BalanceHistoryService;
 import com.qicai.service.DesignApplyService;
 import com.qicai.service.HouseTypeService;
+import com.qicai.service.HouseTypeToStoreService;
 import com.qicai.service.MenuManagerService;
 import com.qicai.service.OrderService;
 import com.qicai.service.RequireService;
@@ -84,6 +85,10 @@ public class BaseController {
 	
 	@Resource
 	protected HouseTypeService houseTypeService;//房型设置
+	
+	
+	@Resource
+	protected HouseTypeToStoreService houseTypeToStoreService;//房型价格设置
 	
 	@Resource
 	protected StoreService storeService;//房型设置

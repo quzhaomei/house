@@ -12,6 +12,15 @@ public class ServiceStoreDTO {
 	private List<ZoneCountDTO> zoneCount;
 	private List<ZoneCountDTO> typeCount;
 	
+	//展示辅助
+	private Integer price;//该订单的价格
+	
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
 	public Integer getSize() {
 		return size;
 	}

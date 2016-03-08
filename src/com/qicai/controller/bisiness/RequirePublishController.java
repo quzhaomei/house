@@ -248,7 +248,6 @@ public class RequirePublishController extends BaseController {
 					userphone+"&sign="+sign;
 					String url=host;
 					url=ShortUrlUtil.getShotUrl(url);
-					System.out.println(url);
 					//TODO 创建时 发送链接
 					String content="尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 "+url+" ,回复TD退订。";
 					 MessageSender.sendMsg(userphone, content);

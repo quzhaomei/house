@@ -26,6 +26,7 @@ import com.qicai.util.HttpSendResult;
 import com.qicai.util.JSONUtil;
 import com.qicai.util.MessageSender;
 import com.qicai.util.PasswordUtil;
+import com.qicai.util.ShortUrlUtil;
 import com.qicai.util.UuidUtils;
 
 /**
@@ -443,8 +444,7 @@ public class RequirePublishController extends BaseController {
 					+ Integer.parseInt(requiredId)+"&userphone="+
 							require.getUserphone()+"&sign="+sign;
 					String url=host;
-					System.out.println(url);
-					//TODO
+					url=ShortUrlUtil.getShotUrl(url);
 					String content="尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 "+url+" ,回复TD退订。";
 					HttpSendResult result= MessageSender.sendMsg(require.getUserphone(), content);
 					if(result.getIsSuccess()){
@@ -602,5 +602,8 @@ public class RequirePublishController extends BaseController {
 		}
 		return "admin/requirePublish_confirm";
 	}
-
+	public static void main(String[] args) {
+		String url="http://51getMore.cn/asdsadad/sadsadsadsadsadsaccascsac/dsasd.html";
+		System.out.println(ShortUrlUtil.getShotUrl(url));
+	}
 }

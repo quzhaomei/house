@@ -216,7 +216,7 @@ public class OrderManagerController extends BaseController {
 				jxl.write.Label temp7 = new jxl.write.Label(6, i + 1, 
 						temp.getCreateUser().getNickname());//客服
 				jxl.write.Label temp8 = new jxl.write.Label(7, i + 1, 
-						temp.getValue()+"");//价格
+						temp.getPrice()+"");//价格
 				jxl.write.Label temp9 = new jxl.write.Label(8, i + 1, 
 						temp.getRequire().getRequiredId()+"");//需求号
 				jxl.write.Label temp10 = new jxl.write.Label(9, i + 1, 

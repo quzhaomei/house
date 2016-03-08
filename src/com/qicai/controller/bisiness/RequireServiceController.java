@@ -509,7 +509,20 @@ public class RequireServiceController extends BaseController {
 
 					saveParam.setStoreId(Integer.parseInt(storeId));
 					saveParam.setRequiredId(Integer.parseInt(requiredId));
-
+					
+					//设置价格
+					HouseTypeToStore priceParam=new HouseTypeToStore();
+					priceParam.setHouseTypeId(require.getHouseType().getTypeId());
+					priceParam.setStoreId(Integer.parseInt(storeId));
+					HouseTypeToStoreDTO priceTemp=houseTypeToStoreService.getByParam(priceParam);
+					if(Integer.parseInt(type)==2){
+						saveParam.setPrice(1);//1块钱赠送
+					}else if(priceTemp.getPrice()==null){
+						saveParam.setPrice(require.getHouseType().getPrice());
+					}else{
+						saveParam.setPrice(priceTemp.getPrice());
+					}
+					
 					saveParam.setOperatorLog(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
 							+ getLoginAdminUser(request).getNickname() + " 派单给 " + store.getStoreName());
 

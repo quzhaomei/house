@@ -173,7 +173,7 @@ td.title {
 											<td>${temp.createUser.nickname }</td>
 											<td>${temp.zonename }</td>
 											<td>${temp.typename }</td>
-											<td>${temp.type==2?"1":temp.value }</td>
+											<td>${temp.price}</td>
 										</tr>
 									</c:forEach>
 								</table>

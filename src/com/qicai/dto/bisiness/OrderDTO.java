@@ -20,7 +20,7 @@ public class OrderDTO {
 	
 	private String zonename;
 	private String typename;
-	private Integer value;
+	private Integer price;//¶©µ¥¼Û¸ñ
 	
 	
 	public String getZonename() {
@@ -35,11 +35,12 @@ public class OrderDTO {
 	public void setTypename(String typename) {
 		this.typename = typename;
 	}
-	public Integer getValue() {
-		return value;
+	
+	public Integer getPrice() {
+		return price;
 	}
-	public void setValue(Integer value) {
-		this.value = value;
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
 	public Integer getOrderId() {
 		return orderId;

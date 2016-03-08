@@ -134,10 +134,9 @@ public class KeeperOrderController extends BaseController {
 				
 				model.addAttribute("order", order);
 				if (order.getStatus() == 0) {// 如果是分配中。
-					int pay = order.getType() == 1 ? order.getValue() : 1;
 					Store store = new Store(order.getStore().getStoreId());
 					StoreDTO data = storeService.getByParam(store);
-					int newbanace = data.getBalance() - pay;
+					int newbanace = data.getBalance() - order.getPrice();
 					store.setBalance(newbanace);
 					if (newbanace < 0) {// 余额不足
 							json.setStatus(0).setMessage("店铺余额只有" + data.getBalance() + "，请联系管理员充值");
@@ -157,7 +156,7 @@ public class KeeperOrderController extends BaseController {
 						history.setOrderId(Integer.parseInt(orderId));
 						history.setType(order.getType());// 1消费。2赠送
 						history.setStoreId(order.getStore().getStoreId());
-						history.setValue(pay);
+						history.setValue(order.getPrice());
 						history.setMessage("店铺订单消费扣款");
 						balanceHistoryService.save(history);
 						json.setStatus(1).setMessage("接单成功");

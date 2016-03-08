@@ -82,7 +82,7 @@
 							  <tr>
 								  <th width=7%>订单号</th>
 								  <th width=5%>类型</th>
-								  <th width=15%>店铺 </th>
+								  <th width=12%>店铺 </th>
 								  <th width=8%>状态</th>
 								  <th width=10%>创建时间</th>
 								  <th width=10%>创建人</th>
@@ -126,7 +126,7 @@
 								<td>${temp.createUser.nickname }</td>
 								<td>${temp.zonename }</td>
 								<td>${temp.typename }</td>
-								<td>${temp.type==2?"1":temp.value }</td>
+								<td>${temp.price }</td>
 								<td class="center">
 								<ad:power uri="../order/getOrder.html">
 								<c:if test="${temp.status==0 }">

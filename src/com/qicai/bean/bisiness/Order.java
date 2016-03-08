@@ -15,7 +15,7 @@ public class Order {
 	private String operatorLog;
 	
 	private Integer status;//0 分配中，1-店铺已接收
-	
+	private Integer price;//订单价格
 	
 	/**查询辅助条件*/
 	private Date startDate;
@@ -96,6 +96,12 @@ public class Order {
 	}
 	public void setOperatorLog(String operatorLog) {
 		this.operatorLog = operatorLog;
+	}
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
 	
 }

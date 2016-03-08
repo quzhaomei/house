@@ -137,7 +137,7 @@
 								<td>${temp.createUser.nickname }</td>
 								<td>${temp.require.requiredId }</td>
 								<td>${temp.typename }</td>
-								<td>￥${temp.type==2?"1":temp.value }</td>
+								<td>￥${temp.price}</td>
 								<td class="center">
 								<ad:power uri="../orderManager/list.html">
 									<a class="btn  btn-mini"  href="list.html?orderId=${temp.orderId }">

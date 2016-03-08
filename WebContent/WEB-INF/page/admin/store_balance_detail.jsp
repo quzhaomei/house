@@ -51,7 +51,7 @@
 							</div>
 					</div>
 					<div class="box-content">
-					<form action="update.html" method="post" id="myform" rel="admin-form">
+					<form action="balance.html" method="post" id="myform" rel="admin-form">
 						<input name="pageIndex" id="pageIndex" type="hidden" value="${pageResult.pageIndex}"/>
 						<input name="pageSize" type="hidden" value="${pageResult.pageSize}"/>
 						<input name="storeId" id="storeId" type="hidden" value="${store.storeId}"/>
@@ -81,6 +81,9 @@
 							  	</c:when>
 							  	<c:when test="${temp.type==1 }">
 							  		<span class="label label-danger">消费</span>
+							  	</c:when>
+							  	<c:when test="${temp.type==2 }">
+							  		<span class="label label-danger">赠送</span>
 							  	</c:when>
 							  </c:choose></td>
 							  <td>￥ ${temp.value }</td>

@@ -11,7 +11,7 @@
 
 		<result property="zonename" column="zonename" />
 		<result property="typename" column="typename" />
-		<result property="value" column="value" />
+		<result property="price" column="price" />
 
 		<association property="require" javaType="com.qicai.dto.bisiness.RequireDTO"
 			column="requiredId">
@@ -39,10 +39,10 @@
 		INTO `order`
 		(`orderId`, `storeId`, `requiredId`, `type`,
 		`status`,
-		`createDate`, `createUserId`, `operatorLog`)
+		`createDate`, `createUserId`, `operatorLog`,`price`)
 		VALUES
 		(#{order.orderId},#{order.storeId},#{order.requiredId},#{order.type},
-		#{order.status},#{order.createDate},#{order.createUserId},#{order.operatorLog})
+		#{order.status},#{order.createDate},#{order.createUserId},#{order.operatorLog},#{order.price})
 	</insert>
 
 	<update id="update">
@@ -57,7 +57,7 @@
 	</update>
 
 	<select id="getByParam" resultMap="orderDTO">
-		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,o.price,
 		s.storeName,r.requiredId,au.adminUserId,au.nickname
 		from `order` o
 		left
@@ -86,10 +86,9 @@
 	</select>
 
 	<select id="getByKeeperId" resultMap="orderDTO">
-		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,o.price,
 		s.storeName,r.requiredId,au.adminUserId,au.nickname,
-		ht.name
-		typename,zs.name zonename,ht.price value
+		ht.name typename,zs.name zonename
 
 		from `order` o
 		left join store s on s.storeId=o.storeId
@@ -123,11 +122,11 @@
 	
 	<select id="list" resultMap="orderDTO">
 		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
-		s.storeName,r.requiredId,
+		s.storeName,r.requiredId,o.price,
 		r.userphone,r.username,
 		r.houseLocation,r.createDate createDate_r,
 		au.adminUserId,au.nickname,
-		ht.name typename,zs.name zonename,ht.price value
+		ht.name typename,zs.name zonename
 		from `order` o
 		left join store
 		s on s.storeId=o.storeId
@@ -171,9 +170,8 @@
 	
 	<select id="getListByParam" resultMap="orderDTO">
 		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
-		s.storeName,r.requiredId,au.adminUserId,au.nickname,
-		ht.name
-		typename,zs.name zonename,ht.price value
+		s.storeName,r.requiredId,au.adminUserId,au.nickname,o.price,
+		ht.name typename,zs.name zonename
 		from `order` o
 		left join store
 		s on s.storeId=o.storeId
@@ -256,11 +254,9 @@
 	</select>
 
 	<select id="getListByKeeperId" resultMap="orderDTO">
-		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,o.price,
 		s.storeName,r.requiredId,au.adminUserId,au.nickname,
-		ht.name
-		typename,zs.name zonename,ht.price value
-
+		ht.name typename,zs.name zonename
 		from `order` o
 		left join store s on s.storeId=o.storeId
 		left join `require`

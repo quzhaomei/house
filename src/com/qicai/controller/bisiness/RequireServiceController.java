@@ -132,7 +132,15 @@ public class RequireServiceController extends BaseController {
 	@RequestMapping(value = "/call")
 	public String call(HttpServletRequest request, HttpServletResponse response, Model model) {
 		JsonDTO json=new JsonDTO();
-		json.setMessage("暂未开发");
+		json.setStatus(0).setMessage("数据异常");
+		String requiredId=request.getParameter("requiredId");
+		if(requiredId!=null&&requiredId.matches("\\d+")){
+			RequireDTO require=requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+			if(require!=null){
+				json.setStatus(1).setMessage("外呼中，请等待");
+				json.setData(require.getUserphone());
+			}
+		}
 		model.addAttribute("json", JSONUtil.object2json(json));
 		return JSON;
 	}

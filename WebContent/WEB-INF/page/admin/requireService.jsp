@@ -168,7 +168,7 @@ position: relative !important;
 							  			</ad:power>
 							  			<ad:power uri="../requireService/call.html">	
 							  			<a class="btn btn-mini yellow call-customer" href="#"
-							  			 data-href="call.html?operator=to_store&requiredId=${temp.requiredId }">
+							  			 data-href="call.html?requiredId=${temp.requiredId }">
 							  			拨通电话</a>
 							  			</ad:power>
 							  			
@@ -217,6 +217,7 @@ position: relative !important;
 	<div class="clearfix"></div>
 	<c:import url="public/p-footer.jsp"></c:import>
 	<c:import url="public/p-javascript.jsp"></c:import>
+	<script type="text/javascript" src="../js/admin/uc-2.0.1.js"></script>
 	<script type="text/javascript">
 	var bak;
 	$(function(){
@@ -251,10 +252,17 @@ position: relative !important;
 			$(this).parents("form").submit();
 		});
 		
+		var obj = new UCObj(window, document);
+		obj.start();
+		//电话外呼
 		$(".call-customer").on("click",function(){
 			var url=$(this).attr("data-href");
 			$.post(url,function(json){
+				var dn = "Tel:"+json.data;
+				var ani = "4000000000";
+				alert(dn);
 				layer.msg(json.message);
+				obj.doCallOut(dn, ani);
 			},"json")
 		});
 		

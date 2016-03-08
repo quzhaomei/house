@@ -443,7 +443,7 @@ public class RequirePublishController extends BaseController {
 					host += "/mobile/requireConfirm.html?requiredId=" 
 					+ Integer.parseInt(requiredId)+"&userphone="+
 							require.getUserphone()+"&sign="+sign;
-					String url=host;
+					String url=host; 
 					url=ShortUrlUtil.getShotUrl(url);
 					String content="尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 "+url+" ,回复TD退订。";
 					HttpSendResult result= MessageSender.sendMsg(require.getUserphone(), content);

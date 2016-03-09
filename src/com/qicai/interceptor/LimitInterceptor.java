@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.chainsaw.Main;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.qicai.annotation.LimitTag;
@@ -93,7 +94,6 @@ public class LimitInterceptor extends HandlerInterceptorAdapter {
 			 */
 
 		}
-
 		request.setAttribute("pageUri", request.getRequestURI());// 页面uri绑定
 		if (handler.getClass().getAnnotation(LimitTag.class) != null) {
 			LimitTag tag = handler.getClass().getAnnotation(LimitTag.class);
@@ -109,7 +109,7 @@ public class LimitInterceptor extends HandlerInterceptorAdapter {
 							&& (adminUser.getPhone() == null || !adminUser
 									.getPhone().equals(godPhone))) {// 如果不为超级管理员，则拦截uri
 						String uriStr = request.getRequestURI();// 获取uri
-						if (uriStr.matches(".*.+/.+/.+")) {// 验证uri格式
+						if (uriStr.matches(".*/.+/.+")) {// 验证uri格式
 							uriStr = uriStr.substring(uriStr.lastIndexOf("/",
 									uriStr.lastIndexOf("/") - 1) + 1);
 							// 得到绝对路径
@@ -130,11 +130,9 @@ public class LimitInterceptor extends HandlerInterceptorAdapter {
 									JSONUtil.object2json(json)
 											.getBytes("utf-8"));
 						} else {
-							String servletName = request.getSession()
-									.getServletContext()
-									.getServletContextName();
-							response.sendRedirect("/" + servletName
-									+ "/welcome/index.html");// 首页
+						//	String servletName = request.getSession().getServletContext().getServletContextName();
+							response.sendRedirect(
+									"/welcome/index.html");// 首页
 						}
 
 						return false;
@@ -150,9 +148,8 @@ public class LimitInterceptor extends HandlerInterceptorAdapter {
 						response.getOutputStream().write(
 								JSONUtil.object2json(json).getBytes("utf-8"));
 					} else {
-						String servletName = request.getSession()
-								.getServletContext().getServletContextName();
-						response.sendRedirect("/" + servletName + "/login.html");// 重新登录
+						//String servletName = request.getSession().getServletContext().getServletContextName();
+						response.sendRedirect("/login.html");// 重新登录
 					}
 					return false;
 				}

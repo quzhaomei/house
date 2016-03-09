@@ -101,6 +101,9 @@ public class Require {
 	private Date startFileTime;
 	private Date endFileTime;
 	
+	private Date startNextCallTime;
+	private Date endNextCallTime;
+	
 	
 	public Date getStartFileTime() {
 		return startFileTime;
@@ -400,6 +403,18 @@ public class Require {
 	}
 	public void setBudgetBak(String budgetBak) {
 		this.budgetBak = budgetBak;
+	}
+	public Date getStartNextCallTime() {
+		return startNextCallTime;
+	}
+	public void setStartNextCallTime(Date startNextCallTime) {
+		this.startNextCallTime = startNextCallTime;
+	}
+	public Date getEndNextCallTime() {
+		return endNextCallTime;
+	}
+	public void setEndNextCallTime(Date endNextCallTime) {
+		this.endNextCallTime = endNextCallTime;
 	}
 	public Require() {
 	}

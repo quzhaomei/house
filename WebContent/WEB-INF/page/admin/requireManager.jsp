@@ -56,8 +56,8 @@ tr.other-info{display:none;border-top:1px solid red;}
 						<input name="operator" value="to_service" type="hidden"/>
 						<table class="table">
 						<tr>
-							<td width=7%>用户名称</td><td width=18%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
-							<td width=7% >用户Id</td><td width=18%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户ID"/></td>
+							<td width=7%>用户名称</td><td width=15%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
+							<td width=7% >用户Id</td><td width=15%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户ID"/></td>
 							<td width=5%>状态</td><td width=18%><select style="width:100px;" name="status" id="chonsenstatus" rel="chosen">
 								<option value="-1" ${param.status=="-1"?"selected='selected'":"" }>全部</option>
 								<option value="0" ${param.status=="0"?"selected='selected'":"" }>发起中</option>
@@ -100,8 +100,12 @@ tr.other-info{display:none;border-top:1px solid red;}
 							<td >关闭/入库 原因</td>
 							<td><input type="text" name="callbackTips" id="callbackTips" value='${param.callbackTips }' class="span12" maxlength="200" /> </td>
 							
-							<td colspan="2">
-							&nbsp;</td>
+							<td >下次回访时间</td>
+							<td>
+							<input type="text" name="startNextCallTime" id="startNextCallTime"value='${param.startNextCallTime }' class="datepicker span5" />
+									-
+							<input type="text" name="endNextCallTime" id="endNextCallTime" value='${param.endNextCallTime }' class="datepicker span5"/>
+							</td>
 						</tr>
 						
 						</table>

@@ -300,6 +300,13 @@
 		<if test="page.param.endFileTime!=null">
 		and r.fileTime &lt; #{page.param.endFileTime}
 		</if>
+		
+		<if test="page.param.startNextCallTime!=null">
+		and r.nextCallTime &gt; #{page.param.startNextCallTime}
+		</if>
+		<if test="page.param.endNextCallTime!=null">
+		and r.nextCallTime &lt; #{page.param.endNextCallTime}
+		</if>
 		 order by r.createDate desc
 		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
 	</select>

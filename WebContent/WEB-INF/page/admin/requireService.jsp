@@ -284,10 +284,10 @@ position: relative !important;
 				    skin: 'layui-layer-rim', //加上边框
 				    area: ['520px', 'auto'], //宽高
 				    content: '<input type="hidden" id="statusTemp"/><div class="status"><a class="btn  status btn-mini " status="40" href="javascript:;">'+ 
-						' 关闭订单</a><a class="btn  status btn-mini" status="41" href="javascript:;">'+ 
+						' 退单</a><a class="btn  status btn-mini" status="41" href="javascript:;">'+ 
 						' 待跟进库</a></div>'+ 
 						' <p class="stLine"  id="nextcallTime-p">下次回访时间： <input type="text" readeronly="readeronly" id="nextcallTime" placeholder="请填写下次回访时间"/></p>'+
-						' <p class="stLine">备注： <small>修改状态的时候，请更改回访备注</small></p><textarea class="statuInfo"></textarea>'+
+						' <p class="stLine">备注： <small>更改状态时，请填写理由</small></p><textarea class="statuInfo"></textarea>'+
 						'<div class="modal-footer"><a href="#" class="btn btn-sm layui-layer-close" data-dismiss="modal">返回</a> <a href="#" class="btn btn-primary btn-sm status-submit">更新</a>'+
 						'</div>',
 					success:function(){

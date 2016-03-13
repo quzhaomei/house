@@ -63,17 +63,7 @@
 							<td width=11% class="basic-title">需求ID</td><td>${require.requiredId }</td>
 							<td  width=9% class="basic-title">添加时间</td><td><fmt:formatDate value="${require.createDate }" pattern="yyyy-MM-dd HH:mm"/> </td>
 							<td width=9%  class="basic-title">创建人员：</td><td>${require.createUser.nickname }</td>
-							<td class="basic-title">业务人员：</td><td>
-							<c:choose>
-								<c:when test="${empty require.serviceUser.nickname }">
-									暂未分配
-								</c:when>
-								<c:otherwise>
-								${require.serviceUser.nickname} 
-								</c:otherwise>
-							</c:choose>
 							
-							</td>
 							<td class="basic-title">需求状态</td><td>
 							<span class="label">
 							<c:choose>
@@ -102,7 +92,7 @@
 									已派单
 								</c:when>
 								<c:when test="${require.status==40  }">
-									关闭
+									退单
 								</c:when>
 								<c:when test="${require.status==41  }">
 									待跟进库
@@ -110,6 +100,7 @@
 							</c:choose>
 							</span>
 							</td>
+							<td class="basic-title">&nbsp;</td><td>&nbsp;</td>
 							</tr>
 							<tr>
 							<td class="basic-title">房型</td><td>${require.houseType.name }</td>
@@ -154,20 +145,25 @@
 							<td class="basic-title">房屋状态：</td><td colspan="9">${require.houseStatus }</td>
 							</tr>
 							</table>
+							<c:if test="${not empty  require.customerTips }">
 							<legend class="help-block"> 客户要求</legend>
 							<p class="basic-info">${require.customerTips }</p>
+							</c:if>
 							
 							<c:if test="${require.status!=40&& require.status!=41}">
 								<legend class="help-block"> 回访备注</legend>
 								<p class="basic-info">${require.callbackTips }</p>
 							</c:if>
 							
+							<c:if test="${not empty  require.serviceTips }">
 							<legend class="help-block"> 商家提示</legend>
 							<p class="basic-info">${require.serviceTips }</p>
+							</c:if>
+							
 							<legend class="help-block">操作日志</legend>
 							<p class="basic-info">${require.operatorLog }</p>
 							<c:if test="${require.status==40 }">
-								<legend class="help-block"> 关闭原因</legend>
+								<legend class="help-block"> 退单原因</legend>
 								<p class="basic-info">${require.callbackTips }</p>
 								<p class="basic-info">归档时间：<fmt:formatDate value="${require.fileTime }" pattern="yyyy-MM-dd"/></p>
 							</c:if>

@@ -122,6 +122,9 @@
 						  				<c:when test="${temp.status==4 }">
 						  				<span class="label label-success">确认完毕待发布</span>
 						  				</c:when>
+						  				<c:when test="${temp.status==40 }">
+						  				<span class="label label-important">退单</span>
+						  				</c:when>
 						  				<c:otherwise>
 						  				<span class="label">已发布</span>
 						  				</c:otherwise>

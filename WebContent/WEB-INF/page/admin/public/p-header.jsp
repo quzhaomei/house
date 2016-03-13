@@ -7,11 +7,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="container-fluid">
+			<img src="../images/cathead.svg" style="width:30px;height:30px; position:absolute;top:5px;left:5px;"/>
 				<a class="btn btn-navbar" data-toggle="collapse"
 					data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span> </a> <a class="brand" href="index.html"><span>系统后台管理</span>
 				</a>
+				
 				<div class="nav-no-collapse header-nav">
 					<ul class="nav pull-right">
 						<!-- start: User Dropdown -->

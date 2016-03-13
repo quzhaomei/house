@@ -8,5 +8,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link id="base-style" href="<%=basePath %>/css/style.css" rel="stylesheet">
 <link id="base-style-responsive" href="<%=basePath %>/css/style-responsive.css" rel="stylesheet">
 <!-- start: 网站logo -->
-<link rel="shortcut icon" href="<%=basePath %>/img/avatar.jpg">
+<link rel="shortcut icon" href="<%=basePath %>/images/cathead.svg" type="image/svg">
 <!-- end: Favicon -->

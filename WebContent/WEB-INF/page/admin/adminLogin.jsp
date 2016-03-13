@@ -21,7 +21,7 @@
 <c:import url="public/p-css.jsp"></c:import>
 <style type="text/css">
 .modal-body{max-height: 580px;}
-body{background-color:#6FC389;}
+body{background: url('../images/geometry2.png') repeat}
 </style>
 </head>
 
@@ -34,7 +34,7 @@ body{background-color:#6FC389;}
 					<div class="box-header" style="padding:20px 25px 10px 25px;margin-bottom:20px;">
 						<a href="#">后台登录</a>
 					</div>
-					<div style="padding:5px 100px;margin-botton:20px;"></div>
+					<div style="padding:10px 50px;"><img src="../images/getmore_login.png" style="width:100%;"/></div>
 					<form class="form-horizontal" action="../login.html" method="post" id="loginForm">
 							<!-- 错误提示 -->
 							<div class="alert alert-error" style="margin:10px 10px;${info==null?"display:none":""}">

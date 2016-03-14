@@ -65,10 +65,10 @@ tr.other-info{display:none;border-top:1px solid red;}
 								<option value="2" ${param.status=="2"?"selected='selected'":"" }>客户打开连接</option>
 								<option value="3" ${param.status=="3"?"selected='selected'":"" }>客户修改提交</option>
 								<option value="4" ${param.status=="4"?"selected='selected'":"" }>待发布</option>
-								<option value="6" ${param.status=="6"?"selected='selected'":"" }>待分单给客服</option>
-								<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单给商家</option>
+								<option value="6" ${param.status=="6"?"selected='selected'":"" }>待分单</option>
+								<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单</option>
 								<option value="8" ${param.status=="8"?"selected='selected'":"" }>已派单</option>
-								<option value="40" ${param.status=="40"?"selected='selected'":"" }>关闭</option>
+								<option value="40" ${param.status=="40"?"selected='selected'":"" }>退单</option>
 								<option value="41" ${param.status=="41"?"selected='selected'":"" }>待跟进库</option>
 							</select></td>
 						</tr>
@@ -91,13 +91,13 @@ tr.other-info{display:none;border-top:1px solid red;}
 						
 						<tr class="other-info">
 						
-							<td >关闭/入库 时间</td>
+							<td >退单/入库 时间</td>
 							<td>
 							<input type="text" name="startFileTime" id="startFileTime"value='${param.startFileTime }' class="datepicker span5" />
 									-
 							<input type="text" name="endFileTime" id="endFileTime" value='${param.endFileTime }' class="datepicker span5"/>
 							</td>
-							<td >关闭/入库 原因</td>
+							<td >退单/入库 原因</td>
 							<td><input type="text" name="callbackTips" id="callbackTips" value='${param.callbackTips }' class="span12" maxlength="200" /> </td>
 							
 							<td >下次回访时间</td>
@@ -166,7 +166,7 @@ tr.other-info{display:none;border-top:1px solid red;}
 						  				
 						  				
 						  				<c:when test="${temp.status==40}">
-						  				<span class="label">关闭</span>
+						  				<span class="label label-important">退单</span>
 						  				</c:when>
 						  				<c:when test="${temp.status==41}">
 						  				<span class="label">待跟进库</span>
@@ -187,6 +187,14 @@ tr.other-info{display:none;border-top:1px solid red;}
 						  			</c:when>
 						  			
 						  		</c:choose>
+						  		
+						  		<c:if test="${(temp.status==6||temp.status==7||temp.status==8)&&(!empty temp.callbackTips) }">
+						  		<ad:power uri="../requireManager/toStore.html">
+							  			<a class="btn btn-mini yellow" href="toStore.html?operator=to_store&requiredId=${temp.requiredId }">
+							  			去派单</a>
+							  			</ad:power>
+							  		</c:if>
+							  		
 						  		 </td>
 						  		</tr>
 						  	</c:forEach>

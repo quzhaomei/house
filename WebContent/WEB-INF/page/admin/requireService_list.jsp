@@ -102,7 +102,7 @@
 									已派单
 								</c:when>
 								<c:when test="${require.status==40  }">
-									订单关闭
+									退单
 								</c:when>
 								<c:when test="${require.status==41  }">
 									待跟进库
@@ -158,7 +158,7 @@
 							<p class="basic-info">${require.operatorLog }</p>
 							
 							<c:if test="${require.status==40 }">
-								<legend class="help-block"> 关闭原因</legend>
+								<legend class="help-block"> 退单原因</legend>
 								<p class="basic-info">${require.callbackTips }</p>
 								<p class="basic-info">归档时间：<fmt:formatDate value="${require.fileTime }" pattern="yyyy-MM-dd"/></p>
 							</c:if>

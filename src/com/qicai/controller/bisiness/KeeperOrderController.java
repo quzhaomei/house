@@ -138,7 +138,7 @@ public class KeeperOrderController extends BaseController {
 					StoreDTO data = storeService.getByParam(store);
 					int newbanace = data.getBalance() - order.getPrice();
 					store.setBalance(newbanace);
-					if (newbanace < 0) {// 余额不足
+					if (newbanace < 0&&false) {// 余额不足
 							json.setStatus(0).setMessage("店铺余额只有" + data.getBalance() + "，请联系管理员充值");
 							model.addAttribute(JSON, JSONUtil.object2json(json));
 							return JSON;

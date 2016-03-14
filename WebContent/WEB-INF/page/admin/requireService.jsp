@@ -87,7 +87,7 @@ position: relative !important;
 								<option value="-1" ${param.status=="-1"?"selected='selected'":"" }>全部</option>
 								<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单</option>
 								<option value="8" ${param.status=="8"?"selected='selected'":"" }>已派单</option>
-								<option value="40" ${param.status=="40"?"selected='selected'":"" }>关闭</option>
+								<option value="40" ${param.status=="40"?"selected='selected'":"" }>退单</option>
 								<option value="41" ${param.status=="41"?"selected='selected'":"" }>待跟进库</option>
 							</select></td>
 						</tr>
@@ -144,7 +144,7 @@ position: relative !important;
 						  				<span class="label label-success">已派单</span>
 						  				</c:when>
 						  				<c:when test="${temp.status==40}">
-						  				<span class="label label-success">关闭</span>
+						  				<span class="label label-success">退单</span>
 						  				</c:when>
 						  				<c:when test="${temp.status==41}">
 						  				<span class="label label-success">待跟进库</span>

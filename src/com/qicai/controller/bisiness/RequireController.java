@@ -14,14 +14,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.qicai.annotation.LimitTag;
 import com.qicai.bean.admin.AdminUser;
+import com.qicai.bean.bisiness.HouseType;
+import com.qicai.bean.bisiness.HouseTypeToStore;
+import com.qicai.bean.bisiness.Order;
 import com.qicai.bean.bisiness.Require;
+import com.qicai.bean.bisiness.Store;
+import com.qicai.bean.bisiness.ZoneSet;
 import com.qicai.controller.BaseController;
 import com.qicai.dto.JsonDTO;
 import com.qicai.dto.PageDTO;
 import com.qicai.dto.admin.AdminUserDTO;
+import com.qicai.dto.bisiness.HouseTypeDTO;
+import com.qicai.dto.bisiness.HouseTypeToStoreDTO;
+import com.qicai.dto.bisiness.OrderDTO;
 import com.qicai.dto.bisiness.RequireDTO;
+import com.qicai.dto.bisiness.ServiceStoreDTO;
 import com.qicai.dto.bisiness.ServiceUserDTO;
+import com.qicai.dto.bisiness.StoreDTO;
+import com.qicai.dto.bisiness.ZoneSetDTO;
 import com.qicai.util.JSONUtil;
+import com.qicai.util.MessageSender;
 
 /**
  * 需求管理
@@ -241,5 +253,220 @@ public class RequireController extends BaseController {
 			return JSON;
 		}
 		return "admin/requireManager_to_service";
+	}
+	@RequestMapping(value = "/toStore") // 派单
+	public String toStore(HttpServletRequest request, HttpServletResponse response, Model model) {
+		String operator = request.getParameter("operator");
+		String requiredId = request.getParameter("requiredId");
+		if ("to_store".equals(operator)) {// 查询店铺
+			if (requiredId != null && requiredId.matches("\\d+")) {
+				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				if (require != null && (require.getStatus() == 6||require.getStatus() == 8 || require.getStatus() == 7)) {// 待派单状态
+					model.addAttribute("require", require);
+					// 搜索条件
+					String storename = request.getParameter("storename");
+					String houseTypeId = request.getParameter("houseTypeId");
+					String zoneId = request.getParameter("zoneId");
+					// 查找所有房屋类型
+					HouseType type = new HouseType();
+					type.setStatus(1);
+					List<HouseTypeDTO> houses = houseTypeService.getListByParam(type);
+					model.addAttribute("houses", houses);
+
+					// 查找所有的区域
+					ZoneSet zone = new ZoneSet();
+					zone.setParentId(0);
+					zone.setStatus(1);
+					List<ZoneSetDTO> zones = zoneSetService.getZoneSetByParam(zone);
+					model.addAttribute("zones", zones);
+
+					Store selectParam = new Store();
+					if (houseTypeId != null && houseTypeId.matches("\\d+")) {
+						selectParam.setServiceTypeId(Integer.parseInt(houseTypeId));
+					} else {
+						selectParam.setServiceTypeId(require.getHouseType().getTypeId());
+					}
+					if (storename != null && storename.trim().length() > 0) {
+						selectParam.setStoreName(storename);
+					}
+					selectParam.setServiceZoneId(require.getZone().getZoneId());
+					if (zoneId != null && zoneId.matches("\\d+")) {
+						selectParam.setServiceZoneId(Integer.parseInt(zoneId));
+						// 获取当前选择位置
+						ZoneSetDTO curZone = zoneSetService.getById(Integer.parseInt(zoneId));
+						model.addAttribute("curZone", curZone);
+						// 获取区域
+						ZoneSet childParam = new ZoneSet();
+						childParam.setParentId(curZone.getParent().getZoneId());
+						List<ZoneSetDTO> curZones = zoneSetService.getZoneSetByParam(childParam);
+						model.addAttribute("curZones", curZones);
+					} else {// 默认为需求的位置
+							// 获取当前位置
+						ZoneSetDTO curZone = zoneSetService.getById(require.getZone().getZoneId());
+						model.addAttribute("curZone", curZone);
+						// 获取区域
+						ZoneSet childParam = new ZoneSet();
+						childParam.setParentId(curZone.getParent().getZoneId());
+						List<ZoneSetDTO> curZones = zoneSetService.getZoneSetByParam(childParam);
+						model.addAttribute("curZones", curZones);
+					}
+
+					String pageIndex = request.getParameter("pageIndex");// 页码
+					String pageSize = request.getParameter("pageSize");// 页容量
+					// 查询所有的业务员
+					if (pageIndex == null) {
+						pageIndex = "1";
+					}
+					if (pageSize == null) {
+						// pageSize = "2";
+						pageSize = "10";
+					}
+					selectParam.setStatus(1);
+					PageDTO<Store> page = new PageDTO<>();
+					page.setParam(selectParam);
+					page.setPageSize(Integer.parseInt(pageSize));
+					page.setPageIndex(Integer.parseInt(pageIndex));
+					PageDTO<List<ServiceStoreDTO>> pageDate = storeService.getServiceListByParam(page);
+					
+					List<ServiceStoreDTO> mainDate=pageDate.getParam();
+					for(ServiceStoreDTO temp:mainDate){
+						HouseTypeToStore param=new HouseTypeToStore();
+						param.setHouseTypeId(require.getHouseType().getTypeId());
+						param.setStoreId(temp.getStoreId());
+						HouseTypeToStoreDTO store=houseTypeToStoreService.getByParam(param);
+						if(store.getPrice()!=null){
+							temp.setPrice(store.getPrice());
+						}else{
+							temp.setPrice(require.getHouseType().getPrice());
+						}
+					}
+					
+					model.addAttribute("pageResult", pageDate);
+
+					// 查询前100条派单历史
+					PageDTO<Order> page_ = new PageDTO<>();
+					page_.setPageIndex(1);
+					page_.setPageSize(100);
+					Order param = new Order();
+					param.setRequiredId(Integer.parseInt(requiredId));
+					page_.setParam(param);
+					PageDTO<List<OrderDTO>> orders = orderService.getListByParam(page_);
+					model.addAttribute("orderHistory", orders);
+
+				}
+
+			}
+		} else if ("store".equals(operator)) {
+			String storeId = request.getParameter("storeId");
+			String type = request.getParameter("type");// 1-派单。2-赠送
+			if (requiredId != null && requiredId.matches("\\d+") && storeId != null && storeId.matches("\\d+")
+					&& type.matches("[12]")) {// 数据验证
+				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				StoreDTO store = storeService.getByParam(new Store(Integer.parseInt(storeId)));
+
+				JsonDTO json = new JsonDTO();
+				json.setStatus(0);
+				if (require != null && (require.getStatus() == 6||require.getStatus() == 7 || require.getStatus() == 8) && store != null) {// 待派单状态
+
+					// 检测余额够不够
+					int price = require.getHouseType().getPrice();
+					if (store.getBalance() < price&&false) {
+						json.setStatus(0).setMessage("店铺余额不足，派单失败");
+						model.addAttribute(JSON, JSONUtil.object2json(json));
+						return JSON;
+					}
+
+					// 检测当月订单数目有没有超标
+					Order countParam = new Order();
+					countParam.setStoreId(Integer.parseInt(storeId));
+					int count = orderService.getCountByParam(countParam);
+					if (store.getSize() <= count) {
+						json.setStatus(0).setMessage("该店铺订单已达本月上限");
+						model.addAttribute(JSON, JSONUtil.object2json(json));
+						return JSON;
+					}
+
+					// 检测店铺状态
+					if (store.getStatus() == 0) {
+						json.setStatus(0).setMessage("该店铺暂不接单");
+						model.addAttribute(JSON, JSONUtil.object2json(json));
+						return JSON;
+					}
+					// 检测是否派过单
+					Order param = new Order();
+					param.setRequiredId(Integer.parseInt(requiredId));
+					param.setStoreId(Integer.parseInt(storeId));
+					OrderDTO order = orderService.getByParam(param);
+					if (order != null) {
+						json.setStatus(0).setMessage("该店铺已经派过此单了！");
+						model.addAttribute(JSON, JSONUtil.object2json(json));
+						return JSON;
+					}
+					Order saveParam = new Order();
+					saveParam.setCreateDate(new Date());
+					saveParam.setCreateUserId(getLoginAdminUser(request).getAdminUserId());
+					saveParam.setType(Integer.parseInt(type));
+					saveParam.setStatus(0);// 0分配中
+
+					saveParam.setStoreId(Integer.parseInt(storeId));
+					saveParam.setRequiredId(Integer.parseInt(requiredId));
+					
+					//设置价格
+					HouseTypeToStore priceParam=new HouseTypeToStore();
+					priceParam.setHouseTypeId(require.getHouseType().getTypeId());
+					priceParam.setStoreId(Integer.parseInt(storeId));
+					HouseTypeToStoreDTO priceTemp=houseTypeToStoreService.getByParam(priceParam);
+					if(Integer.parseInt(type)==2){
+						saveParam.setPrice(1);//1块钱赠送
+					}else if(priceTemp.getPrice()==null){
+						saveParam.setPrice(require.getHouseType().getPrice());
+					}else{
+						saveParam.setPrice(priceTemp.getPrice());
+					}
+					
+					saveParam.setOperatorLog(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+							+ getLoginAdminUser(request).getNickname() + " 派单给 " + store.getStoreName());
+
+					try {
+						orderService.save(saveParam);
+						json.setStatus(1).setMessage("派单成功！");
+
+						// 更新需求状态
+						Require updateParam = new Require();
+						updateParam.setRequiredId(Integer.parseInt(requiredId));
+						updateParam.setOperatorLog(require.getOperatorLog() + " <br/> "
+								+ new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+								+ getLoginAdminUser(request).getNickname() + " 进行派单给 " + store.getStoreName());
+						updateParam.setStatus(8);
+						requireService.update(updateParam);
+						//TODO 短信提示店铺接单
+						//发送短信
+						String content="您好,凯特猫家装后台有单,请注意查收！回复TD退订。";
+						 MessageSender.sendMsg(store.getMsgPhone(), content);
+						
+					} catch (Exception e) {
+						json.setStatus(0).setMessage("派单过程中，系统出现异常");
+						e.printStackTrace();
+					}
+				} else {
+					json.setMessage("数据异常");
+				}
+				model.addAttribute(JSON, JSONUtil.object2json(json));
+			}
+			return JSON;
+		} else if ("findOrderZone".equals(operator)) {
+			// 查找所有父级区域对应的子区域
+			String zoneId = request.getParameter("zoneId");
+			if (zoneId != null && zoneId.matches("\\d+")) {
+				ZoneSet zone = new ZoneSet();
+				zone.setParentId(Integer.parseInt(zoneId));
+				zone.setStatus(1);
+				List<ZoneSetDTO> zones = zoneSetService.getZoneSetByParam(zone);
+
+				model.addAttribute("json", JSONUtil.object2json(zones));
+				return JSON;
+			}
+		}
+		return "admin/requireService_to_store";
 	}
 }

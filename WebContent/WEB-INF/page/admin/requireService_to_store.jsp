@@ -227,7 +227,7 @@
 								</tr>
 								<c:forEach items="${pageResult.param }" var="temp" >
 								<tr>
-								<td>${temp.storeName }</td><td>${temp.balance }</td>
+								<td>${temp.storeName }</td><td><span class="${temp.balance <= 2000?"red":"" }">${temp.balance }</span></td>
 								<td>${temp.size }</td>
 								<td>${temp.price }</td>
 								<td>派单：${temp.monthCount } 份 ，赠送:${temp.monthFreeCount } 份</td>

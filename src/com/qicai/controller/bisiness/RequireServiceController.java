@@ -477,7 +477,7 @@ public class RequireServiceController extends BaseController {
 
 					// ºÏ≤‚”‡∂Óπª≤ªπª
 					int price = require.getHouseType().getPrice();
-					if (store.getBalance() < price) {
+					if (store.getBalance() < price&&false) {
 						json.setStatus(0).setMessage("µÍ∆Ã”‡∂Ó≤ª◊„£¨≈…µ• ß∞‹");
 						model.addAttribute(JSON, JSONUtil.object2json(json));
 						return JSON;

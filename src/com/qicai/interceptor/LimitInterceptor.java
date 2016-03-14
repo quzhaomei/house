@@ -34,7 +34,6 @@ public class LimitInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
-		
 		//Î¢ÐÅµÇÂ½À¹½Ø
 		if (handler.getClass().getAnnotation(WechatTag.class) != null) {
 			String url = request.getRequestURL().toString();
@@ -132,7 +131,8 @@ public class LimitInterceptor extends HandlerInterceptorAdapter {
 											.getBytes("utf-8"));
 						} else {
 							String servletName =  request.getContextPath();
-							response.sendRedirect("/"+servletName+
+							
+							response.sendRedirect(servletName+
 									"/welcome/index.html");// Ê×Ò³
 						}
 
@@ -149,8 +149,9 @@ public class LimitInterceptor extends HandlerInterceptorAdapter {
 						response.getOutputStream().write(
 								JSONUtil.object2json(json).getBytes("utf-8"));
 					} else {
-						//String servletName = request.getSession().getServletContext().getServletContextName();
-						response.sendRedirect("/login.html");// ÖØÐÂµÇÂ¼
+						String servletName = request.getContextPath();
+						
+						response.sendRedirect(servletName+"/login.html");// ÖØÐÂµÇÂ¼
 					}
 					return false;
 				}

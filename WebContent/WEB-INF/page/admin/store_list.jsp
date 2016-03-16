@@ -124,6 +124,10 @@ td.title {
 										<td class="title">店铺详细地址</td>
 										<td colspan="5">${store.storeAddress }</td>
 									</tr>
+									<tr>
+										<td class="title">店铺备注</td>
+										<td colspan="5">${store.remarks }</td>
+									</tr>
 								</table>
 
 								<form action="list.html#myform" method="post" id="myform"

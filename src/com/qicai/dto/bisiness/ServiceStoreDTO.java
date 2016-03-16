@@ -6,6 +6,7 @@ public class ServiceStoreDTO {
 	private Integer storeId;
 	private Integer balance;
 	private String storeName;
+	private String remarks;
 	private Integer size;
 	private Integer monthCount;
 	private Integer monthFreeCount;
@@ -20,6 +21,13 @@ public class ServiceStoreDTO {
 	}
 	public void setPrice(Integer price) {
 		this.price = price;
+	}
+	
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 	public Integer getSize() {
 		return size;

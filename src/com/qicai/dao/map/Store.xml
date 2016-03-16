@@ -15,6 +15,7 @@
 		<result property="companyName" column="companyName" />
 		<result property="ruleUserName" column="ruleUserName" />
 		<result property="ruleUserPhone" column="ruleUserPhone" />
+		<result property="remarks" column="remarks" />
 		
 		
 		<result property="createDate" column="createDate" />
@@ -55,6 +56,7 @@
 		<id property="storeId" column="storeId" />
 		<result property="balance" column="balance"/>
 		<result property="storeName" column="storeName"/>
+		<result property="remarks" column="remarks"/>
 		<result property="size" column="size"/>
 		<result property="monthCount" column="monthCount"/>
 		<result property="monthFreeCount" column="monthFreeCount"/>
@@ -75,13 +77,13 @@
 	<insert id="save"  useGeneratedKeys="true" keyProperty="store.storeId">
 		insert into store(storeId,logo,storeName,storeAddress,storePhone,callPhone,msgPhone,
 		size,companyName,ruleUserName,ruleUserPhone,createDate,
-		status,zoneId,keeperId,createUserId)
+		status,zoneId,keeperId,createUserId,remarks)
 		values
 		(#{store.storeId},#{store.logo},#{store.storeName},#{store.storeAddress},#{store.storePhone},
 		#{store.callPhone},#{store.msgPhone},#{store.size},#{store.companyName},
 		#{store.ruleUserName},#{store.ruleUserPhone},#{store.createDate},
 		#{store.status},#{store.zoneId},#{store.keeperId}
-		,#{store.createUserId})
+		,#{store.createUserId},#{store.remarks})
 	</insert>
 	<insert id="addStoreOrderZones">
 		<selectKey keyProperty="id" order="AFTER"  resultType="java.lang.Integer">  
@@ -121,6 +123,9 @@
 		</if>
 		<if test="store.logo!=null">
 			,logo=#{store.logo}
+		</if>
+		<if test="store.remarks!=null">
+			,remarks=#{store.remarks}
 		</if>
 		<if test="store.zoneId!=null">
 			,zoneId=#{store.zoneId}
@@ -167,7 +172,7 @@
 	<delete id="delete"></delete>
 	
 	<select id="getServiceListByParam" resultMap="serviceStoreDTO" useCache="false">
-		select s.storeId,s.balance,s.storeName,s.size
+		select s.storeId,s.balance,s.storeName,s.size,s.remarks
 ,(select count(*) from `order` o where o.storeId=s.storeId
  and o.type=1 and o.createDate &gt;=(select DATE_ADD(curdate(),interval -day(curdate())+1 day)) ) monthCount
 ,(select count(*) from `order` o where o.storeId=s.storeId
@@ -206,7 +211,7 @@ from store s
 	</select>
 	
 	<select id="getListByParam" resultMap="storeDTO">
-		select s.storeId,s.storeName,s.createDate,s.status,s.balance,s.updateDate,
+		select s.storeId,s.storeName,s.createDate,s.status,s.balance,s.updateDate,s.remarks,
 		s.keeperId,au.nickname nickname_k,
 		zs.zoneId,zs.name
 		from store s 
@@ -240,7 +245,7 @@ from store s
 		
 	</select>
 	<select id="getByParam" resultMap="storeDTO" useCache="false">
-	select s.storeId,zs.zoneId,
+	select s.storeId,zs.zoneId,s.remarks,
 		zs.name,
 		zss.zoneId zoneId_o,zss.name name_o,
 		ht.typeId,ht.name name_type,

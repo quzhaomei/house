@@ -12,7 +12,6 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
  * 缩略图类（�?用） 本java类能将jpg、bmp、png、gif图片文件，进行等比或非等比的大小转换�?具体使用方法
  * compressPic(大图片路�?生成小图片路�?大图片文件名,生成小图片文�?生成小图片宽�?生成小图片高�?是否等比缩放(默认为true))
  */
-@SuppressWarnings("restriction")
 public class ImgUtil {
 	// 图片处理
 	public static void compressPic(Image img,String path) {

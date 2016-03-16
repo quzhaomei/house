@@ -219,10 +219,11 @@
 								<!-- 数据展示 -->
 								<table class="table">
 								<tr>
-								<td width="15%">商家名称</td><td width="15%">账户余额</td>
-								<td >每月订单控量</td>
-								<td >订单单价</td>
+								<td width="15%">商家名称</td><td width="10%">账户余额</td>
+								<td width="10%">每月订单控量</td>
+								<td width="10%">订单单价</td>
 								<td width="20%">本月发单情况</td>
+								<td width="20%">店铺备注</td>
 								<td>操作</td>
 								</tr>
 								<c:forEach items="${pageResult.param }" var="temp" >
@@ -231,6 +232,7 @@
 								<td>${temp.size }</td>
 								<td>${temp.price }</td>
 								<td>派单：${temp.monthCount } 份 ，赠送:${temp.monthFreeCount } 份</td>
+								<td>${temp.remarks }</td>
 								<td>
 								<span class="btn btn-mini btn-success send-to-store" storeId="${temp.storeId}" type="1">派单</span>
 								<span class="btn btn-mini btn-important send-to-store" storeId="${temp.storeId}" type="2">赠送</span>

@@ -41,7 +41,7 @@ public class StoreDTO {
 	private Integer updateUser;
 	private Date updateDate;
 	
-	
+	private String remarks;//±¸×¢
 	public List<HouseTypeDTO> getHouseTypes() {
 		return houseTypes;
 	}
@@ -176,6 +176,12 @@ public class StoreDTO {
 	}
 	public void setSize(Integer size) {
 		this.size = size;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 	
 	

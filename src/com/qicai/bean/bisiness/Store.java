@@ -27,7 +27,7 @@ public class Store {
 	private String ruleUserPhone;//法人电话
 	
 	
-	
+	private String remarks;//备注
 	
 	private Integer status;//1-接单，0-暂停
 	private Integer createUserId;
@@ -196,6 +196,12 @@ public class Store {
 		this.storeId = storeId;
 	}
 	public Store() {
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 	
 }

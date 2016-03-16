@@ -12,5 +12,8 @@ public interface RequireService  {
 	RequireDTO getByParam(Require require) ;
 	PageDTO<List<RequireDTO>> findListByPage(PageDTO<Require> page);
 	
+	PageDTO<List<RequireDTO>> findPublishByPage(PageDTO<Require> page);
+	
 	List<RequireDTO> list(Require require);//查询数组
+	List<RequireDTO> publishList(Require require);//查询数组
 }

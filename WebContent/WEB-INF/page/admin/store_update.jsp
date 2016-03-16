@@ -219,6 +219,15 @@
 								  </div>
 								</div>
 							  </div>
+							  <div class="control-group">
+								<label class="control-label" for="msgPhone">店铺备注</label>
+								<div class="controls">
+								  <div class="input-prepend input-append">
+									<textarea name="remarks" id="remarks" style="width:500px;height:100px;resize:none;" maxlength="2000"
+									>${store.remarks }</textarea>
+								  </div>
+								</div>
+							  </div>
 							  
 							  <div class="form-actions">
 								<button type="button" class="btn btn-primary btn-add-store">确认</button>
@@ -273,6 +282,7 @@
 			var ruleUserPhone=$("#ruleUserPhone").val();
 			var callPhone=$("#callPhone").val();
 			var msgPhone=$("#msgPhone").val();
+			var remarks=$("#remarks").val();
 			//数据判断
 			if(!storeName){
 				layer.msg("店铺名字不能为空");
@@ -335,6 +345,7 @@
 			param.ruleUserPhone=ruleUserPhone;
 			param.msgPhone=msgPhone;
 			param.callPhone=callPhone;
+			param.remarks=remarks;
 			
 			$(this).attr("disabled","disabled");
 			$.post("update.html",param,function(json){

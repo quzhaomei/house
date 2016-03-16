@@ -197,6 +197,15 @@ position:absolute;right:150px;top:50px;}
 								</div>
 							  </div>
 							  
+							  <div class="control-group">
+								<label class="control-label" for="msgPhone">店铺备注</label>
+								<div class="controls">
+								  <div class="input-prepend input-append">
+									<textarea name="remarks" id="remarks" style="width:500px;height:100px;resize:none;" maxlength="2000"></textarea>
+								  </div>
+								</div>
+							  </div>
+							  
 							  <div class="form-actions">
 								<button type="button" class="btn btn-primary btn-add-store">确认</button>
 								<button type="button" onclick="history.go(-1)" class="btn">取消</button>
@@ -250,6 +259,8 @@ position:absolute;right:150px;top:50px;}
 			var ruleUserPhone=$("#ruleUserPhone").val();
 			var callPhone=$("#callPhone").val();
 			var msgPhone=$("#msgPhone").val();
+			
+			var remarks=$("#remarks").val();
 			//数据判断
 			if(!storeName){
 				layer.msg("店铺名字不能为空");
@@ -301,7 +312,7 @@ position:absolute;right:150px;top:50px;}
 			param.zoneId=zoneId;
 			param.orderZoneIds=orderZoneIds;
 			param.orderTypeIds=orderTypeIds;
-			
+			param.remarks=remarks;
 			param.status=status;
 			param.storePhone=storePhone;
 			param.keeperId=keeperId;

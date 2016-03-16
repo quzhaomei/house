@@ -193,7 +193,8 @@ public class StoreController extends BaseController {
 			String[] orderZoneIds = request.getParameterValues("orderZoneIds[]");// 接单区域
 
 			String[] orderTypeIds = request.getParameterValues("orderTypeIds[]");// 接单房型
-
+			
+			String remarks=request.getParameter("remarks");
 			String storePhone = request.getParameter("storePhone");// 店铺电话
 			String storeName = request.getParameter("storeName");// 名字
 			String storeAddress = request.getParameter("storeAddress");// 店铺地址
@@ -247,6 +248,8 @@ public class StoreController extends BaseController {
 				saveParam.setStatus(Integer.parseInt(status));
 				saveParam.setCreateDate(new Date());
 				saveParam.setCreateUserId(getLoginAdminUser(request).getAdminUserId());
+				
+				saveParam.setRemarks(remarks);
 				try {
 					storeService.save(saveParam, zoneIds, typeIds);
 					json.setStatus(1).setMessage("保存店铺成功！");
@@ -327,7 +330,7 @@ public class StoreController extends BaseController {
 			String callPhone = request.getParameter("callPhone");// 对接电话
 			String msgPhone = request.getParameter("msgPhone");//// 短信电话
 			String size = request.getParameter("size");// 每月接单量
-
+			String remarks=request.getParameter("remarks");
 			String companyName = request.getParameter("companyName");// 公司名字
 			String ruleUserName = request.getParameter("ruleUserName");//// 法人姓名
 			String ruleUserPhone = request.getParameter("ruleUserPhone");// 法人电话
@@ -362,6 +365,7 @@ public class StoreController extends BaseController {
 				if (keeperId != null) {
 					updateParam.setKeeperId(Integer.parseInt(keeperId));
 				}
+				updateParam.setRemarks(remarks);
 				updateParam.setLogo(logo);
 				updateParam.setStorePhone(storePhone);
 				updateParam.setStoreName(storeName);

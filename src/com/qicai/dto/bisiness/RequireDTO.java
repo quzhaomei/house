@@ -77,7 +77,19 @@ public class RequireDTO {
 	private String nextCallTimeStr;
 	private Date fileTime;//归档时间
 	
+	/**
+	 * 额外查询字段
+	 */
+	private Integer acceptNum;//已接数
 	
+	
+	
+	public Integer getAcceptNum() {
+		return acceptNum;
+	}
+	public void setAcceptNum(Integer acceptNum) {
+		this.acceptNum = acceptNum;
+	}
 	public String getNextCallTimeStr() {
 		return nextCallTimeStr;
 	}

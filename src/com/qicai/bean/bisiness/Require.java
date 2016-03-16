@@ -80,6 +80,16 @@ public class Require {
 	
 	
 	
+	/**查询辅助字段*/
+	private Integer acceptNum;//已接单数目
+	
+	
+	public Integer getAcceptNum() {
+		return acceptNum;
+	}
+	public void setAcceptNum(Integer acceptNum) {
+		this.acceptNum = acceptNum;
+	}
 	public Date getNextCallTime() {
 		return nextCallTime;
 	}

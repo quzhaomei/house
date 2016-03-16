@@ -90,6 +90,7 @@ position: relative !important;
 								<option value="40" ${param.status=="40"?"selected='selected'":"" }>退单</option>
 								<option value="41" ${param.status=="41"?"selected='selected'":"" }>待跟进库</option>
 							</select></td>
+							
 						</tr>
 						<tr>
 							<td>录入时间</td>
@@ -287,7 +288,7 @@ position: relative !important;
 						' 退单</a><a class="btn  status btn-mini" status="41" href="javascript:;">'+ 
 						' 待跟进库</a></div>'+ 
 						' <p class="stLine"  id="nextcallTime-p">下次回访时间： <input type="text" readeronly="readeronly" id="nextcallTime" placeholder="请填写下次回访时间"/></p>'+
-						' <p class="stLine">备注： <small>更改状态时，请填写理由</small></p><textarea class="statuInfo"></textarea>'+
+						' <p class="stLine">备注： <small>更改状态时，请填写理由</small></p><textarea maxlength="500" class="statuInfo"></textarea>'+
 						'<div class="modal-footer"><a href="#" class="btn btn-sm layui-layer-close" data-dismiss="modal">返回</a> <a href="#" class="btn btn-primary btn-sm status-submit">更新</a>'+
 						'</div>',
 					success:function(){

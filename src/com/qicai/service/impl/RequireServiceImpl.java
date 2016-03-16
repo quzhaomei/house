@@ -54,4 +54,23 @@ public class RequireServiceImpl implements RequireService {
 		return requireDao.list(require);
 	}
 
+	@Override
+	public PageDTO<List<RequireDTO>> findPublishByPage(PageDTO<Require> page) {
+		List<RequireDTO> dateList = requireDao.findPublishByPage(page);
+
+		PageDTO<List<RequireDTO>> pageDate = new PageDTO<List<RequireDTO>>();
+		pageDate.setParam(dateList);
+		pageDate.setPageIndex(page.getPageIndex());
+		pageDate.setPageSize(page.getPageSize());
+		Integer count = requireDao.getPublishCountByParam(page.getParam());
+		count = count % page.getPageSize() == 0 ? count / page.getPageSize() : count / page.getPageSize() + 1;
+		pageDate.setTotalPage(count);
+		return pageDate;
+	}
+
+	@Override
+	public List<RequireDTO> publishList(Require require) {
+		return requireDao.publishList(require);
+	}
+
 }

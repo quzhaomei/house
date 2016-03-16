@@ -56,21 +56,26 @@ tr.other-info{display:none;border-top:1px solid red;}
 						<input name="operator" value="to_service" type="hidden"/>
 						<table class="table">
 						<tr>
-							<td width=7%>用户名称</td><td width=15%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
-							<td width=7% >用户Id</td><td width=15%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户ID"/></td>
-							<td width=5%>状态</td><td width=18%><select style="width:100px;" name="status" id="chonsenstatus" rel="chosen">
+							<td width=8%>用户名称</td><td width=20%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
+							<td width=8% >用户Id</td><td width=20%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户ID"/></td>
+							<td width=8%>状态</td><td width=18%><select style="width:80%;" name="status" id="chonsenstatus" rel="chosen">
 								<option value="-1" ${param.status=="-1"?"selected='selected'":"" }>全部</option>
-								<option value="0" ${param.status=="0"?"selected='selected'":"" }>发起中</option>
+							<!--	<option value="0" ${param.status=="0"?"selected='selected'":"" }>发起中</option>
 								<option value="1" ${param.status=="1"?"selected='selected'":"" }>短信中</option>
 								<option value="2" ${param.status=="2"?"selected='selected'":"" }>客户打开连接</option>
 								<option value="3" ${param.status=="3"?"selected='selected'":"" }>客户修改提交</option>
-								<option value="4" ${param.status=="4"?"selected='selected'":"" }>待发布</option>
+								<option value="4" ${param.status=="4"?"selected='selected'":"" }>待发布</option>  -->
 								<option value="6" ${param.status=="6"?"selected='selected'":"" }>待分单</option>
 								<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单</option>
 								<option value="8" ${param.status=="8"?"selected='selected'":"" }>已派单</option>
 								<option value="40" ${param.status=="40"?"selected='selected'":"" }>退单</option>
 								<option value="41" ${param.status=="41"?"selected='selected'":"" }>待跟进库</option>
 							</select></td>
+							<td>&nbsp;
+							<ad:power uri="../requireManager/loadAll.html">
+							<a href="#" class="btn btn-mini red loadAll">下载数据</a>
+							</ad:power>
+							</td>
 						</tr>
 						<tr>
 							<td>录入时间</td>
@@ -83,10 +88,11 @@ tr.other-info{display:none;border-top:1px solid red;}
 							<input type="text" name="serviceStartDate" id="serviceStartDate" value='${param.serviceStartDate }' class="datepicker span5" />
 									-
 							<input type="text" name="serviceEndDate" id="serviceEndDate" value='${param.serviceEndDate }' class="datepicker span5"/>
-							</td><td colspan="2"><span class="add-on">
+							</td><td colspan="3"><span class="add-on">
 							<button type="button" class="btn btn-small btn-search">
 							<i class="halflings-icon search white"></i> 查询</button>
 							</span></td>
+							
 						</tr>
 						
 						<tr class="other-info">
@@ -106,24 +112,44 @@ tr.other-info{display:none;border-top:1px solid red;}
 									-
 							<input type="text" name="endNextCallTime" id="endNextCallTime" value='${param.endNextCallTime }' class="datepicker span5"/>
 							</td>
+							<td>&nbsp;
+							<input type="hidden" name="acceptNum" id="acceptNum" value='${param.acceptNum }' />
+							</td>
 						</tr>
 						
 						</table>
 						</form>
 						
 						<table class="table table-striped table-bordered bootstrap-datatable">
+						<caption style="text-align:left;">
+						条件筛选：
+						<c:choose>
+							<c:when test="${param.acceptNum==1 }">
+								<a href="#" class="chooseOrder" order="0" style="color:red;"><i class="icon icon-search"></i> 查看全部</a>&nbsp;
+								<span>只看已接单</span>
+							</c:when>
+							<c:otherwise>
+								<span>查看全部</span>&nbsp;
+								<a href="#" class="chooseOrder" order="1" style="color:red; "><i class="icon icon-search"></i>  只看已接单</a>
+							</c:otherwise>
+						</c:choose>
+						
+						</caption>
 						  <thead>
+						  
 							  <tr>
-								  <th width=5%>序列</th>
-								  <th width=15%>录入时间</th>
-								  <th width=10%>地区</th>
-								  <th width=5%>用户ID </th>
-								  <th width=10%>用户名称</th>
-								  <th width=10%>用户手机</th>
-								  <th width=15%>分单时间</th>
-								  <th width=8%>状态</th>
-								  <th >操作</th>
+								  <th width=5% rowspan="2">序列</th>
+								  <th width=12% rowspan="2">录入时间</th>
+								  <th width=8% rowspan="2">地区</th>
+								  <th width=5% rowspan="2">用户ID </th>
+								  <th width=8% rowspan="2">用户名称</th>
+								  <th width=10% rowspan="2">用户手机</th>
+								  <th width=12% rowspan="2">分单时间</th>
+								  <th width=15% colspan="2" style="text-align:center;">订单统计</th>
+								  <th width=8% rowspan="2">状态</th>
+								  <th rowspan="2">操作</th>
 							  </tr>
+						 	 <tr><td>已派数</td><td>已接数</td></tr>
 						  </thead>   
 						  <tbody>
 						  	<c:forEach items="${pageResult.param }" var="temp" varStatus="status">
@@ -135,6 +161,9 @@ tr.other-info{display:none;border-top:1px solid red;}
 						  		<td>${temp.username }</td>
 						  		<td>${fn:substring(temp.userphone,0,3) }********</td>
 						  		<td><fmt:formatDate value="${temp.serviceDate }" pattern="yyyy-MM-dd HH:mm"/></td>
+						  		
+						  		<td><span style="color:${temp.orderCount==0?'red':'' }">${temp.orderCount }</span></td><!-- 已派单数 -->
+						  		<td><span style="color:${temp.acceptNum==0?'red':'' }">${temp.acceptNum }</span></td><!-- 已接单数 -->
 						  		<td>
 						  			<c:choose>
 						  				<c:when test="${temp.status==0 }">
@@ -200,7 +229,6 @@ tr.other-info{display:none;border-top:1px solid red;}
 						  	</c:forEach>
 						  </tbody>
 					  </table>   
-					  
 					  <!--分页控制  -->
 								<ad:page pageIndex="${pageResult.pageIndex }"
 									 pageSize="${pageResult.pageSize}" 
@@ -276,9 +304,25 @@ tr.other-info{display:none;border-top:1px solid red;}
 				$("#callbackTips").val("");
 				$("#startFileTime").val("");
 				$("#endFileTime").val("");
-			}o
+			}
 		});
 		$("#chonsenstatus").change();
+		
+		$(".chooseOrder").on("click",function(){
+			var order=$(this).attr("order");
+			if(order){
+				$("#acceptNum").val(order);
+				$("#myform").submit();
+			}
+		});
+		
+		//接单
+		$(".loadAll").on("click",function(){
+			$("#myform").attr("action","loadAll.html");
+			$("#myform").submit();
+			$("#myform").attr("action","index.html");
+		});
+		
 	});
 	</script>
 </body>

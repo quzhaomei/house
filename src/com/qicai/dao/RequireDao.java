@@ -18,5 +18,10 @@ public interface RequireDao {
 	RequireDTO getByParam(@Param(value="require")Require require);//查询单个
 	int getCountByParam(@Param(value="require")Require require);//查询数量
 	
+	List<RequireDTO> findPublishByPage(@Param(value="page")PageDTO<Require> page);
+	int getPublishCountByParam(@Param(value="require")Require require);//查询数量
+	
 	List<RequireDTO> list(@Param(value="require")Require require);//查询数组
+	
+	List<RequireDTO> publishList(@Param(value="require")Require require);//查询数组
 }

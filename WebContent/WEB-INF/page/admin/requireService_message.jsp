@@ -155,11 +155,11 @@
 							<p>${require.customerTips }</p>
 							
 							<legend class="help-block"> 回访备注</legend>
-							<textarea rows="" cols="" class="textarea" id="callbackTips" maxlength="100"
+							<textarea rows="" cols="" class="textarea" id="callbackTips" maxlength="500"
 							>${require.callbackTips }</textarea>
 							
 							<legend class="help-block"> 商家提示</legend>
-							<textarea rows="" cols="" class="textarea" id="serviceTips" maxlength="100"
+							<textarea rows="" cols="" class="textarea" id="serviceTips" maxlength="500"
 							>${require.serviceTips }</textarea>
 							</fieldset>
 							

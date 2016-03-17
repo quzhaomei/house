@@ -11,6 +11,7 @@ import com.qicai.bean.bisiness.Require;
 import com.qicai.dao.RequireDao;
 import com.qicai.dto.PageDTO;
 import com.qicai.dto.bisiness.RequireDTO;
+import com.qicai.dto.bisiness.RequireGift;
 import com.qicai.service.RequireService;
 
 @Service
@@ -71,6 +72,16 @@ public class RequireServiceImpl implements RequireService {
 	@Override
 	public List<RequireDTO> publishList(Require require) {
 		return requireDao.publishList(require);
+	}
+
+	@Override
+	public int getPublishCountByParam(Require require) {
+		return requireDao.getPublishCountByParam(require);
+	}
+
+	@Override
+	public void saveGift(RequireGift requireGift) {
+		requireDao.saveGift(requireGift);
 	}
 
 }

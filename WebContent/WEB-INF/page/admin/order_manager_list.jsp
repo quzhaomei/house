@@ -64,7 +64,32 @@
 							<span class="basic-title">
 							客户电话 : </span> ${require.userphone }
 							&nbsp;
+							
+							<c:if test="${order.status==1 }"><!-- 已接单才显示 -->
+							<br/>
+							<span class="basic-title">量房结果  : </span> 
+							<c:choose>
+								<c:when test="${empty order.isSuccess }">
+									<span style="color:#888;">未确认</span>
+								</c:when>
+								<c:when test="${order.isSuccess==0}">
+									<span style="color:red;">失败</span>
+									</c:when>
+								<c:when test="${order.isSuccess==1}">
+									<span style="color:green;">成功</span>
+								</c:when>
+							</c:choose>
+							</c:if>
+							<c:if test="${not empty order.remarks }">
+							<br/>
+							<span class="basic-title">商家备注  : </span> 
+							<span style="color:red;">${order.remarks }</span>
+							</c:if>
 							</p>
+							
+							
+							
+							
 							
 							<legend class="help-block"> 订单操作日志</legend>
 							${order.operatorLog }

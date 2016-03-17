@@ -51,7 +51,13 @@
 		<result property="fileTime" column="fileTime" />
 		
 		<result property="acceptNum" column="acceptNum" />
+		<result property="successNum" column="successNum" />
 		
+		<association property="gift" javaType="com.qicai.dto.bisiness.RequireGift" column="giftId">
+			<id property="giftId" column="giftId"/>
+			<result property="address" column="address"/>
+			<result property="status" column="status"/>
+		</association>
 		
 		<association property="zone" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="zoneId">
 			<id property="zoneId" column="zoneId"/>
@@ -96,7 +102,14 @@
 		 ,#{require.createUserId},#{require.status},#{require.operatorLog},
 		 #{require.designType},#{require.designStyle},#{require.houseStatus})
 	</insert>
-	<select id="update" flushCache="true" >
+	
+	<insert id="saveGift"  useGeneratedKeys="true" keyProperty="gift.giftId" flushCache="true">
+		INSERT INTO `require_gift`(`giftId`, `requiredId`, `address`,
+		 `status`, `createDate`) 
+		 values(#{gift.giftId},#{gift.requiredId},#{gift.address}
+		 ,#{gift.status},#{gift.createDate})
+	</insert>
+	<update id="update" flushCache="true" >
 	update  `require` set requiredId=#{require.requiredId}
 	<if test="require.serviceUserId!=null">
 			,serviceUserId=#{require.serviceUserId}
@@ -228,7 +241,8 @@
 		
 		where requiredId=#{require.requiredId}
 	
-	</select>
+	</update>
+	
 	<select id="getByParam" resultMap="requireDTO">
 		SELECT r.requiredId,r.userId,r.username,r.userphone,r.zoneId,r.houseTypeId typeId,
 		r.budget,r.budgetBak,r.designType,r.designTypeBak,r.designStyle,r.designStyleBak
@@ -263,9 +277,12 @@
 		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,r.callbackTips,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount ,
-		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1) acceptNum
+		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1) acceptNum,
+		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1 and o.isSuccess=1) successNum
+		,rg.giftId,rg.address,rg.status
 		from `require` r left join 
 		zone_set zs on zs.zoneId=r.zoneId
+		left join require_gift rg on r.requiredId=rg.requiredId
 		 where r.status>4
 		<if test="page.param.serviceUserId!=null">
 		and r.serviceUserId=#{page.param.serviceUserId}
@@ -417,43 +434,48 @@
 	
 	<select id="getPublishCountByParam" resultType="int">
 		select count(*)
-		from `require` where status>4
+		from `require` r where status>4
 		<if test="require.serviceUserId!=null">
-		and serviceUserId=#{require.serviceUserId}
+		and r.serviceUserId=#{require.serviceUserId}
 		</if>
+		
+		<if test="(require.acceptNum!=null) &amp;&amp; (require.acceptNum==1)">
+		and (select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1)>0
+		</if>
+		
 		<if test="require.status!=null">
-		and status=#{require.status}
+		and r.status=#{require.status}
 		</if>
 		<if test="require.userId!=null">
-		and userId=#{require.userId}
+		and r.userId=#{require.userId}
 		</if>
 		<if test="require.username!=null">
-		and username like '%${require.username}%'
+		and r.username like '%${require.username}%'
 		</if>
 		<if test="require.userphone!=null">
-		and userphone like '${require.userphone}%'
+		and r.userphone like '${require.userphone}%'
 		</if>
 		<if test="require.startDate!=null">
-		and createDate &gt; #{require.startDate}
+		and r.createDate &gt; #{require.startDate}
 		</if>
 		<if test="require.endDate!=null">
-		and createDate &lt; #{require.endDate}
+		and r.createDate &lt; #{require.endDate}
 		</if>
 		<if test="require.serviceStartDate!=null">
-		and serviceDate &gt; #{require.serviceStartDate}
+		and r.serviceDate &gt; #{require.serviceStartDate}
 		</if>
 		<if test="require.serviceEndDate!=null">
-		and serviceDate &lt; #{require.serviceEndDate}
+		and r.serviceDate &lt; #{require.serviceEndDate}
 		</if>
 		
 		<if test="require.callbackTips!=null">
-		and callbackTips like '%${require.callbackTips}%'
+		and r.callbackTips like '%${require.callbackTips}%'
 		</if>
 		<if test="require.startFileTime!=null">
-		and fileTime &gt; #{require.startFileTime}
+		and r.fileTime &gt; #{require.startFileTime}
 		</if>
 		<if test="require.endFileTime!=null">
-		and fileTime &lt; #{require.endFileTime}
+		and r.fileTime &lt; #{require.endFileTime}
 		</if>
 	</select>
 	<select id="publishList" resultMap="requireDTO">

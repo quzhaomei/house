@@ -13,6 +13,36 @@
 <style type="text/css">
 .modal-body{max-height: 580px;}
 tr.other-info{display:none;border-top:1px solid red;}
+div.count {margin:10px 0px;font-size:15px;color:red;}
+div.count .title{font-size:15px;font-weight:bold;color:#888}
+div.count .info{font-size:15px;color:#444;margin:0 30px 0 10px;}
+div.count .info.cred{color:red;}
+
+.layui-layer-content{
+padding:5px 5px;
+}
+.status{
+text-align: center;
+margin:5px 0;
+}
+.status a{
+margin:3px 8px;
+}
+.statuInfo{
+margin:0px 20px;
+width:90%;
+height:95px;
+resize:none;
+}
+.stLine{
+margin:10px 20px;
+padding-bottom:5px;
+border-bottom:1px solid #aaa;
+font-weight: bold;
+}
+.modal-footer a.btn{
+position: relative !important;
+}
 </style>
 </head>
 
@@ -139,17 +169,21 @@ tr.other-info{display:none;border-top:1px solid red;}
 						  
 							  <tr>
 								  <th width=5% rowspan="2">序列</th>
-								  <th width=12% rowspan="2">录入时间</th>
+								  <th width=11% rowspan="2">录入时间</th>
 								  <th width=8% rowspan="2">地区</th>
 								  <th width=5% rowspan="2">用户ID </th>
 								  <th width=8% rowspan="2">用户名称</th>
-								  <th width=10% rowspan="2">用户手机</th>
-								  <th width=12% rowspan="2">分单时间</th>
-								  <th width=15% colspan="2" style="text-align:center;">订单统计</th>
+								  <th width=8% rowspan="2">用户手机</th>
+								  <th width=11% rowspan="2">分单时间</th>
+								  <th width=10% colspan="2" style="text-align:center;">订单统计</th>
+								  <th width=10% colspan="2" style="text-align:center;">礼包配送</th>
 								  <th width=8% rowspan="2">状态</th>
 								  <th rowspan="2">操作</th>
 							  </tr>
-						 	 <tr><td>已派数</td><td>已接数</td></tr>
+						 	 <tr>
+						 	 	<td>已派数</td><td>已接数</td>
+						 	 	<td>成功数</td><td>礼包</td>
+						 	 </tr>
 						  </thead>   
 						  <tbody>
 						  	<c:forEach items="${pageResult.param }" var="temp" varStatus="status">
@@ -164,6 +198,17 @@ tr.other-info{display:none;border-top:1px solid red;}
 						  		
 						  		<td><span style="color:${temp.orderCount==0?'red':'' }">${temp.orderCount }</span></td><!-- 已派单数 -->
 						  		<td><span style="color:${temp.acceptNum==0?'red':'' }">${temp.acceptNum }</span></td><!-- 已接单数 -->
+						  		<td><span style="color:${temp.successNum==0?'red':'' }">${temp.successNum }</span></td><!-- 成功数 -->
+						  		<td>
+						  		<c:choose>
+									<c:when test="${empty temp.gift.giftId }">
+										未配送
+									</c:when>	
+									<c:otherwise>
+										<span style="color:green;">已配送</span>
+									</c:otherwise>
+						  		</c:choose>
+						  		</td>
 						  		<td>
 						  			<c:choose>
 						  				<c:when test="${temp.status==0 }">
@@ -224,6 +269,14 @@ tr.other-info{display:none;border-top:1px solid red;}
 							  			</ad:power>
 							  		</c:if>
 							  		
+							  		<c:if test="${temp.successNum>0&&empty temp.gift.giftId}"><!-- 没有配送的可以配送 -->
+						  			<ad:power uri="../requireManager/sendGift.html">
+							  			<a class="btn btn-mini blue sendGift" href="#" requiredId="${temp.requiredId }">
+							  			配送礼包</a>
+							  			</ad:power>
+							  		</c:if>
+							  		
+							  		
 						  		 </td>
 						  		</tr>
 						  	</c:forEach>
@@ -234,7 +287,47 @@ tr.other-info{display:none;border-top:1px solid red;}
 									 pageSize="${pageResult.pageSize}" 
 									 totalPage="${pageResult.totalPage}"></ad:page>
 									 
-					           
+					    <div class="count">
+					    数据统计:&nbsp;
+					    <c:choose>
+					    	<c:when test="${empty param.status || param.status=='-1' }">
+					    		<span class="title">发布需求总数:</span>
+					    		<span class="info ${status6 + status7 + status8 + status40 +status41==0?'cred':''}">${status6 + status7 + status8 + status40 +status41 }</span>
+					    	
+					    		<span class="title">已跟进总数:</span>
+					    		<span class="info ${status8 + status40 +status41==0?'cred':''}">${status8 + status40 +status41 }</span>
+					    		
+					    		<span class="title">待跟进总数:</span>
+					    		<span class="info ${status41==0?'cred':''}">${status41}</span>
+					    		
+					    		<span class="title">退单总数:</span>
+					    		<span class="info ${status40==0?'cred':''}">${status40}</span>
+					    	</c:when>
+					    	
+					    	<c:when test="${param.status=='6' }">
+					    		<span class="title">待分单数:</span>
+					    		<span class="info ${status6==0?'cred':''}">${status6}</span>
+					    	</c:when>
+					    	<c:when test="${param.status=='7' }">
+					    		<span class="title">待派单数:</span>
+					    		<span class="info ${status7==0?'cred':''}">${status7}</span>
+					    	</c:when>
+					    	<c:when test="${param.status=='8' }">
+					    		<span class="title">已派单数:</span>
+					    		<span class="info ${status8==0?'cred':''}">${status8}</span>
+					    	</c:when>
+					    	<c:when test="${param.status=='41' }">
+					    		<span class="title">待跟进总数:</span>
+					    		<span class="info ${status41==0?'cred':''}">${status41}</span>
+					    	</c:when>
+					    	<c:when test="${param.status=='40' }">
+					    		<span class="title">退单总数:</span>
+					    		<span class="info ${status40==0?'cred':''}">${status40}</span>
+					    	</c:when>
+					    	
+					    </c:choose>
+					    
+					    </div>       
 					</div>
 				</div><!--/span-->
 			
@@ -311,6 +404,7 @@ tr.other-info{display:none;border-top:1px solid red;}
 		$(".chooseOrder").on("click",function(){
 			var order=$(this).attr("order");
 			if(order){
+				$("#pageIndex").val(1);
 				$("#acceptNum").val(order);
 				$("#myform").submit();
 			}
@@ -321,6 +415,49 @@ tr.other-info{display:none;border-top:1px solid red;}
 			$("#myform").attr("action","loadAll.html");
 			$("#myform").submit();
 			$("#myform").attr("action","index.html");
+		});
+		
+		//配送礼物
+		$(".sendGift").on("click",function(){
+			var requiredId=$(this).attr("requiredId");
+			if(!requiredId){layer.msg("数据缺失！");return;}
+				layer.open({
+				    type: 1,
+				    scrollbar: false,
+				    title:"礼物配送",
+				    shadeClose:true,
+				    skin: 'layui-layer-rim', //加上边框
+				    area: ['520px', 'auto'], //宽高
+				    content: '<input type="hidden" id="requiredId"/>'+ 
+						' <p class="stLine">配送地址：</p><textarea maxlength="500" class="statuInfo"></textarea>'+
+						'<div class="modal-footer"><a href="#" class="btn btn-sm layui-layer-close" data-dismiss="modal">返回</a> <a href="#" class="btn btn-primary btn-sm status-submit">确定</a>'+
+						'</div>',
+					success:function(){
+						$("div.status a.btn[status='"+status+"']").addClass("btn-success");
+						$("#requiredId").val(requiredId);
+					}
+				});
+		});
+		
+		$("body").on("click","a.status-submit",function(){
+			var requiredId=$("#requiredId").val();
+			var info=$(".statuInfo").val();
+			if(!info){
+				layer.msg("请填写配送地址");
+				return;
+			}
+			var param={};
+			param.requiredId=requiredId;
+			if(info){param.info=info;}
+			$.post("sendGift.html",param,function(data){
+				if(data.status=="1"){
+					layer.msg(data.message);
+					$("#myform").submit();
+				}else{
+					layer.msg(data.message);
+				}
+				
+			},"json");
 		});
 		
 	});

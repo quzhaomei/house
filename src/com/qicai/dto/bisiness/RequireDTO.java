@@ -76,11 +76,13 @@ public class RequireDTO {
 	private Date nextCallTime;//下次回访的时间
 	private String nextCallTimeStr;
 	private Date fileTime;//归档时间
+	private RequireGift gift;//礼品
 	
 	/**
 	 * 额外查询字段
 	 */
 	private Integer acceptNum;//已接数
+	private Integer successNum;//成功数
 	
 	
 	
@@ -379,6 +381,18 @@ public class RequireDTO {
 	}
 	public void setHouseStatusBak(String houseStatusBak) {
 		this.houseStatusBak = houseStatusBak;
+	}
+	public RequireGift getGift() {
+		return gift;
+	}
+	public void setGift(RequireGift gift) {
+		this.gift = gift;
+	}
+	public Integer getSuccessNum() {
+		return successNum;
+	}
+	public void setSuccessNum(Integer successNum) {
+		this.successNum = successNum;
 	}
 	
 	

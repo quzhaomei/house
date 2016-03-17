@@ -17,6 +17,8 @@ public class Order {
 	private Integer status;//0 分配中，1-店铺已接收
 	private Integer price;//订单价格
 	
+	private Integer isSuccess;//是否量房成功  0-未成功，1-已成功
+	private String remarks;//量房备注
 	/**查询辅助条件*/
 	private Date startDate;
 	private Date endDate;
@@ -102,6 +104,18 @@ public class Order {
 	}
 	public void setPrice(Integer price) {
 		this.price = price;
+	}
+	public Integer getIsSuccess() {
+		return isSuccess;
+	}
+	public void setIsSuccess(Integer isSuccess) {
+		this.isSuccess = isSuccess;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 	
 }

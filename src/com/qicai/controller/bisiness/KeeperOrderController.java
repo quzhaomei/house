@@ -121,6 +121,8 @@ public class KeeperOrderController extends BaseController {
 	@RequestMapping(value = "/getOrder")
 	public String getOrder(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String orderId = request.getParameter("orderId");
+		String operator=request.getParameter("operator");
+		if("order".equals(operator)){
 		JsonDTO json = new JsonDTO();
 		if (orderId != null && orderId.matches("\\d+")) {
 
@@ -176,6 +178,36 @@ public class KeeperOrderController extends BaseController {
 				}
 			}
 
+		}
+		}else if("isSuccess".equals(operator)){
+			String isSuccess=request.getParameter("isSuccess");
+			String info=request.getParameter("info");
+			JsonDTO json=new JsonDTO();
+			if (orderId != null && orderId.matches("\\d+")&&isSuccess!=null&&isSuccess.matches("[01]")) {
+				Order param = new Order();
+				param.setOrderId(Integer.parseInt(orderId));
+				// 以店长ID 和订单ID进行匹配
+				OrderDTO order = orderService.getByKeeperId(param, getLoginAdminUser(request).getAdminUserId());
+				if(order!=null&&isSuccess.matches("\\d+")){
+					param.setIsSuccess(Integer.parseInt(isSuccess));
+					param.setRemarks(info);
+					param.setOperatorLog(order.getOperatorLog() + " <br/> "
+							+ new SimpleDateFormat("yyyy-MM-dd HH:ss").format(new Date()) + " " + "由"
+							+ getLoginAdminUser(request).getNickname() + "确认量房状态为"+(Integer.parseInt(isSuccess)==0?"失败":"成功"));
+					try {
+						orderService.update(param);
+						json.setStatus(1).setMessage("确认量房状态操作成功");
+					} catch (Exception e) {
+						json.setStatus(0).setMessage("更新状态失败");
+						e.printStackTrace();
+					}	
+						
+				}
+			}else{
+				json.setStatus(0).setMessage("数据错误");
+			}
+			model.addAttribute(JSON, JSONUtil.object2json(json));
+			return JSON;
 		}
 		return "admin/store_order_list";
 	}

@@ -22,7 +22,8 @@ public class OrderDTO {
 	private String typename;
 	private Integer price;//订单价格
 	
-	
+	private Integer isSuccess;//是否量房成功  0-未成功，1-已成功
+	private String remarks;//量房备注
 	public String getZonename() {
 		return zonename;
 	}
@@ -90,6 +91,18 @@ public class OrderDTO {
 	}
 	public void setOperatorLog(String operatorLog) {
 		this.operatorLog = operatorLog;
+	}
+	public Integer getIsSuccess() {
+		return isSuccess;
+	}
+	public void setIsSuccess(Integer isSuccess) {
+		this.isSuccess = isSuccess;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 	
 }

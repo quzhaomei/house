@@ -12,6 +12,9 @@
 		<result property="zonename" column="zonename" />
 		<result property="typename" column="typename" />
 		<result property="price" column="price" />
+		
+		<result property="isSuccess" column="isSuccess" />
+		<result property="remarks" column="remarks" />
 
 		<association property="require" javaType="com.qicai.dto.bisiness.RequireDTO"
 			column="requiredId">
@@ -50,6 +53,14 @@
 		<if test="order.status!=null">
 			, status=#{order.status}
 		</if>
+		
+		<if test="order.isSuccess!=null">
+			, isSuccess=#{order.isSuccess}
+		</if>
+		<if test="order.remarks!=null">
+			, remarks=#{order.remarks}
+		</if>
+		
 		<if test="order.operatorLog!=null">
 			, operatorLog=#{order.operatorLog}
 		</if>
@@ -57,7 +68,8 @@
 	</update>
 
 	<select id="getByParam" resultMap="orderDTO">
-		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,o.price,
+		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,o.price,o.isSuccess,
+		o.remarks,
 		s.storeName,r.requiredId,au.adminUserId,au.nickname
 		from `order` o
 		left
@@ -87,7 +99,7 @@
 
 	<select id="getByKeeperId" resultMap="orderDTO">
 		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,o.price,
-		s.storeName,r.requiredId,au.adminUserId,au.nickname,
+		s.storeName,r.requiredId,au.adminUserId,au.nickname,o.isSuccess,o.remarks,
 		ht.name typename,zs.name zonename
 
 		from `order` o
@@ -122,7 +134,7 @@
 	
 	<select id="list" resultMap="orderDTO">
 		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
-		s.storeName,r.requiredId,o.price,
+		s.storeName,r.requiredId,o.price,o.isSuccess,o.remarks,
 		r.userphone,r.username,
 		r.houseLocation,r.createDate createDate_r,
 		au.adminUserId,au.nickname,
@@ -170,7 +182,7 @@
 	
 	<select id="getListByParam" resultMap="orderDTO">
 		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,
-		s.storeName,r.requiredId,au.adminUserId,au.nickname,o.price,
+		s.storeName,r.requiredId,au.adminUserId,au.nickname,o.price,o.isSuccess,o.remarks,
 		ht.name typename,zs.name zonename
 		from `order` o
 		left join store
@@ -255,7 +267,7 @@
 
 	<select id="getListByKeeperId" resultMap="orderDTO">
 		select o.orderId,o.type,o.status,o.createDate,o.operatorLog,s.storeId,o.price,
-		s.storeName,r.requiredId,au.adminUserId,au.nickname,
+		s.storeName,r.requiredId,au.adminUserId,au.nickname,o.isSuccess,o.remarks,
 		ht.name typename,zs.name zonename
 		from `order` o
 		left join store s on s.storeId=o.storeId

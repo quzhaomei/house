@@ -33,6 +33,7 @@ import com.qicai.dto.bisiness.HouseTypeDTO;
 import com.qicai.dto.bisiness.HouseTypeToStoreDTO;
 import com.qicai.dto.bisiness.OrderDTO;
 import com.qicai.dto.bisiness.RequireDTO;
+import com.qicai.dto.bisiness.RequireGift;
 import com.qicai.dto.bisiness.ServiceStoreDTO;
 import com.qicai.dto.bisiness.ServiceUserDTO;
 import com.qicai.dto.bisiness.StoreDTO;
@@ -175,8 +176,30 @@ public class RequireController extends BaseController {
 
 				PageDTO<List<RequireDTO>> pageDate = requireService.findPublishByPage(page);
 				
-				
 				model.addAttribute("pageResult", pageDate);
+				//统计
+				 /** 6-待分单
+				 * 7-待派单
+				 * 40关闭，41待跟进库
+				 * 8-已派单
+				 */
+				
+				if (status!=null&&status.matches("\\d+")) {
+					selectParam.setStatus(Integer.parseInt(status));
+					model.addAttribute("status"+Integer.parseInt(status), requireService.getPublishCountByParam(selectParam));
+				}else{//全部 
+					selectParam.setStatus(6);
+					model.addAttribute("status6", requireService.getPublishCountByParam(selectParam));
+					selectParam.setStatus(7);
+					model.addAttribute("status7", requireService.getPublishCountByParam(selectParam));
+					selectParam.setStatus(8);
+					model.addAttribute("status8", requireService.getPublishCountByParam(selectParam));
+					selectParam.setStatus(40);
+					model.addAttribute("status40", requireService.getPublishCountByParam(selectParam));
+					selectParam.setStatus(41);
+					model.addAttribute("status41", requireService.getPublishCountByParam(selectParam));
+				}
+				
 				return "admin/requireManager";
 			}
 		}
@@ -194,6 +217,37 @@ public class RequireController extends BaseController {
 			model.addAttribute("require", require);
 		}
 		return "admin/requireManager_list";
+	}
+	
+	// 配送礼物
+	@RequestMapping(value = "/sendGift")
+	public String sendGift(HttpServletRequest request, HttpServletResponse response, Model model) {
+		String requiredId = request.getParameter("requiredId");
+		String address=request.getParameter("info");
+		JsonDTO json=new JsonDTO();
+		if (requiredId != null && requiredId.matches("\\d+")) {
+			RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+			if(require!=null){
+				RequireGift gift=new RequireGift();
+				gift.setRequiredId(Integer.parseInt(requiredId));
+				gift.setStatus(0);
+				gift.setAddress(address);
+				gift.setCreateDate(new Date());
+				try {
+					requireService.saveGift(gift);
+					json.setStatus(1).setMessage("配送成功");
+				} catch (Exception e) {
+					e.printStackTrace();
+					json.setStatus(0).setMessage("配送失败");
+				}
+			}else{
+				json.setStatus(0).setMessage("数据错误");
+			}
+		}else{
+			json.setStatus(0).setMessage("数据错误");
+		}
+		model.addAttribute("json", JSONUtil.object2json(json));
+		return JSON;
 	}
 
 	@RequestMapping(value = "/toService") // 派单

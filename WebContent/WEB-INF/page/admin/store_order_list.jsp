@@ -42,7 +42,9 @@
 				<div class="row-fluid sortable">
 				<div class="box span12">
 					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon edit"></i><span class="break"></span>订单</h2>
+						<h2><i class="halflings-icon edit"></i><span class="break"></span>
+						订单
+						</h2>
 						<div class="box-icon">
 							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
 							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
@@ -54,6 +56,9 @@
 					<div class="box-content">
 						<form class="form-horizontal" action="#" method="post">
 							<fieldset>
+							
+							
+							
 							<legend class="help-block"> 订单信息</legend>
 							<p class="basic-info">
 								<span class="basic-title">
@@ -73,9 +78,30 @@
 							<c:if test="${order.status==1 }">
 								${require.userphone }
 							</c:if>
-							
 							&nbsp;
+							<c:if test="${order.status==1 }"><!-- 已接单才显示 -->
+							<br/>
+							<span class="basic-title">量房结果  : </span> 
+							<c:choose>
+								<c:when test="${empty order.isSuccess }">
+									<span style="color:#888;">未确认</span>
+								</c:when>
+								<c:when test="${order.isSuccess==0}">
+									<span style="color:red;">失败</span>
+									</c:when>
+								<c:when test="${order.isSuccess==1}">
+									<span style="color:green;">成功</span>
+								</c:when>
+							</c:choose>
+							</c:if>
+							<c:if test="${not empty order.remarks }">
+							<br/>
+							<span class="basic-title">商家备注  : </span> 
+							<span style="color:red;">${order.remarks }</span>
+							</c:if>
 							</p>
+						
+							
 							
 							<legend class="help-block"> 订单操作日志</legend>
 							${order.operatorLog }
@@ -101,21 +127,7 @@
 							<td class="basic-title">需求状态</td><td>
 							<span class="label">
 							<c:choose>
-								<c:when test="${require.status==0  }">
-									发起中
-								</c:when>
-								<c:when test="${require.status==1  }">
-									短信中
-								</c:when>
-								<c:when test="${require.status==2  }">
-									客户打开短信
-								</c:when>
-								<c:when test="${require.status==3  }">
-									客户修改提交
-								</c:when>
-								<c:when test="${require.status==4  }">
-									确认完毕待发布
-								</c:when>
+							
 								<c:when test="${require.status==6  }">
 									待分单
 								</c:when>
@@ -124,6 +136,12 @@
 								</c:when>
 								<c:when test="${require.status==8  }">
 									已派单
+								</c:when>
+								<c:when test="${require.status==40  }">
+									已退单
+								</c:when>
+								<c:when test="${require.status==41 }">
+									待跟进库
 								</c:when>
 							</c:choose>
 							</span>
@@ -181,8 +199,10 @@
 							<td class="basic-title">装修风格</td><td colspan="9">${require.designStyle }</td>
 							</tr>
 							</table>
-							<legend class="help-block"> 商家提示</legend>
-							<p class="basic-info">${require.serviceTips }</p>
+								<c:if test="${not empty require.serviceTips}">
+									<legend class="help-block"> 商家提示</legend>
+									<p class="basic-info">${require.serviceTips }</p>
+								</c:if>
 							</fieldset>
 							
 						</form>

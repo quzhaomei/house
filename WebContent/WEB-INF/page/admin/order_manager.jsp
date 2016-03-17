@@ -93,14 +93,15 @@
 							  <tr>
 								  <th width=7%>订单号</th>
 								  <th width=5%>类型</th>
-								  <th width=15%>店铺 </th>
+								  <th width=12%>店铺 </th>
 								  <th width=8%>状态</th>
-								  <th width=10%>创建时间</th>
+								  <th width=15%>创建时间</th>
 								  <th width=10%>客服</th>
-								  <th width=10%>需求ID</th>
+								  <th width=8%>需求ID</th>
 								  <th width=10%>房型面积</th>
-								  <th width=10%>费用</th>
-								  <th width=20%>操作</th>
+								  <th width=8%>费用</th>
+								   <th width=8%>量房状态</th>
+								  <th width=10%>操作</th>
 							  </tr>
 						  </thead>   
 						  <tbody>
@@ -138,6 +139,21 @@
 								<td>${temp.require.requiredId }</td>
 								<td>${temp.typename }</td>
 								<td>￥${temp.price}</td>
+								<td>
+									<c:if test="${temp.status==1 }">
+										<c:choose>
+											<c:when test="${empty temp.isSuccess }">
+													<span style="color:#888;">待确认</span>
+											</c:when>
+											<c:when test="${ temp.isSuccess==0 }">
+												<span style="color:red;">量房失败</span>
+											</c:when>
+											<c:when test="${ temp.isSuccess==1 }">
+												<span style="color:green;">量房成功</span>
+											</c:when>
+										</c:choose>
+									</c:if>
+								</td>
 								<td class="center">
 								<ad:power uri="../orderManager/list.html">
 									<a class="btn  btn-mini"  href="list.html?orderId=${temp.orderId }">

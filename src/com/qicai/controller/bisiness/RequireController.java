@@ -662,7 +662,17 @@ public class RequireController extends BaseController {
 			jxl.write.Label label9 = new jxl.write.Label(8, 0, "已派单数");
 			jxl.write.Label label10 = new jxl.write.Label(9, 0, "已接单数");
 			jxl.write.Label label11 = new jxl.write.Label(10, 0, "状态");
-
+			
+			jxl.write.Label label12 = new jxl.write.Label(11, 0, "客户要求");
+			jxl.write.Label label13 = new jxl.write.Label(12, 0, "回访记录");
+			jxl.write.Label label14 = new jxl.write.Label(13, 0, "商户提示");
+			jxl.write.Label label15 = new jxl.write.Label(14, 0, "归档时间");
+			jxl.write.Label label16 = new jxl.write.Label(15, 0, "下次回访时间");
+			
+			jxl.write.Label label17 = new jxl.write.Label(16, 0, "成功量房数");
+			jxl.write.Label label18 = new jxl.write.Label(17, 0, "礼包状态");
+			jxl.write.Label label19 = new jxl.write.Label(18, 0, "礼包地址");
+			
 			ws.addCell(label1);// 放入工作簿
 			ws.addCell(label2);
 			ws.addCell(label3);
@@ -674,6 +684,16 @@ public class RequireController extends BaseController {
 			ws.addCell(label9);
 			ws.addCell(label10);
 			ws.addCell(label11);
+			
+			ws.addCell(label12);
+			ws.addCell(label13);
+			ws.addCell(label14);
+			ws.addCell(label15);
+			ws.addCell(label16);
+			ws.addCell(label17);
+			ws.addCell(label18);
+			ws.addCell(label19);
+			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			for (int i = 0; i < result.size(); i++) {
 				
@@ -696,12 +716,28 @@ public class RequireController extends BaseController {
 				jxl.write.Label temp3 = new jxl.write.Label(2, i + 1, temp.getZone().getName());
 				jxl.write.Label temp4 = new jxl.write.Label(3, i + 1, temp.getUserId()+"");// 
 				jxl.write.Label temp5 = new jxl.write.Label(4, i + 1, temp.getUsername());//
-				jxl.write.Label temp6 = new jxl.write.Label(5, i + 1, temp.getUserphone());//
+				jxl.write.Label temp6 = new jxl.write.Label(5, i + 1, temp.getUserphone().substring(0,5)+"******");//
 				jxl.write.Label temp7 = new jxl.write.Label(6, i + 1,dateFormat.format( temp.getCreateDate()));// 客服
-				jxl.write.Label temp8 = new jxl.write.Label(7, i + 1,dateFormat.format( temp.getServiceDate()));// 价格
+				jxl.write.Label temp8 = new jxl.write.Label(7, i + 1,temp.getServiceDate()!=null?dateFormat.format( temp.getServiceDate()):"");// 价格
 				jxl.write.Label temp9 = new jxl.write.Label(8, i + 1, temp.getOrderCount()+"");// 需求号
 				jxl.write.Label temp10 = new jxl.write.Label(9, i + 1, temp.getAcceptNum()+"");// 客户名称
 				jxl.write.Label temp11 = new jxl.write.Label(10, i + 1,statusStr);// 电话
+				
+				jxl.write.Label temp12 = new jxl.write.Label(11, i + 1,temp.getCustomerTips());
+				jxl.write.Label temp13 = new jxl.write.Label(12, i + 1,temp.getCallbackTips());
+				jxl.write.Label temp14 = new jxl.write.Label(13, i + 1,temp.getServiceTips());
+				
+				jxl.write.Label temp15 = new jxl.write.Label(14, i + 1,temp.getFileTime()!=null?dateFormat.format(temp.getFileTime()):"");
+				jxl.write.Label temp16 = new jxl.write.Label(15, i + 1,temp.getNextCallTime()!=null?dateFormat.format(temp.getFileTime()):"");
+				jxl.write.Label temp17 = new jxl.write.Label(16, i + 1,temp.getSuccessNum()+"");
+				String giftStatus="";
+				if(temp.getGift()!=null&&temp.getGift().getStatus()==0){
+					giftStatus="已配送";
+				}else{
+					giftStatus="未配送";
+				}
+				jxl.write.Label temp18 = new jxl.write.Label(17, i + 1,giftStatus);
+				jxl.write.Label temp19 = new jxl.write.Label(18, i + 1,temp.getGift()!=null?temp.getGift().getAddress():"");
 
 				ws.addCell(temp1);// 放入工作簿
 				ws.addCell(temp2);// 放入工作簿
@@ -715,6 +751,14 @@ public class RequireController extends BaseController {
 				ws.addCell(temp10);// 放入工作簿
 
 				ws.addCell(temp11);// 放入工作簿
+				ws.addCell(temp12);// 放入工作簿
+				ws.addCell(temp13);// 放入工作簿
+				ws.addCell(temp14);// 放入工作簿
+				ws.addCell(temp15);// 放入工作簿
+				ws.addCell(temp16);// 放入工作簿
+				ws.addCell(temp17);// 放入工作簿
+				ws.addCell(temp18);// 放入工作簿
+				ws.addCell(temp19);// 放入工作簿
 			}
 			// 写入Exel工作表
 			wwb.write();

@@ -56,7 +56,7 @@
 		<association property="gift" javaType="com.qicai.dto.bisiness.RequireGift" column="giftId">
 			<id property="giftId" column="giftId"/>
 			<result property="address" column="address"/>
-			<result property="status" column="status"/>
+			<result property="status" column="status_g"/>
 		</association>
 		
 		<association property="zone" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="zoneId">
@@ -279,7 +279,7 @@
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount ,
 		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1) acceptNum,
 		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1 and o.isSuccess=1) successNum
-		,rg.giftId,rg.address,rg.status
+		,rg.giftId,rg.address,rg.status status_g
 		from `require` r left join 
 		zone_set zs on zs.zoneId=r.zoneId
 		left join require_gift rg on r.requiredId=rg.requiredId
@@ -483,9 +483,12 @@
 		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,r.callbackTips,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount ,
-		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1) acceptNum
+		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1) acceptNum,
+		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1 and o.isSuccess=1) successNum
+		,rg.giftId,rg.address,rg.status status_g
 		from `require` r left join 
 		zone_set zs on zs.zoneId=r.zoneId
+		left join require_gift rg on r.requiredId=rg.requiredId
 		 where r.status>4
 		<if test="require.serviceUserId!=null">
 		and r.serviceUserId=#{require.serviceUserId}

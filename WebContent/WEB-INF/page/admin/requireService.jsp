@@ -261,7 +261,6 @@ position: relative !important;
 			$.post(url,function(json){
 				var dn = "Tel:"+json.data;
 				var ani = "4000000000";
-				alert(dn);
 				layer.msg(json.message);
 				obj.doCallOut(dn, ani);
 			},"json")

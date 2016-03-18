@@ -133,7 +133,9 @@
 									${temp.keeper.nickname }
 								</td>
 								<td>
-									￥<fmt:formatNumber value="${temp.balance }" ></fmt:formatNumber>  
+								<span style="${temp.balance<=2000?'color:red':''}">
+									￥<fmt:formatNumber value="${temp.balance }" ></fmt:formatNumber>
+									</span>  
 								</td>
 								
 								<td class="center">

@@ -88,19 +88,29 @@ position: relative !important;
 						<tr>
 							<td width=8%>用户名称</td><td width=20%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
 							<td width=8% >用户Id</td><td width=20%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户ID"/></td>
-							<td width=8%>状态</td><td width=18%><select style="width:80%;" name="status" id="chonsenstatus" rel="chosen">
-								<option value="-1" ${param.status=="-1"?"selected='selected'":"" }>全部</option>
-							<!--	<option value="0" ${param.status=="0"?"selected='selected'":"" }>发起中</option>
-								<option value="1" ${param.status=="1"?"selected='selected'":"" }>短信中</option>
-								<option value="2" ${param.status=="2"?"selected='selected'":"" }>客户打开连接</option>
-								<option value="3" ${param.status=="3"?"selected='selected'":"" }>客户修改提交</option>
-								<option value="4" ${param.status=="4"?"selected='selected'":"" }>待发布</option>  -->
-								<option value="6" ${param.status=="6"?"selected='selected'":"" }>待分单</option>
-								<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单</option>
-								<option value="8" ${param.status=="8"?"selected='selected'":"" }>已派单</option>
-								<option value="40" ${param.status=="40"?"selected='selected'":"" }>退单</option>
-								<option value="41" ${param.status=="41"?"selected='selected'":"" }>待跟进库</option>
-							</select></td>
+						<c:choose>
+							<c:when test="${param.acceptNum!=1}">
+								<td width=8%>状态</td><td width=18%>
+								<select style="width:80%;" name="status" id="chonsenstatus" rel="chosen">
+									<option value="-1" ${param.status=="-1"?"selected='selected'":"" }>全部</option>
+								<!--	<option value="0" ${param.status=="0"?"selected='selected'":"" }>发起中</option>
+									<option value="1" ${param.status=="1"?"selected='selected'":"" }>短信中</option>
+									<option value="2" ${param.status=="2"?"selected='selected'":"" }>客户打开连接</option>
+									<option value="3" ${param.status=="3"?"selected='selected'":"" }>客户修改提交</option>
+									<option value="4" ${param.status=="4"?"selected='selected'":"" }>待发布</option>  -->
+									<option value="6" ${param.status=="6"?"selected='selected'":"" }>待分单</option>
+									<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单</option>
+									<option value="8" ${param.status=="8"?"selected='selected'":"" }>已派单</option>
+									<option value="40" ${param.status=="40"?"selected='selected'":"" }>退单</option>
+									<option value="41" ${param.status=="41"?"selected='selected'":"" }>待跟进库</option>
+								</select>
+							</td>
+							</c:when>
+							<c:otherwise>
+							<td colspan="2"></td>
+							</c:otherwise>
+						</c:choose>
+							
 							<td>&nbsp;
 							<ad:power uri="../requireManager/loadAll.html">
 							<a href="#" class="btn btn-mini red loadAll">下载数据</a>
@@ -239,11 +249,11 @@ position: relative !important;
 						  				</c:when>
 						  				
 						  				
-						  				<c:when test="${temp.status==40}">
-						  				<span class="label label-important">退单</span>
-						  				</c:when>
 						  				<c:when test="${temp.status==41}">
 						  				<span class="label">待跟进库</span>
+						  				</c:when>
+						  				<c:when test="${temp.status==40}">
+						  				<span class="label label-important">退单</span>
 						  				</c:when>
 						  			</c:choose>
 						  		</td>
@@ -287,6 +297,7 @@ position: relative !important;
 									 pageSize="${pageResult.pageSize}" 
 									 totalPage="${pageResult.totalPage}"></ad:page>
 									 
+						<c:if test="${param.acceptNum!=1 }">			 
 					    <div class="count">
 					    数据统计:&nbsp;
 					    <c:choose>
@@ -294,10 +305,14 @@ position: relative !important;
 					    		<span class="title">发布需求总数:</span>
 					    		<span class="info ${status6 + status7 + status8 + status40 +status41==0?'cred':''}">${status6 + status7 + status8 + status40 +status41 }</span>
 					    	
-					    		<span class="title">已跟进总数:</span>
-					    		<span class="info ${status8 + status40 +status41==0?'cred':''}">${status8 + status40 +status41 }</span>
 					    		
-					    		<span class="title">待跟进总数:</span>
+					    		<span class="title">待分单数:</span>
+					    		<span class="info ${status6==0?'cred':''}">${status6}</span>
+					    		<span class="title">待派单数:</span>
+					    		<span class="info ${status7==0?'cred':''}">${status7}</span>
+					    		<span class="title">已派单数:</span>
+					    		<span class="info ${status8==0?'cred':''}">${status8}</span>
+					    		<span class="title">待跟进库数:</span>
 					    		<span class="info ${status41==0?'cred':''}">${status41}</span>
 					    		
 					    		<span class="title">退单总数:</span>
@@ -327,7 +342,9 @@ position: relative !important;
 					    	
 					    </c:choose>
 					    
-					    </div>       
+					    </div>    
+					    </c:if>  
+					     
 					</div>
 				</div><!--/span-->
 			
@@ -405,6 +422,7 @@ position: relative !important;
 			var order=$(this).attr("order");
 			if(order){
 				$("#pageIndex").val(1);
+				$("#chonsenstatus option[value='-1']").attr("selected","selected");
 				$("#acceptNum").val(order);
 				$("#myform").submit();
 			}

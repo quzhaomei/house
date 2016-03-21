@@ -35,7 +35,7 @@ public class DesignApplyController extends BaseController {
 			pageIndex = "1";
 		}
 		if (pageSize == null) {
-			pageSize = "10";
+			pageSize = "50";
 		}
 		if (pageIndex.matches("\\d+") && pageSize.matches("\\d+")) {
 			Integer pageIndexInt = Integer.parseInt(pageIndex);

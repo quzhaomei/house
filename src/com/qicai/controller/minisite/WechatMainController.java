@@ -24,7 +24,6 @@ import com.qicai.util.JSONUtil;
 import com.qicai.util.PasswordUtil;
 
 /**
- * 活动专用controller
  * 
  * @author Administrator
  */

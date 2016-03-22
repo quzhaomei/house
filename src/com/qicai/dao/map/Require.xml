@@ -349,6 +349,9 @@
 		<if test="page.param.userId!=null">
 		and r.userId=#{page.param.userId}
 		</if>
+		<if test="page.param.createUserId!=null">
+		and r.createUserId=#{page.param.createUserId}
+		</if>
 		<if test="page.param.status!=null">
 		and r.status=#{page.param.status}
 		</if>
@@ -395,6 +398,9 @@
 		from `require` where 1=1
 		<if test="require.serviceUserId!=null">
 		and serviceUserId=#{require.serviceUserId}
+		</if>
+		<if test="require.createUserId!=null">
+		and createUserId=#{require.createUserId}
 		</if>
 		<if test="require.status!=null">
 		and status=#{require.status}

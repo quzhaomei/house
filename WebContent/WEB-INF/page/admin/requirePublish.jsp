@@ -53,11 +53,16 @@
 						<input name="pageSize" type="hidden" value="${pageResult.pageSize}"/>
 						<table class="table">
 						<tr>
-							<td width=7%>用户名称</td><td width=18%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
-							<td width=7% >用户Id</td><td width=18%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户号码"/></td>
-							<td width=5%>&nbsp;</td><td width=18%>
-							&nbsp;
-							</td>
+							<td width=7%>用户名称</td><td width=25%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
+							<td width=7% >用户Id</td><td width=25%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户号码"/></td>
+							<td colspan="2">
+							<ad:power uri="../requirePublish/add.html">
+							<a href="batchUpload.html?operator=toUpload" style="font-size:15px;color:red;">
+							<i class="halflings-icon upload white"></i> 批量上传</a>
+								</ad:power>
+								&nbsp;
+								</td>
+								
 						</tr>
 						<tr>
 							<td>录入时间</td>
@@ -77,6 +82,7 @@
 							<a href="add.html?operator=toAdd" class="btn btn-small btn-search addHouse btn-danger">
 							<i class="halflings-icon plus white"></i> 新建预约</a>
 								</ad:power>
+								
 							</td>
 						</tr>
 						</table>
@@ -141,12 +147,19 @@
 							  			<a class="btn btn-mini green" href="update.html?operator=toUpdate&requiredId=${temp.requiredId }">
 							  			修正预约</a>
 							  			</ad:power>
+							  			
 							  			<ad:power uri="../requirePublish/status.html">
 							  			<a class="btn btn-mini green sendRequire"   status="${temp.status}" requiredId="${temp.requiredId }" href="#">
 							  			发布</a>
 							  			</ad:power>
-							  			</c:if>
 							  			
+							  			<ad:power uri="../requirePublish/call.html">
+							  				<a class="btn btn-mini yellow call-customer" href="#"
+							  			 data-href="call.html?requiredId=${temp.requiredId }">
+							  			拨通电话</a>
+							  			</ad:power>
+							  			</c:if>
+							  		
 							  			<c:choose>
 								  			<c:when test="${temp.status==0||temp.status==1 }">
 								  				<ad:power uri="../requirePublish/sendMsg.html">
@@ -185,6 +198,7 @@
 	<div class="clearfix"></div>
 	<c:import url="public/p-footer.jsp"></c:import>
 	<c:import url="public/p-javascript.jsp"></c:import>
+	<script type="text/javascript" src="../js/admin/uc-2.0.1.js"></script>
 	<script type="text/javascript">
 	var bak;
 	$(function(){
@@ -229,6 +243,19 @@
 			}, function(){
 				
 			});
+		});
+		
+		var obj = new UCObj(window, document);
+		obj.start();
+		//电话外呼
+		$(".call-customer").on("click",function(){
+			var url=$(this).attr("data-href");
+			$.post(url,function(json){
+				var dn = "Tel:"+json.data;
+				var ani = "4000000000";
+				layer.msg(json.message);
+				obj.doCallOut(dn, ani);
+			},"json")
 		});
 		
 		$(".sendRequire").on("click",function(){

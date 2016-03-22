@@ -13,6 +13,7 @@ import com.qicai.bean.minisite.DesignApply;
 import com.qicai.controller.BaseController;
 import com.qicai.dto.JsonDTO;
 import com.qicai.util.JSONUtil;
+import com.qicai.util.RequestUtil;
 /**
  * 活动专用controller
  * 
@@ -21,14 +22,12 @@ import com.qicai.util.JSONUtil;
 @Controller
 @RequestMapping(value = "minisite")
 public class MinisiteController extends BaseController {
-	@RequestMapping(value = "/designApply_pc.html")
-	public String designApply_pc(HttpServletRequest request, HttpServletResponse response, Model model) {
+	@RequestMapping(value = "/designApply_to.html")
+	public String designApply_to(HttpServletRequest request, HttpServletResponse response, Model model) {
+		if(RequestUtil.isMobileDevice(request)){
+			return "minisite/designApply_mb";
+		}
 		return "minisite/designApply_pc";
-	}
-	
-	@RequestMapping(value = "/designApply_mb.html")
-	public String designApply_mb(HttpServletRequest request, HttpServletResponse response, Model model) {
-		return "minisite/designApply_mb";
 	}
 	
 	@RequestMapping(value = "/designApply.html")

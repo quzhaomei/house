@@ -1,7 +1,10 @@
 package com.qicai.controller.bisiness;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.qicai.annotation.LimitTag;
 import com.qicai.bean.bisiness.HouseType;
@@ -28,6 +33,10 @@ import com.qicai.util.MessageSender;
 import com.qicai.util.PasswordUtil;
 import com.qicai.util.ShortUrlUtil;
 import com.qicai.util.UuidUtils;
+
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 /**
  * 需求发布
@@ -111,7 +120,7 @@ public class RequirePublishController extends BaseController {
 						e.printStackTrace();
 					}
 				}
-
+				selectParam.setCreateUserId(getLoginAdminUser(request).getAdminUserId());
 				page.setParam(selectParam);
 
 				PageDTO<List<RequireDTO>> pageDate = requireService.findListByPage(page);
@@ -183,16 +192,15 @@ public class RequirePublishController extends BaseController {
 			String designTime = request.getParameter("designTime");
 			String phoneTime = request.getParameter("phoneTime");
 			String customerTips = request.getParameter("customerTips");
-			
-			String designType = request.getParameter("designType");//装修方式
-			String designStyle = request.getParameter("designStyle");//装修风格
-			String houseStatus = request.getParameter("houseStatus");//房屋状态
+
+			String designType = request.getParameter("designType");// 装修方式
+			String designStyle = request.getParameter("designStyle");// 装修风格
+			String houseStatus = request.getParameter("houseStatus");// 房屋状态
 			// 数据校验
 			if (username != null && username.length() <= 20 && userphone != null && userphone.matches("\\d+")
 					&& zoneId != null && zoneId.matches("\\d+") && typeId != null && typeId.matches("\\d+")
-					&& houseDes != null && isNew != null && isNew.matches("\\d+") && budget != null
-					 && houseInfo != null && houseLocation != null && designTime != null
-					&& phoneTime != null && isReady.matches("[01]")
+					&& houseDes != null && isNew != null && isNew.matches("\\d+") && budget != null && houseInfo != null
+					&& houseLocation != null && designTime != null && phoneTime != null && isReady.matches("[01]")
 					&& (("1".equals(isReady) || readyDate != null && readyDate.length() == 10))) {
 				Require saveParam = new Require();
 				saveParam.setUserphone(userphone);
@@ -206,7 +214,7 @@ public class RequirePublishController extends BaseController {
 				}
 
 				saveParam.setUsername(username);
-				
+
 				saveParam.setZoneId(Integer.parseInt(zoneId));
 				saveParam.setHouseTypeId(Integer.parseInt(typeId));
 				saveParam.setBudget(budget);
@@ -231,27 +239,26 @@ public class RequirePublishController extends BaseController {
 
 				saveParam.setOperatorLog(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
 						+ getLoginAdminUser(request).getNickname() + " 创建预约");
-				
+
 				saveParam.setDesignType(designType);
 				saveParam.setDesignStyle(designStyle);
 				saveParam.setHouseStatus(houseStatus);
 				try {
 					requireService.save(saveParam);
-					
-					//发送短信
+
+					// 发送短信
 					String sign = PasswordUtil.MD5(userphone + saveParam.getRequiredId());
 					String host = request.getRequestURL().toString();
 					host = host.substring(0, host.lastIndexOf("/"));
 					host = host.substring(0, host.lastIndexOf("/"));
-					host += "/mobile/requireConfirm.html?requiredId=" 
-					+ saveParam.getRequiredId()+"&userphone="+
-					userphone+"&sign="+sign;
-					String url=host;
-					url=ShortUrlUtil.getShotUrl(url);
-					//TODO 创建时 发送链接
-					String content="尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 "+url+" ,回复TD退订。";
-					 MessageSender.sendMsg(userphone, content);
-					 
+					host += "/mobile/requireConfirm.html?requiredId=" + saveParam.getRequiredId() + "&userphone="
+							+ userphone + "&sign=" + sign;
+					String url = host;
+					url = ShortUrlUtil.getShotUrl(url);
+					// TODO 创建时 发送链接
+					String content = "尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 " + url + " ,回复TD退订。";
+					MessageSender.sendMsg(userphone, content);
+
 					json.setStatus(1).setMessage("预约需求成功");
 				} catch (Exception e) {
 					json.setStatus(0).setMessage("添加过程中。系统出现异常");
@@ -281,9 +288,8 @@ public class RequirePublishController extends BaseController {
 			String requiredId = request.getParameter("requiredId");
 			if (requiredId != null && requiredId.matches("\\d+")) {
 				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
-				if (require.getStatus() == 0||require.getStatus() == 1
-						||require.getStatus() == 2||require.getStatus() == 3
-						||require.getStatus() == 4) {// 未发布的才能更改
+				if (require.getStatus() == 0 || require.getStatus() == 1 || require.getStatus() == 2
+						|| require.getStatus() == 3 || require.getStatus() == 4) {// 未发布的才能更改
 					// 查找所有房屋类型
 					HouseType type = new HouseType();
 					type.setStatus(1);
@@ -319,13 +325,13 @@ public class RequirePublishController extends BaseController {
 			String designTime = request.getParameter("designTime");
 			String phoneTime = request.getParameter("phoneTime");
 			String customerTips = request.getParameter("customerTips");
-			
-			String designType=request.getParameter("designType");
-			String designStyle=request.getParameter("designStyle");
-			String houseStatus=request.getParameter("houseStatus");
+
+			String designType = request.getParameter("designType");
+			String designStyle = request.getParameter("designStyle");
+			String houseStatus = request.getParameter("houseStatus");
 			// 数据校验
-			if (requiredId != null && requiredId.matches("\\d+") && budget != null 
-					&& username != null && username.length() <= 20 && userphone != null && userphone.matches("\\d+")
+			if (requiredId != null && requiredId.matches("\\d+") && budget != null && username != null
+					&& username.length() <= 20 && userphone != null && userphone.matches("\\d+")
 					&& (zoneId == null || zoneId != null && zoneId.matches("\\d+")) && typeId != null
 					&& typeId.matches("\\d+") && houseDes != null && isNew != null && isNew.matches("\\d+")
 					&& houseInfo != null && houseLocation != null && designTime != null && phoneTime != null
@@ -356,15 +362,14 @@ public class RequirePublishController extends BaseController {
 				updateParam.setDesignTime(designTime);
 				updateParam.setPhoneTime(phoneTime);
 				updateParam.setCustomerTips(customerTips);
-				
+
 				updateParam.setDesignStyle(designStyle);
 				updateParam.setDesignType(designType);
 				updateParam.setHouseStatus(houseStatus);
 				try {
 					requireService.update(updateParam);
 					json.setStatus(1).setMessage("预约更新成功");
-					
-					
+
 				} catch (Exception e) {
 					json.setStatus(0).setMessage("更新过程中。系统出现异常");
 					e.printStackTrace();
@@ -399,8 +404,8 @@ public class RequirePublishController extends BaseController {
 		if (requiredId != null && requiredId.matches("\\d+")) {
 			JsonDTO json = new JsonDTO();
 			RequireDTO old = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
-			if (old != null && (old.getStatus() == 0||old.getStatus() == 1
-					||old.getStatus() == 2||old.getStatus() == 3||old.getStatus() == 4)) {
+			if (old != null && (old.getStatus() == 0 || old.getStatus() == 1 || old.getStatus() == 2
+					|| old.getStatus() == 3 || old.getStatus() == 4)) {
 				Require updateParam = new Require();
 				updateParam.setRequiredId(Integer.parseInt(requiredId));
 				updateParam.setStatus(6);// 设置为发布状态，待分单
@@ -421,80 +426,80 @@ public class RequirePublishController extends BaseController {
 		}
 		return JSON;
 	}
-		
+
 	// 发送短信
 	@RequestMapping(value = "/sendMsg")
 	public String sendMsg(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String requiredId = request.getParameter("requiredId");
-		JsonDTO json=new JsonDTO();
+		JsonDTO json = new JsonDTO();
 		if (requiredId != null && requiredId.matches("\\d+")) {
 			RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
-			if(require!=null&&(require.getStatus()==1||require.getStatus()==0)){
-				Require updateParam=new Require();
+			if (require != null && (require.getStatus() == 1 || require.getStatus() == 0)) {
+				Require updateParam = new Require();
 				updateParam.setRequiredId(Integer.parseInt(requiredId));
-				updateParam.setStatus(1);//重置为发送短信的状态
-				updateParam.setOperatorLog(require.getOperatorLog()+" <br/> "+
-						new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())+" 由 "+getLoginAdminUser(request).getNickname()+" 发送短信给客户");
+				updateParam.setStatus(1);// 重置为发送短信的状态
+				updateParam.setOperatorLog(require.getOperatorLog() + " <br/> "
+						+ new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+						+ getLoginAdminUser(request).getNickname() + " 发送短信给客户");
 				try {
 					String sign = PasswordUtil.MD5(require.getUserphone() + requiredId);
 					String host = request.getRequestURL().toString();
 					host = host.substring(0, host.lastIndexOf("/"));
 					host = host.substring(0, host.lastIndexOf("/"));
-					host += "/mobile/requireConfirm.html?requiredId=" 
-					+ Integer.parseInt(requiredId)+"&userphone="+
-							require.getUserphone()+"&sign="+sign;
-					String url=host; 
-					url=ShortUrlUtil.getShotUrl(url);
-					String content="尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 "+url+" ,回复TD退订。";
-					HttpSendResult result= MessageSender.sendMsg(require.getUserphone(), content);
-					if(result.getIsSuccess()){
+					host += "/mobile/requireConfirm.html?requiredId=" + Integer.parseInt(requiredId) + "&userphone="
+							+ require.getUserphone() + "&sign=" + sign;
+					String url = host;
+					url = ShortUrlUtil.getShotUrl(url);
+					String content = "尊敬的会员您好：感谢您预约免费量房，注册还可以领取装修礼包 " + url + " ,回复TD退订。";
+					HttpSendResult result = MessageSender.sendMsg(require.getUserphone(), content);
+					if (result.getIsSuccess()) {
 						requireService.update(updateParam);
 						json.setStatus(1).setMessage("发送短信成功");
-					}else{
+					} else {
 						json.setStatus(0).setMessage(result.getInfo());
 					}
 				} catch (Exception e) {
 					json.setStatus(0).setMessage("发送短信失败");
 					e.printStackTrace();
 				}
-			}else{
+			} else {
 				json.setStatus(0).setMessage("数据异常！");
 			}
-		}else{
+		} else {
 			json.setStatus(0).setMessage("数据丢失，请刷新页面");
 		}
 		model.addAttribute(JSON, JSONUtil.object2json(json));
 		return JSON;
 	}
-	
-	//确认
+
+	// 确认
 	@RequestMapping(value = "/confirm")
 	public String confirm(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String operator = request.getParameter("operator");
 		String requiredId = request.getParameter("requiredId");
-		if("to_confirm".equals(operator)){//跳转到确认页面
-			if(requiredId!=null&&requiredId.matches("\\d+")){
-				RequireDTO require=requireService.getByParam(new Require(Integer.parseInt(requiredId)));
-				//判断状态
-				if(require!=null&&require.getStatus()==3){
-					//查找所有房屋类型
-					HouseType houseType=new HouseType();
+		if ("to_confirm".equals(operator)) {// 跳转到确认页面
+			if (requiredId != null && requiredId.matches("\\d+")) {
+				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				// 判断状态
+				if (require != null && require.getStatus() == 3) {
+					// 查找所有房屋类型
+					HouseType houseType = new HouseType();
 					houseType.setStatus(1);
-					List<HouseTypeDTO> houses=houseTypeService.getListByParam(houseType);
+					List<HouseTypeDTO> houses = houseTypeService.getListByParam(houseType);
 					model.addAttribute("houses", houses);
-					
-					//查找所有的区域
-					ZoneSet zone=new ZoneSet();
+
+					// 查找所有的区域
+					ZoneSet zone = new ZoneSet();
 					zone.setParentId(0);
 					zone.setStatus(1);
-					List<ZoneSetDTO> zones=zoneSetService.getZoneSetByParam(zone);
+					List<ZoneSetDTO> zones = zoneSetService.getZoneSetByParam(zone);
 					model.addAttribute("zones", zones);
-					
+
 					model.addAttribute("require", require);
 				}
 			}
-			
-		}else if ("findOrderZone".equals(operator)) {// 查找
+
+		} else if ("findOrderZone".equals(operator)) {// 查找
 			// 查找所有父级区域对应的子区域
 			String zoneId = request.getParameter("zoneId");
 			if (zoneId != null && zoneId.matches("\\d+")) {
@@ -506,15 +511,15 @@ public class RequirePublishController extends BaseController {
 				model.addAttribute("json", JSONUtil.object2json(zones));
 				return JSON;
 			}
-		}else if("confirm".equals(operator)){
+		} else if ("confirm".equals(operator)) {
 			JsonDTO json = new JsonDTO();
-			
+
 			String username = request.getParameter("username");
 			String userphone = request.getParameter("userphone");
 			String zoneId = request.getParameter("zoneId");
 			String typeId = request.getParameter("typeId");
 			String houseDes = request.getParameter("houseDes");
-			String budget=request.getParameter("budget");
+			String budget = request.getParameter("budget");
 
 			String houseInfo = request.getParameter("houseInfo");
 			String isReady = request.getParameter("isReady");
@@ -524,35 +529,35 @@ public class RequirePublishController extends BaseController {
 			String designTime = request.getParameter("designTime");
 			String phoneTime = request.getParameter("phoneTime");
 			String customerTips = request.getParameter("customerTips");
-			
-			String callbackTips=request.getParameter("callbackTips");
-			String serviceTips=request.getParameter("serviceTips");
-			
-			String designType=request.getParameter("designType");
-			String designStyle=request.getParameter("designStyle");
-			String houseStatus=request.getParameter("houseStatus");
+
+			String callbackTips = request.getParameter("callbackTips");
+			String serviceTips = request.getParameter("serviceTips");
+
+			String designType = request.getParameter("designType");
+			String designStyle = request.getParameter("designStyle");
+			String houseStatus = request.getParameter("houseStatus");
 			// 数据校验
-			if (requiredId!=null&&requiredId.matches("\\d+")&&
-					username != null && username.length() <= 20 && userphone != null && userphone.matches("\\d+")
-					&& (zoneId==null||zoneId != null && zoneId.matches("\\d+")) && typeId != null && typeId.matches("\\d+")
-					&& houseDes != null  && isNew != null && isNew.matches("\\d+")
+			if (requiredId != null && requiredId.matches("\\d+") && username != null && username.length() <= 20
+					&& userphone != null && userphone.matches("\\d+")
+					&& (zoneId == null || zoneId != null && zoneId.matches("\\d+")) && typeId != null
+					&& typeId.matches("\\d+") && houseDes != null && isNew != null && isNew.matches("\\d+")
 					&& houseInfo != null && houseLocation != null && designTime != null && phoneTime != null
 					&& isReady.matches("[01]")
-				
+
 					&& (("1".equals(isReady) || readyDate != null && readyDate.length() == 10))) {
-				RequireDTO old=requireService.getByParam(new Require(Integer.parseInt(requiredId)));
-				if(old==null||old.getStatus()!=3){
-					return "";//非法数据拦截
+				RequireDTO old = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				if (old == null || old.getStatus() != 3) {
+					return "";// 非法数据拦截
 				}
-				
+
 				Require updateParam = new Require();
 				updateParam.setRequiredId(Integer.parseInt(requiredId));
 				updateParam.setUsername(username);
 				updateParam.setUserphone(userphone);
-				if(zoneId!=null&&zoneId.matches("\\d+")){
+				if (zoneId != null && zoneId.matches("\\d+")) {
 					updateParam.setZoneId(Integer.parseInt(zoneId));
 				}
-				if(budget!=null){
+				if (budget != null) {
 					updateParam.setBudget(budget);
 				}
 				updateParam.setHouseTypeId(Integer.parseInt(typeId));
@@ -560,7 +565,7 @@ public class RequirePublishController extends BaseController {
 				updateParam.setHouseInfo(houseInfo);
 				updateParam.setIsNew(Integer.parseInt(isNew));
 				updateParam.setIsReady(Integer.parseInt(isReady));
-				
+
 				updateParam.setHouseStatus(houseStatus);
 				updateParam.setDesignStyle(designStyle);
 				updateParam.setDesignType(designType);
@@ -575,16 +580,17 @@ public class RequirePublishController extends BaseController {
 				updateParam.setDesignTime(designTime);
 				updateParam.setPhoneTime(phoneTime);
 				updateParam.setCustomerTips(customerTips);
-				
+
 				updateParam.setCreateUserId(getLoginAdminUser(request).getAdminUserId());
 
 				updateParam.setServiceTips(serviceTips);
 				updateParam.setCallbackTips(callbackTips);
-				
-				updateParam.setStatus(4);//变为待分单状态
-				
-				updateParam.setOperatorLog(old.getOperatorLog()+" <br/> "+new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())+" 由 "
-						+getLoginAdminUser(request).getNickname()+" 确认客户修改的订单消息，并提交");
+
+				updateParam.setStatus(4);// 变为待分单状态
+
+				updateParam.setOperatorLog(
+						old.getOperatorLog() + " <br/> " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())
+								+ " 由 " + getLoginAdminUser(request).getNickname() + " 确认客户修改的订单消息，并提交");
 				try {
 					requireService.update(updateParam);
 					json.setStatus(1).setMessage("需求确认成功");
@@ -598,12 +604,96 @@ public class RequirePublishController extends BaseController {
 			}
 			model.addAttribute("json", JSONUtil.object2json(json));
 			return JSON;
-		
+
 		}
 		return "admin/requirePublish_confirm";
 	}
-	public static void main(String[] args) {
-		String url="http://51getMore.cn/asdsadad/sadsadsadsadsadsaccascsac/dsasd.html";
-		System.out.println(ShortUrlUtil.getShotUrl(url));
+
+	// 批量上传
+	@RequestMapping(value = "/batchUpload")
+	public String batchUpload(HttpServletRequest request, HttpServletResponse response, Model model,
+			@RequestParam(value = "excell", required = false) MultipartFile excell) {
+		// 上传文档
+		if (excell != null) {
+			try {
+				Workbook rwb = Workbook.getWorkbook(excell.getInputStream());
+				Sheet rst = rwb.getSheet(0);
+				// 获取Sheet表中所包含的总列数
+				List<Require> datas = new ArrayList<Require>();
+				// 获取Sheet表中所包含的总行数
+				int rsRows = rst.getRows();
+				for (int row = 1; row < rsRows; row++) {
+					Require temp = new Require();
+					temp.setUsername(rst.getCell(0, row).getContents());
+					temp.setUserphone(rst.getCell(1, row).getContents());
+					datas.add(temp);
+				}
+				JsonDTO json = new JsonDTO();
+				json.setStatus(1).setData(datas);
+				model.addAttribute("json", JSONUtil.object2json(json));
+			} catch (BiffException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return JSON;
+		}
+		String operator = request.getParameter("operator");
+		if ("toUpload".equals(operator)) {
+			return "admin/requirePublish_batchUpload";
+		} else if ("upload".equals(operator)) {
+			JsonDTO json = new JsonDTO();
+
+			String[] usernames = request.getParameterValues("username");
+			String[] userphones = request.getParameterValues("userphone");
+			for (int index = 0; index < usernames.length; index++) {
+
+				Require require = new Require();
+				require.setUserphone(userphones[index]);
+
+				// 处理userId存在的问题
+				List<RequireDTO> old = requireService.list(require);
+
+				if (old != null && old.size() > 0) {
+					require.setUserId(old.get(0).getUserId());
+				} else {
+					require.setUserId(UuidUtils.getUserId());
+				}
+
+				require.setUsername(usernames[index]);
+				require.setCreateUserId(getLoginAdminUser(request).getAdminUserId());
+				require.setStatus(0);
+				require.setCreateDate(new Date());
+
+				require.setOperatorLog(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+						+ getLoginAdminUser(request).getNickname() + " 创建预约");
+
+				try {
+					requireService.save(require);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			json.setStatus(1).setMessage("导入成功");
+			model.addAttribute("json", JSONUtil.object2json(json));
+		}
+		return JSON;
+	}
+
+	// 拨打电话
+	@RequestMapping(value = "/call")
+	public String call(HttpServletRequest request, HttpServletResponse response, Model model) {
+		JsonDTO json = new JsonDTO();
+		json.setStatus(0).setMessage("数据异常");
+		String requiredId = request.getParameter("requiredId");
+		if (requiredId != null && requiredId.matches("\\d+")) {
+			RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+			if (require != null) {
+				json.setStatus(1).setMessage("外呼中，请等待");
+				json.setData(require.getUserphone());
+			}
+		}
+		model.addAttribute("json", JSONUtil.object2json(json));
+		return JSON;
 	}
 }

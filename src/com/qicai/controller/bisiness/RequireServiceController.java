@@ -577,9 +577,4 @@ public class RequireServiceController extends BaseController {
 		return "admin/requireService_to_store";
 	}
 
-	public static void main(String[] args) {
-		String url = "http://51getMore.cn/house/requirePublish/index.html";
-		url = ShortUrlUtil.getShotUrl(url);
-		System.out.println(url);
-	}
 }

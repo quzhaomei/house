@@ -486,7 +486,8 @@
 	</select>
 	<select id="publishList" resultMap="requireDTO">
 		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
-		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,r.callbackTips,
+		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,r.customerTips,
+		r.callbackTips,r.serviceTips,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount ,
 		(select count(*) from `order` o where o.requiredId=r.requiredId and o.status=1) acceptNum,

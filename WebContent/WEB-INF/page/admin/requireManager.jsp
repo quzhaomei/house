@@ -203,7 +203,17 @@ position: relative !important;
 						  		<td>${temp.zone.name }</td>
 						  		<td>${temp.userId }</td>
 						  		<td>${temp.username }</td>
-						  		<td>${fn:substring(temp.userphone,0,3) }********</td>
+						  		<td>
+						  		<c:choose>
+						  			<c:when test="${fn:length(temp.userphone)>3&&fn:length(temp.userphone)<11 }">
+						  				${fn:substring(temp.userphone,0,3) }********
+						  			</c:when>
+						  			<c:when test="${fn:length(temp.userphone)>=11}">
+						  			${fn:substring(temp.userphone,0,3) }****${fn:substring(temp.userphone,7,11) }
+						  			</c:when>
+						  		</c:choose>
+						  		
+						  		</td>
 						  		<td><fmt:formatDate value="${temp.serviceDate }" pattern="yyyy-MM-dd HH:mm"/></td>
 						  		
 						  		<td><span style="color:${temp.orderCount==0?'red':'' }">${temp.orderCount }</span></td><!-- 已派单数 -->

@@ -61,7 +61,7 @@
 								</div>
 							  </div>
 							
-							    <div class="control-group">
+						    <div class="control-group" style="display:none;">
 							  <label class="control-label" for="userphone">客户手机号</label>
 							 <div class="controls">
 								  <div class="input-prepend">
@@ -76,7 +76,7 @@
 								<label class="control-label" for="zoneId">区域</label>
 								<div class="controls">
 								 <div class="input-prepend">
-									<input type="text" maxlength="10" class="span6" value="${require.zone.name }" readonly="readonly"> 
+									<input type="text" maxlength="10" class="span6" id="zoneIdBak" value="${require.zone.name }" readonly="readonly"> 
 										<span class="changeZone btn btn-mini btn-success">点击更换</span>
 								  </div>
 								  <div style="display:none;">
@@ -302,7 +302,7 @@
 			}else if(!userphone){
 				layer.msg("客户手机号不能为空");
 				return;
-			}else if(!$(".changeZone")[0]&&!zoneId){
+			}else if((!$(".changeZone")[0]||!$("#zoneIdBak").val())&&!zoneId ){
 				layer.msg("请选择房子所在的区域");
 				return;
 			}else if(!typeId){

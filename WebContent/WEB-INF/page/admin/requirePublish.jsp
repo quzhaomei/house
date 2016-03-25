@@ -110,7 +110,15 @@
 						  		<td>${temp.zone.name }</td>
 						  		<td>${temp.userId }</td>
 						  		<td>${temp.username }</td>
-						  		<td>${temp.userphone }</td>
+						  		<td>
+						  		<c:choose>
+						  			<c:when test="${fn:length(temp.userphone)>3&&fn:length(temp.userphone)<11 }">
+						  				${fn:substring(temp.userphone,0,3) }********
+						  			</c:when>
+						  			<c:when test="${fn:length(temp.userphone)>=11}">
+						  			${fn:substring(temp.userphone,0,3) }****${fn:substring(temp.userphone,7,11) }
+						  			</c:when>
+						  		</c:choose></td>
 						  		<td>
 						  			<c:choose>
 						  				<c:when test="${temp.status==0 }">

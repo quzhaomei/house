@@ -12,6 +12,33 @@
 <c:import url="public/p-css.jsp"></c:import>
 <style type="text/css">
 .modal-body{max-height: 580px;}
+.modal-body{max-height: 580px;}
+
+.layui-layer-content{
+padding:5px 5px;
+}
+.status{
+text-align: center;
+margin:5px 0;
+}
+.status a{
+margin:3px 8px;
+}
+.statuInfo{
+margin:0px 20px;
+width:90%;
+height:95px;
+}
+.stLine{
+margin:10px 20px;
+padding-bottom:5px;
+border-bottom:1px solid #aaa;
+font-weight: bold;
+}
+.modal-footer a.btn{
+position: relative !important;
+}
+</style>
 </style>
 </head>
 
@@ -92,13 +119,14 @@
 						  <thead>
 							  <tr>
 								  <th width=5%>序列</th>
-								  <th width=13%>录入时间</th>
-								  <th width=8%>区域</th>
+								  <th width=10%>录入时间</th>
+								  <th width=7%>区域</th>
 								  <th width=8%>用户ID </th>
 								  <th width=8%>用户名称</th>
 								  <th width=10%>用户手机</th>
 								  <th width=5%>状态</th>
-								  <th width=12%>楼盘信息</th>
+								  <th width=10%>楼盘信息</th>
+								  <th width=13% >特殊状态</th>
 								  <th >操作</th>
 							  </tr>
 						  </thead>   
@@ -145,12 +173,38 @@
 						  			</c:choose>
 						  		</td>
 						  		<td>${temp.houseInfo }</td>
-						  		
+						  		<td>
+								  	<c:choose>
+								  		<c:when test="${temp.remarks.status==0 }">
+								  			<span class="label">已关闭</span><a href="#" class="status-remarks"  requiredId="${temp.requiredId }" >[原因]</a>
+								  		</c:when>
+								  		<c:when test="${temp.remarks.status==1 }">
+								  			<span class="label label-important">待跟进库</span><a href="#" class="status-remarks"  requiredId="${temp.requiredId }" >[原因]</a>
+								  			<br/>下次回访:<fmt:formatDate value="${temp.remarks.nextTime }" pattern="yyyy-MM-dd"/>
+								  		</c:when>
+								  	</c:choose>
+						  		</td>
 						  		<td>
 						  		<ad:power uri="../requirePublish/list.html">
 						  		<a class="btn btn-mini" href="list.html?requiredId=${temp.requiredId }">详情</a>
 						  		</ad:power>
+						  		
+						  		<c:if test="${not empty temp.remarks }">
+						  			<c:if test="${temp.remarks.status==1 }">
+						  			<ad:power uri="../requirePublish/otherStatus.html">
+							  			<a class="btn btn-success btn-mini startStatus" href="#" requiredId="${temp.requiredId }">
+										  			启用</a>
+										  			</ad:power>
+						  			</c:if>
+						  		</c:if>
+						  		<c:if test="${empty temp.remarks }">
+						  		
 						  			<c:if test="${temp.status<=4 }">
+						  				<ad:power uri="../requirePublish/otherStatus.html">
+						  				<a class="btn btn-danger btn-mini otherStatus" href="#" requiredId="${temp.requiredId }">
+									  			特殊状态</a>	
+									  			</ad:power>	
+									  			
 						  				<ad:power uri="../requirePublish/update.html">
 							  			<a class="btn btn-mini green" href="update.html?operator=toUpdate&requiredId=${temp.requiredId }">
 							  			修正预约</a>
@@ -182,6 +236,11 @@
 									  			</ad:power>
 								  			</c:when>
 								  		</c:choose>
+								  		</c:if>
+								  		
+								  		
+									  	
+									  	
 						  		 </td>
 						  		</tr>
 						  	</c:forEach>
@@ -303,6 +362,130 @@
 			});
 		});
 		
+		
+		//切换状态
+		$(".otherStatus").on("click",function(){
+			var requiredId=$(this).attr("requiredId");
+			if(!requiredId){layer.msg("数据缺失！");return;}
+			var param={};
+			param.operator="toOtherStatus";
+			param.requiredId=requiredId;
+			$.post("otherStatus.html",param,function(json){
+				var remark=json.data;
+				var status=json.status;
+				if(json.status==0){
+					layer.msg(json.message);
+				}else{
+				layer.open({
+				    type: 1,
+				    scrollbar: false,
+				    title:"特殊状态",
+				    shadeClose:true,
+				    skin: 'layui-layer-rim', //加上边框
+				    area: ['520px', 'auto'], //宽高
+				    content: '<input type="hidden" id="statusTemp"/><div class="status"><a class="btn  status btn-mini " status="0" href="javascript:;">'+ 
+						' 关闭</a><a class="btn  status btn-mini" status="1" href="javascript:;">'+ 
+						' 待跟进库</a></div>'+ 
+						' <p class="stLine"  id="nextcallTime-p">下次回访时间： <input type="text" readeronly="readeronly" id="nextcallTime" placeholder="请填写下次回访时间"/></p>'+
+						' <p class="stLine">备注： <small>更改状态时，请填写理由</small></p><textarea maxlength="500" class="statuInfo"></textarea>'+
+						'<div class="modal-footer"><a href="#" class="btn btn-sm layui-layer-close" data-dismiss="modal">返回</a> <a href="#" class="btn btn-primary btn-sm status-submit">更新</a>'+
+						'</div>',
+					success:function(){
+						$("#statusTemp").val(requiredId);
+						$("#nextcallTime-p").hide();
+						$("#nextcallTime").datepicker({changeYear:true,changeMonth:true});
+					}
+				});}
+			},"json");
+		});
+		
+		
+		//带跟进库激活
+		$(".startStatus").on("click",function(){
+			var requiredId=$(this).attr("requiredId");
+			if(!requiredId){layer.msg("数据缺失！");return;}
+			var param={};
+			param.operator="openStatus";
+			param.requiredId=requiredId;
+
+			layer.confirm("确定激活吗？",function(index){
+				layer.close(index);
+				$.post("otherStatus.html",param,function(json){
+					if(json.status==1){
+						layer.msg(json.message);
+						$("#myform").submit();
+					}else{
+						layer.msg(json.message);
+					}
+					
+				},"json");
+			});
+		});
+		
+		
+		$("body").on("click","div.status a.btn",function(){
+			var status=$(this).attr("status");
+			
+			if($(this).hasClass("btn-success")){
+				return;
+			}
+			$("div.status a.btn").removeClass("btn-success");
+			$(this).addClass("btn-success");
+			if(status=="1"){
+				$("#nextcallTime-p").show();
+			}else{
+				$("#nextcallTime-p").hide();
+			}
+		});
+		
+		$("body").on("click","a.status-submit",function(){
+			var requiredId=$("#statusTemp").val();
+			var newstatus=$("div.status a.btn[status].btn-success").attr("status");
+			var info=$(".statuInfo").val();
+			var nextcallTime=$("#nextcallTime").val();
+			
+			if(!newstatus){
+				layer.msg("请选择状态");
+				return;
+			}
+			
+			var param={};
+			param.status=newstatus;
+			if(info){param.remark=info;}
+			param.requiredId=requiredId;
+			param.operator="otherStatus";
+			if(newstatus=="1"&&!nextcallTime){
+				layer.msg("请填写下次回访时间");
+				return;
+			}
+			if(newstatus=="1"){
+				param.nextcallTime=nextcallTime;
+			}
+			$.post("otherStatus.html",param,function(data){
+				if(data.status=="1"){
+					layer.msg(data.message);
+					$("#myform").submit();
+				}else{
+					layer.msg(data.message);
+				}
+				
+			},"json");
+		});
+		
+		$(".status-remarks").on("click",function(){
+			var requiredId=$(this).attr("requiredId");
+			if(requiredId){
+				var param={};
+				param.requiredId=requiredId;
+				param.operator="json";
+				$.post("list.html",param,function(json){
+					if(json.status){
+						layer.msg(json.remarks.remark);
+					}
+				},"json");
+			}
+			
+		});
 	});
 	</script>
 </body>

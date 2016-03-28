@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.qicai.annotation.LimitTag;
 import com.qicai.bean.bisiness.HouseType;
 import com.qicai.bean.bisiness.Require;
+import com.qicai.bean.bisiness.RequireRemark;
 import com.qicai.bean.bisiness.ZoneSet;
 import com.qicai.controller.BaseController;
 import com.qicai.dto.JsonDTO;
@@ -138,9 +139,15 @@ public class RequirePublishController extends BaseController {
 	@RequestMapping(value = "/list")
 	public String list(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String requiredId = request.getParameter("requiredId");
+		String operator=request.getParameter("operator");
+		
 		if (requiredId != null && requiredId.matches("\\d+")) {
 			RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
 			model.addAttribute("require", require);
+			if("json".equals(operator)){
+				model.addAttribute("json", JSONUtil.object2json(require));
+				return JSON;
+			}
 		}
 		return "admin/requireManager_list";
 	}
@@ -694,6 +701,96 @@ public class RequirePublishController extends BaseController {
 			}
 		}
 		model.addAttribute("json", JSONUtil.object2json(json));
+		return JSON;
+	}
+	
+	// otherStatus 状态切换
+	@RequestMapping(value = "/otherStatus")
+	public String otherStatus(HttpServletRequest request, HttpServletResponse response, Model model) {
+		String operator=request.getParameter("operator");
+		String requiredId=request.getParameter("requiredId");
+		JsonDTO json=new JsonDTO();
+		if("toOtherStatus".equals(operator)){
+			if(requiredId!=null&&requiredId.matches("\\d+")){
+				RequireDTO require=requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				if(require.getRemarks()==null&&require.getStatus()<=4){
+					json.setStatus(1);
+				}else{
+					json.setStatus(0).setMessage("数据异常");
+				}
+				
+			}
+		}else if("otherStatus".equals(operator)){
+			if(requiredId!=null&&requiredId.matches("\\d+")){
+				RequireDTO require=requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				if(require.getRemarks()==null&&require.getStatus()<=4){
+					String remark=request.getParameter("remark");
+					String nextcallTime=request.getParameter("nextcallTime");
+					String status=request.getParameter("status");
+					if(status!=null&&status.matches("\\d+")){
+						RequireRemark saveRemark=new RequireRemark();
+						saveRemark.setRequiredId(Integer.parseInt(requiredId));
+						saveRemark.setStatus(Integer.parseInt(status));
+						saveRemark.setRemark(remark);
+						saveRemark.setCreateDate(new Date());
+						if(nextcallTime!=null&&nextcallTime.length()==10){
+							try {
+								saveRemark.setNextTime(new SimpleDateFormat("yyyy-MM-dd")
+										.parse(nextcallTime));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+							try {
+								requireService.saveRemark(saveRemark);
+								Require updateParam=new Require();
+								updateParam.setRequiredId(Integer.parseInt(requiredId));
+								updateParam.setOperatorLog(require.getOperatorLog()+" <br/> "+new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+						+ getLoginAdminUser(request).getNickname() + "在发布前对需求进行了"+(Integer.parseInt(status)==0?"关闭":"待跟进")+"操作");
+								
+								requireService.update(updateParam);
+								json.setStatus(1).setMessage("更新成功");
+							} catch (Exception e) {
+								json.setStatus(0).setMessage("更新过程中，数据出现异常");
+								e.printStackTrace();
+							}
+						
+						
+					}else{
+						json.setStatus(0).setMessage("数据异常");
+					}
+				}else{
+						json.setStatus(0).setMessage("数据异常");
+				}
+				
+			}
+		}else if("openStatus".equals(operator)){
+			if(requiredId!=null&&requiredId.matches("\\d+")){
+				RequireDTO require=requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				if(require.getRemarks()!=null&&require.getRemarks().getStatus()==1){
+					json.setStatus(1);
+					try {
+						requireService.clearRemark(require.getRequiredId());
+						Require updateParam=new Require();
+						updateParam.setRequiredId(Integer.parseInt(requiredId));
+						updateParam.setOperatorLog(require.getOperatorLog()+" <br/> "+new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+				+ getLoginAdminUser(request).getNickname() + "在发布前对需求进行了启用操作");
+						
+						requireService.update(updateParam);
+						json.setStatus(1).setMessage("更新成功");
+					} catch (Exception e) {
+						json.setStatus(0).setMessage("更新过程中，数据出现异常");
+						e.printStackTrace();
+					}
+				}else{
+					json.setStatus(0).setMessage("数据异常");
+				}
+				
+				
+			}
+		}
+		model.addAttribute("json", JSONUtil.object2json(json));
+		
 		return JSON;
 	}
 }

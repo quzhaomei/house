@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.qicai.bean.bisiness.Require;
+import com.qicai.bean.bisiness.RequireRemark;
 import com.qicai.dao.RequireDao;
 import com.qicai.dto.PageDTO;
+import com.qicai.dto.admin.AdminUserDTO;
 import com.qicai.dto.bisiness.RequireDTO;
 import com.qicai.dto.bisiness.RequireGift;
 import com.qicai.service.RequireService;
@@ -82,6 +84,21 @@ public class RequireServiceImpl implements RequireService {
 	@Override
 	public void saveGift(RequireGift requireGift) {
 		requireDao.saveGift(requireGift);
+	}
+
+	@Override
+	public List<AdminUserDTO> getAllPublishUser() {
+		return requireDao.getAllPublishUser();
+	}
+
+	@Override
+	public void saveRemark(RequireRemark remark) {
+		requireDao.saveRemark(remark);
+	}
+
+	@Override
+	public void clearRemark(Integer requiredId) {
+		requireDao.clearRemark(requiredId);
 	}
 
 }

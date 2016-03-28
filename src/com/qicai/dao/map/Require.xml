@@ -53,6 +53,15 @@
 		<result property="acceptNum" column="acceptNum" />
 		<result property="successNum" column="successNum" />
 		
+		<association property="remarks" javaType="com.qicai.bean.bisiness.RequireRemark" column="remarkId">
+			<id property="remarkId" column="remarkId"/>
+			<result property="requiredId" column="requiredId_r"/>
+			<result property="remark" column="remark"/>
+			<result property="nextTime" column="nextTime"/>
+			<result property="createDate" column="createDate_r"/>
+			<result property="status" column="status_r"/>
+		</association>
+		
 		<association property="gift" javaType="com.qicai.dto.bisiness.RequireGift" column="giftId">
 			<id property="giftId" column="giftId"/>
 			<result property="address" column="address"/>
@@ -88,6 +97,11 @@
 			<result property="nickname" column="nickname"/>
 		</association>
 	</resultMap>
+	
+	<resultMap type="com.qicai.dto.admin.AdminUserDTO" id="userDTO">
+		<id property="adminUserId" column="adminUserId" />
+		<result property="nickname" column="nickname" />
+	</resultMap>
 	<insert id="save"  useGeneratedKeys="true" keyProperty="require.requiredId">
 		INSERT INTO `require`(`requiredId`, `userId`, `username`, `userphone`,
 		 `houseTypeId`, `zoneId`, `budget`, `houseDes`, `isNew`, `houseInfo`, `isReady`, 
@@ -102,6 +116,17 @@
 		 ,#{require.createUserId},#{require.status},#{require.operatorLog},
 		 #{require.designType},#{require.designStyle},#{require.houseStatus})
 	</insert>
+	
+	<insert id="saveRemark"  useGeneratedKeys="true" keyProperty="remark.remarkId">
+		INSERT INTO `require_remark`(`remarkId`, `requiredId`, `remark`, `nextTime`,
+		 `createDate`, `status`)
+		 values(#{remark.remarkId},#{remark.requiredId},#{remark.remark},#{remark.nextTime},
+		 #{remark.createDate},#{remark.status})
+	</insert>
+	
+	<update id="clearRemark" flushCache="true">
+		delete from `require_remark` where requiredId=#{requiredId}
+	</update>
 	
 	<insert id="saveGift"  useGeneratedKeys="true" keyProperty="gift.giftId" flushCache="true">
 		INSERT INTO `require_gift`(`giftId`, `requiredId`, `address`,
@@ -253,7 +278,8 @@
 		 r.customerTipsBak,r.createDate,r.callbackTips,r.serviceTips,r.status,r.operatorLog, 
 		 r.createUserId,r.serviceUserId, zs.name zonename,ht.name typename, ht.price,
 		zsb.name zonenameBak,htb.name typenameBak, 
-		 ca.nickname,sa.nickname nickname_s 
+		 ca.nickname,sa.nickname nickname_s, 
+		 rr.remarkId,rr.requiredId requiredId_r,rr.remark,rr.nextTime,rr.createDate createDate_r,rr.status status_r
 		 FROM `require` r 
 		 left join zone_set zs on zs.zoneId=r.zoneId 
 		 left join house_type ht on ht.typeId=r.houseTypeId 
@@ -261,7 +287,9 @@
 		 left join admin_user sa on sa.adminUserId=r.serviceUserId
 		 
 		  left join zone_set zsb on zsb.zoneId=r.zoneIdBak 
-		 left join house_type htb on htb.typeId=r.houseTypeIdBak 
+		 left join house_type htb on htb.typeId=r.houseTypeIdBak
+		  
+		 left join require_remark rr on rr.requiredId=r.requiredId
 		 
 		 where 1=1
 		 <if test="require.requiredId!=null">
@@ -331,17 +359,22 @@
 		<if test="page.param.endNextCallTime!=null">
 		and r.nextCallTime &lt; #{page.param.endNextCallTime}
 		</if>
-		 order by r.createDate desc
+		 order by r.requiredId desc
 		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
 	</select>
 	
 	<select id="getListByParam" resultMap="requireDTO">
 		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
 		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,r.callbackTips,
-		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
+		r.status,r.operatorLog,zs.zoneId,zs.name zonename,r.createUserId,au.nickname,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount
+		 ,rr.remarkId,rr.requiredId requiredId_r,rr.remark,rr.nextTime,
+		 rr.createDate createDate_r,rr.status status_r
 		from `require` r left join 
 		zone_set zs on zs.zoneId=r.zoneId
+		left join admin_user au on au.adminUserId=r.createUserId
+		
+		left join require_remark rr on rr.requiredId=r.requiredId
 		 where 1=1
 		<if test="page.param.serviceUserId!=null">
 		and r.serviceUserId=#{page.param.serviceUserId}
@@ -390,7 +423,7 @@
 		<if test="page.param.endNextCallTime!=null">
 		and r.nextCallTime &lt; #{page.param.endNextCallTime}
 		</if>
-		 order by r.createDate desc
+		 order by r.requiredId desc
 		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
 	</select>
 	<select id="getCountByParam" resultType="int">
@@ -544,15 +577,18 @@
 		<if test="require.endNextCallTime!=null">
 		and r.nextCallTime &lt; #{require.endNextCallTime}
 		</if>
-		 order by r.createDate desc
+		 order by r.requiredId desc
 	</select>
 	<select id="list" resultMap="requireDTO">
 		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
 		r.budget,r.budgetBak,r.fileTime,r.nextCallTime,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount
+		,rr.remarkId,rr.requiredId requiredId_r,rr.remark,rr.nextTime,
+		 rr.createDate createDate_r,rr.status status_r
 		from `require` r left join 
 		zone_set zs on zs.zoneId=r.zoneId
+		left join require_remark rr on rr.requiredId=r.requiredId
 		 where 1=1
 		<if test="require.serviceUserId!=null">
 		and r.serviceUserId=#{require.serviceUserId}
@@ -599,6 +635,12 @@
 		and r.nextCallTime &lt; #{require.endNextCallTime}
 		</if>
 		order by r.requiredId
+	</select>
+	<select id="getAllPublishUser" resultMap="userDTO">
+		select u.adminUserId,u.nickname
+		from admin_user u where u.adminUserId in(
+			select distinct r.createUserId
+			from `require` r	);
 	</select>
 	
 </mapper>  

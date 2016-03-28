@@ -2,6 +2,7 @@ package com.qicai.dto.bisiness;
 
 import java.util.Date;
 
+import com.qicai.bean.bisiness.RequireRemark;
 import com.qicai.dto.admin.AdminUserDTO;
 
 /**
@@ -84,6 +85,7 @@ public class RequireDTO {
 	private Integer acceptNum;//已接数
 	private Integer successNum;//成功数
 	
+	private RequireRemark remarks;//需求备注
 	
 	
 	public Integer getAcceptNum() {
@@ -393,6 +395,12 @@ public class RequireDTO {
 	}
 	public void setSuccessNum(Integer successNum) {
 		this.successNum = successNum;
+	}
+	public RequireRemark getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(RequireRemark remarks) {
+		this.remarks = remarks;
 	}
 	
 	

@@ -530,7 +530,6 @@ select {
   border-radius: 3px;
   padding: 12px;
   color: white;
-  height: 40px;
   line-height: 16px; }
 
 textarea {
@@ -1730,7 +1729,11 @@ label.namecard img {
     padding-top: 10px !important;
     margin-top: 10px; }
 
-#area, #city {
+.twocol i.right {
+    left: 50%;
+}
+
+.twocol input, .twocol select {
   width: 49%;
   display: inline-block;
   vertical-align: middle;
@@ -1738,7 +1741,48 @@ label.namecard img {
 
 #area {
   padding-left: 15px !important;
+}
+.right {
+  
   float: right; }
 
 #address {
   padding-left: 15px !important; }
+
+.measure label {
+  position: absolute;
+  top: 0px;
+  padding-top: 10px;
+  left: 10px;
+  color: #586168;
+  font-size: 18px;
+  right: 10px;
+  border-bottom: solid #A1B1BD 1px;
+  padding-bottom: 5px;
+  display: block;
+  background-color: #EEF2F4;
+  font-weight: bold;
+}
+
+.measure input, .measure select {
+  line-height: 1.1em;
+
+}
+
+.measure textarea {
+    padding-top: 50px;
+    resize: vertical;
+
+}
+
+.bg_black {
+  background-color: rgba(0,0,0,0.85);
+}
+
+.measure button {
+    background-color: #C50019;
+    border-bottom-color: #A41500;
+  }
+
+
+

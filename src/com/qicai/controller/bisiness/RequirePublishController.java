@@ -67,6 +67,9 @@ public class RequirePublishController extends BaseController {
 		String userId = request.getParameter("userId");
 		String serviceStartDate = request.getParameter("serviceStartDate");
 		String serviceEndDate = request.getParameter("serviceEndDate");
+		
+		String specialStatus=request.getParameter("specialStatus");//特殊状态 0 关闭，1待跟进
+		
 		if (pageIndex == null) {
 			pageIndex = "1";
 		}
@@ -122,6 +125,10 @@ public class RequirePublishController extends BaseController {
 					}
 				}
 				selectParam.setCreateUserId(getLoginAdminUser(request).getAdminUserId());
+				if(specialStatus!=null&&specialStatus.matches("\\d+")){
+					selectParam.setSpecialStatus(Integer.parseInt(specialStatus));
+				}
+				
 				page.setParam(selectParam);
 
 				PageDTO<List<RequireDTO>> pageDate = requireService.findListByPage(page);
@@ -149,7 +156,7 @@ public class RequirePublishController extends BaseController {
 				return JSON;
 			}
 		}
-		return "admin/requireManager_list";
+		return "admin/requirePublish_list";
 	}
 
 	// 添加新的需求预约

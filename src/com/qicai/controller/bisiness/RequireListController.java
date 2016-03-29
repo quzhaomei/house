@@ -72,6 +72,7 @@ public class RequireListController extends BaseController {
 		String userId = request.getParameter("userId");
 		String createUserId=request.getParameter("createUserId");
 
+		String specialStatus=request.getParameter("specialStatus");//特殊状态 0 关闭，1待跟进
 
 		if (pageIndex == null) {
 			pageIndex = "1";
@@ -114,8 +115,11 @@ public class RequireListController extends BaseController {
 				if(createUserId!=null&&createUserId.matches("\\d+")){
 					selectParam.setCreateUserId(Integer.parseInt(createUserId));
 				}
+				if(specialStatus!=null&&specialStatus.matches("\\d+")){
+					selectParam.setSpecialStatus(Integer.parseInt(specialStatus));
+				}
+				
 				page.setParam(selectParam);
-
 				PageDTO<List<RequireDTO>> pageDate = requireService.findListByPage(page);
 				
 				model.addAttribute("pageResult", pageDate);
@@ -161,6 +165,8 @@ public class RequireListController extends BaseController {
 		String username = request.getParameter("username");
 		String userId = request.getParameter("userId");
 		String createUserId=request.getParameter("createUserId");
+		String specialStatus=request.getParameter("specialStatus");//特殊状态 0 关闭，1待跟进
+		
 		Require selectParam = new Require();
 		selectParam.setUsername(username);
 		if (userId != null && userId.matches("\\d+")) {
@@ -189,7 +195,9 @@ public class RequireListController extends BaseController {
 		if(createUserId!=null&&createUserId.matches("\\d+")){
 			selectParam.setCreateUserId(Integer.parseInt(createUserId));
 		}
-		
+		if(specialStatus!=null&&specialStatus.matches("\\d+")){
+			selectParam.setSpecialStatus(Integer.parseInt(specialStatus));
+		}
 		List<RequireDTO> result=requireService.list(selectParam);
 		WritableWorkbook wwb = null;
 		String fileName = "需求统计.xls";
@@ -261,7 +269,7 @@ public class RequireListController extends BaseController {
 				String special="";
 				if(temp.getRemarks()!=null&&temp.getRemarks().getStatus()==0){
 					special="关闭";
-				}else{
+				}else if(temp.getRemarks()!=null&&temp.getRemarks().getStatus()==1){
 					special="待跟进库";
 				}
 				jxl.write.Label temp10 = new jxl.write.Label(9, i + 1,special);// 电话

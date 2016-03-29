@@ -375,7 +375,10 @@
 		left join admin_user au on au.adminUserId=r.createUserId
 		
 		left join require_remark rr on rr.requiredId=r.requiredId
-		 where 1=1
+		 where 1=1 
+		 <if test="page.param.specialStatus!=null">
+		and rr.status=#{page.param.specialStatus}
+		</if>
 		<if test="page.param.serviceUserId!=null">
 		and r.serviceUserId=#{page.param.serviceUserId}
 		</if>
@@ -428,46 +431,51 @@
 	</select>
 	<select id="getCountByParam" resultType="int">
 		select count(*)
-		from `require` where 1=1
+		from `require` r
+		left join require_remark rr on rr.requiredId=r.requiredId
+		 where 1=1
+		 <if test="require.specialStatus!=null">
+		and rr.status=#{require.specialStatus}
+		</if>
 		<if test="require.serviceUserId!=null">
-		and serviceUserId=#{require.serviceUserId}
+		and r.serviceUserId=#{require.serviceUserId}
 		</if>
 		<if test="require.createUserId!=null">
-		and createUserId=#{require.createUserId}
+		and r.createUserId=#{require.createUserId}
 		</if>
 		<if test="require.status!=null">
-		and status=#{require.status}
+		and r.status=#{require.status}
 		</if>
 		<if test="require.userId!=null">
-		and userId=#{require.userId}
+		and r.userId=#{require.userId}
 		</if>
 		<if test="require.username!=null">
-		and username like '%${require.username}%'
+		and r.username like '%${require.username}%'
 		</if>
 		<if test="require.userphone!=null">
-		and userphone like '${require.userphone}%'
+		and r.userphone like '${require.userphone}%'
 		</if>
 		<if test="require.startDate!=null">
-		and createDate &gt; #{require.startDate}
+		and r.createDate &gt; #{require.startDate}
 		</if>
 		<if test="require.endDate!=null">
-		and createDate &lt; #{require.endDate}
+		and r.createDate &lt; #{require.endDate}
 		</if>
 		<if test="require.serviceStartDate!=null">
-		and serviceDate &gt; #{require.serviceStartDate}
+		and r.serviceDate &gt; #{require.serviceStartDate}
 		</if>
 		<if test="require.serviceEndDate!=null">
-		and serviceDate &lt; #{require.serviceEndDate}
+		and r.serviceDate &lt; #{require.serviceEndDate}
 		</if>
 		
 		<if test="require.callbackTips!=null">
-		and callbackTips like '%${require.callbackTips}%'
+		and r.callbackTips like '%${require.callbackTips}%'
 		</if>
 		<if test="require.startFileTime!=null">
-		and fileTime &gt; #{require.startFileTime}
+		and r.fileTime &gt; #{require.startFileTime}
 		</if>
 		<if test="require.endFileTime!=null">
-		and fileTime &lt; #{require.endFileTime}
+		and r.fileTime &lt; #{require.endFileTime}
 		</if>
 	</select>
 	
@@ -586,12 +594,20 @@
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount
 		,rr.remarkId,rr.requiredId requiredId_r,rr.remark,rr.nextTime,
 		 rr.createDate createDate_r,rr.status status_r
+		 ,r.createUserId,au.nickname
 		from `require` r left join 
 		zone_set zs on zs.zoneId=r.zoneId
+		left join admin_user au on au.adminUserId=r.createUserId
 		left join require_remark rr on rr.requiredId=r.requiredId
 		 where 1=1
 		<if test="require.serviceUserId!=null">
 		and r.serviceUserId=#{require.serviceUserId}
+		</if>
+		<if test="require.createUserId!=null">
+		and r.createUserId=#{require.createUserId}
+		</if>
+		<if test="require.specialStatus!=null">
+		and rr.status=#{require.specialStatus}
 		</if>
 		<if test="require.userId!=null">
 		and r.userId=#{require.userId}

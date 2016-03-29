@@ -200,7 +200,7 @@ display: inline-block;
 	<!-- start: JavaScript-->
 	<c:import url="public/p-javascript.jsp"></c:import>>
 	<!-- end: JavaScript-->
-	<script type="text/javascript" src="../js/admin/adminUser.js?v=1" >
+	<script type="text/javascript" src="../js/admin/adminUser.js?v=2" >
 	
 	</script>
 </body>

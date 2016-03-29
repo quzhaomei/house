@@ -84,6 +84,8 @@ position: relative !important;
 						<input name="pageIndex" id="pageIndex" type="hidden" value="${pageResult.pageIndex}"/>
 						<input name="pageSize" type="hidden" value="${pageResult.pageSize}"/>
 						<input name="operator" value="to_service" type="hidden"/>
+						<input type="hidden" name="specialStatus" id="specialStatus" value='${empty param.specialStatus?"-1":param.specialStatus }' />
+						
 						<table class="table">
 						<tr>
 							<td width=8%>用户名称</td><td width=20%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
@@ -146,7 +148,26 @@ position: relative !important;
 						</form>
 						
 						<table class="table table-striped table-bordered bootstrap-datatable">
+						 <caption style="text-align:left;">
+						特殊状态筛选：
+						<c:choose>
+							<c:when test="${param.specialStatus==0 }">
+								<a href="#" class="chooseOrder" order="-1" style="color:red;"><i class="icon icon-search"></i> 查看全部</a>&nbsp;
+								<span>只看关闭</span>
+								<a href="#" class="chooseOrder" order="1" style="color:red;"><i class="icon icon-search"></i> 只看待跟进库</a>&nbsp;
+							</c:when><c:when test="${param.specialStatus==1 }">
+								<a href="#" class="chooseOrder" order="-1" style="color:red;"><i class="icon icon-search"></i> 查看全部</a>&nbsp;
+								<a href="#" class="chooseOrder" order="0" style="color:red;"><i class="icon icon-search"></i> 只看关闭</a>&nbsp;
+								<span>只看待跟进库</span>
+							</c:when>
+							<c:otherwise>
+								<span>查看全部</span>
+								<a href="#" class="chooseOrder" order="0" style="color:red;"><i class="icon icon-search"></i> 只看关闭</a>&nbsp;
+								<a href="#" class="chooseOrder" order="1" style="color:red;"><i class="icon icon-search"></i> 只看待跟进库</a>&nbsp;
+							</c:otherwise>
+						</c:choose>
 						
+						</caption>
 						  <thead>
 						  
 							  <tr>
@@ -279,8 +300,25 @@ position: relative !important;
 					}
 				},"json");
 			}
-			
 		});
+		
+		$(".chooseOrder").on("click",function(){
+			var order=$(this).attr("order");
+			if(order){
+				$("#pageIndex").val(1);
+				$("#chonsenstatus option[value='-1']").attr("selected","selected");
+				$("#specialStatus").val(order);
+				$("#myform").submit();
+			}
+		});
+		
+		//接单
+		$(".loadAll").on("click",function(){
+			$("#myform").attr("action","loadAll.html");
+			$("#myform").submit();
+			$("#myform").attr("action","index.html");
+		});
+		
 	});
 	</script>
 </body>

@@ -507,7 +507,7 @@
    	 return this.optional(element) || (name.test(value));
 	});
 	$.validator.addMethod("isPhone", function(value, element) {   
-   	 var tel = /^1[3|4|5|8][0-9]\d{4,8}$/;
+   	 var tel = /^1[3|4|5|6|7|8][0-9]\d{4,8}$/;
    	 return this.optional(element) || (tel.test(value)&&value.length==11);
 	});
 	$.validator.addMethod("isEmail", function(value, element) {   

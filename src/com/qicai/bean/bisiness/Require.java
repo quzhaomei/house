@@ -83,6 +83,8 @@ public class Require {
 	/**查询辅助字段*/
 	private Integer acceptNum;//已接单数目
 	
+	private Integer specialStatus;//特殊状态
+	
 	
 	public Integer getAcceptNum() {
 		return acceptNum;
@@ -422,6 +424,13 @@ public class Require {
 	}
 	public Date getEndNextCallTime() {
 		return endNextCallTime;
+	}
+	
+	public Integer getSpecialStatus() {
+		return specialStatus;
+	}
+	public void setSpecialStatus(Integer specialStatus) {
+		this.specialStatus = specialStatus;
 	}
 	public void setEndNextCallTime(Date endNextCallTime) {
 		this.endNextCallTime = endNextCallTime;

@@ -62,14 +62,14 @@ position: relative !important;
 			<div id="content" class="span10">
 				<ul class="breadcrumb">
 					<li><a href="#">需求管理 </a>
-					<li><i class="icon-angle-right"></i> <a href="index.html">预约需求列表 </a></li>
+					<li><i class="icon-angle-right"></i> <a href="index.html">需求统计 </a></li>
 				</ul>
 
 				<div class="row-fluid sortable">		
 				<div class="box span12">
 					<div class="box-header" data-original-title>
 						<h2>
-								<i class="halflings-icon user"></i><span class="break"></span>需求预约管理
+								<i class="halflings-icon user"></i><span class="break"></span>需求统计
 							</h2>
 							<div class="box-icon">
 							
@@ -141,7 +141,13 @@ position: relative !important;
 							</span></td>
 							
 						</tr>
-						
+						<tr>
+							<td>下次回访时间</td>
+							<td colspan="5">
+							<input type="text" name="specialStartDate" id="specialStartDate"value='${param.specialStartDate }' class="datepicker span3" />
+									-
+							<input type="text" name="specialEndDate" id="specialEndDate" value='${param.specialEndDate }' class="datepicker span3"/></td>
+						</tr>
 			
 						
 						</table>

@@ -99,12 +99,14 @@
 							<td class="basic-title">房型描述</td><td>${require.houseDes }</td>
 							<td class="basic-title">是否新房：</td><td>
 							<c:choose>
+								<c:when test="${empty require.isNew }"></c:when>
 								<c:when test="${require.isNew==1 }">新房</c:when>
 								<c:otherwise>旧房</c:otherwise>
 							</c:choose>
 							</td>
 							<td class="basic-title">交房情况</td><td>
 							<c:choose>
+								<c:when test="${empty require.isReady }">&nbsp;</c:when>
 								<c:when test="${require.isReady==1 }">已交房</c:when>
 								<c:otherwise>待交房</c:otherwise>
 							</c:choose>

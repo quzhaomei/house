@@ -77,7 +77,7 @@ position: relative !important;
 					<form action="index.html" method="post" id="myform" rel="admin-form">
 						<input name="pageIndex" id="pageIndex" type="hidden" value="${pageResult.pageIndex}"/>
 						<input name="pageSize" type="hidden" value="${pageResult.pageSize}"/>
-						<input type="hidden" name="specialStatus" id="specialStatus" value='${param.specialStatus }' />
+						<input type="hidden" name="specialStatus" id="specialStatus" value='${empty param.specialStatus?"-1":param.specialStatus }' />
 						<table class="table">
 						<tr>
 							<td width=7%>用户名称</td><td width=25%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
@@ -111,6 +111,13 @@ position: relative !important;
 								</ad:power>
 								
 							</td>
+						</tr>
+						<tr>
+							<td>下次回访时间</td>
+							<td colspan="5">
+							<input type="text" name="specialStartDate" id="specialStartDate"value='${param.specialStartDate }' class="datepicker span3" />
+									-
+							<input type="text" name="specialEndDate" id="specialEndDate" value='${param.specialEndDate }' class="datepicker span3"/></td>
 						</tr>
 						</table>
 						</form>

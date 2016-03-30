@@ -68,6 +68,10 @@ public class RequirePublishController extends BaseController {
 		String serviceStartDate = request.getParameter("serviceStartDate");
 		String serviceEndDate = request.getParameter("serviceEndDate");
 		
+		
+		String specialStartDate = request.getParameter("specialStartDate");
+		String specialEndDate = request.getParameter("specialEndDate");
+		
 		String specialStatus=request.getParameter("specialStatus");//特殊状态 0 关闭，1待跟进
 		
 		if (pageIndex == null) {
@@ -124,6 +128,24 @@ public class RequirePublishController extends BaseController {
 						e.printStackTrace();
 					}
 				}
+				
+				if (specialStartDate != null && specialStartDate.length() == 10) {
+					try {
+						selectParam.setSpecialStartDate(format.parse(specialStartDate));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				if (specialEndDate != null && specialEndDate.length() == 10) {
+					try {
+						Date specialEndDateTime = format.parse(specialEndDate);
+						specialEndDateTime.setDate(specialEndDateTime.getDate() + 1);
+						selectParam.setSpecialEndDate(specialEndDateTime);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				
 				selectParam.setCreateUserId(getLoginAdminUser(request).getAdminUserId());
 				if(specialStatus!=null&&specialStatus.matches("\\d+")){
 					selectParam.setSpecialStatus(Integer.parseInt(specialStatus));
@@ -779,6 +801,7 @@ public class RequirePublishController extends BaseController {
 					try {
 						requireService.clearRemark(require.getRequiredId());
 						Require updateParam=new Require();
+						updateParam.setCreateDate(new Date());
 						updateParam.setRequiredId(Integer.parseInt(requiredId));
 						updateParam.setOperatorLog(require.getOperatorLog()+" <br/> "+new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
 				+ getLoginAdminUser(request).getNickname() + "在发布前对需求进行了启用操作");

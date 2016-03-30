@@ -116,6 +116,9 @@ public class Require {
 	private Date startNextCallTime;
 	private Date endNextCallTime;
 	
+	private Date specialStartDate;
+	private Date specialEndDate;
+	
 	
 	public Date getStartFileTime() {
 		return startFileTime;
@@ -431,6 +434,19 @@ public class Require {
 	}
 	public void setSpecialStatus(Integer specialStatus) {
 		this.specialStatus = specialStatus;
+	}
+	
+	public Date getSpecialStartDate() {
+		return specialStartDate;
+	}
+	public void setSpecialStartDate(Date specialStartDate) {
+		this.specialStartDate = specialStartDate;
+	}
+	public Date getSpecialEndDate() {
+		return specialEndDate;
+	}
+	public void setSpecialEndDate(Date specialEndDate) {
+		this.specialEndDate = specialEndDate;
 	}
 	public void setEndNextCallTime(Date endNextCallTime) {
 		this.endNextCallTime = endNextCallTime;

@@ -73,6 +73,9 @@ public class RequireListController extends BaseController {
 		String createUserId=request.getParameter("createUserId");
 
 		String specialStatus=request.getParameter("specialStatus");//ÌØÊâ×´Ì¬ 0 ¹Ø±Õ£¬1´ý¸ú½ø
+		
+		String specialStartDate = request.getParameter("specialStartDate");
+		String specialEndDate = request.getParameter("specialEndDate");
 
 		if (pageIndex == null) {
 			pageIndex = "1";
@@ -117,6 +120,22 @@ public class RequireListController extends BaseController {
 				}
 				if(specialStatus!=null&&specialStatus.matches("\\d+")){
 					selectParam.setSpecialStatus(Integer.parseInt(specialStatus));
+				}
+				if (specialStartDate != null && specialStartDate.length() == 10) {
+					try {
+						selectParam.setSpecialStartDate(format.parse(specialStartDate));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				if (specialEndDate != null && specialEndDate.length() == 10) {
+					try {
+						Date specialEndDateTime = format.parse(specialEndDate);
+						specialEndDateTime.setDate(specialEndDateTime.getDate() + 1);
+						selectParam.setSpecialEndDate(specialEndDateTime);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
 				}
 				
 				page.setParam(selectParam);
@@ -166,6 +185,9 @@ public class RequireListController extends BaseController {
 		String userId = request.getParameter("userId");
 		String createUserId=request.getParameter("createUserId");
 		String specialStatus=request.getParameter("specialStatus");//ÌØÊâ×´Ì¬ 0 ¹Ø±Õ£¬1´ý¸ú½ø
+		String specialStartDate = request.getParameter("specialStartDate");
+		String specialEndDate = request.getParameter("specialEndDate");
+
 		
 		Require selectParam = new Require();
 		selectParam.setUsername(username);
@@ -187,6 +209,23 @@ public class RequireListController extends BaseController {
 				Date endTime = format.parse(endDate);
 				endTime.setDate(endTime.getDate() + 1);
 				selectParam.setEndDate(endTime);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (specialStartDate != null && specialStartDate.length() == 10) {
+			try {
+				selectParam.setSpecialStartDate(format.parse(specialStartDate));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		if (specialEndDate != null && specialEndDate.length() == 10) {
+			try {
+				Date specialEndDateTime = format.parse(specialEndDate);
+				specialEndDateTime.setDate(specialEndDateTime.getDate() + 1);
+				selectParam.setSpecialEndDate(specialEndDateTime);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

@@ -297,7 +297,7 @@ public class RequireListController extends BaseController {
 				// 写表头
 				jxl.write.Label temp1 = new jxl.write.Label(0, i + 1, "" + (i + 1));
 				jxl.write.Label temp2 = new jxl.write.Label(1, i + 1, temp.getRequiredId() + "");
-				jxl.write.Label temp3 = new jxl.write.Label(2, i + 1, temp.getZone().getName());
+				jxl.write.Label temp3 = new jxl.write.Label(2, i + 1, temp.getZone()!=null?temp.getZone().getName():"");
 				jxl.write.Label temp4 = new jxl.write.Label(3, i + 1, temp.getUserId()+"");// 
 				jxl.write.Label temp5 = new jxl.write.Label(4, i + 1, temp.getUsername());//
 				jxl.write.Label temp6 = new jxl.write.Label(5, i + 1, temp.getUserphone().substring(0,5)+"******");//
@@ -314,7 +314,7 @@ public class RequireListController extends BaseController {
 				jxl.write.Label temp10 = new jxl.write.Label(9, i + 1,special);// 电话
 				String nextTime="";
 				if(temp.getRemarks()!=null&&temp.getRemarks().getNextTime()!=null){
-					nextTime=new SimpleDateFormat("yyyy-MM-DD").format(temp.getRemarks().getNextTime());
+					nextTime=new SimpleDateFormat("yyyy-MM-dd").format(temp.getRemarks().getNextTime());
 				}
 				jxl.write.Label temp11 = new jxl.write.Label(10, i + 1,nextTime);// 电话
 				jxl.write.Label temp12 = new jxl.write.Label(11, i + 1,temp.getRemarks()!=null?temp.getRemarks().getRemark():"");// 电话

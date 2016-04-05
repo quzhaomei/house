@@ -73,7 +73,15 @@
 							<span class="basic-title">
 							客户电话 : </span> 
 							<c:if test="${order.status==0 }">
-								${fn:substring(require.userphone,0,3)}********
+							<c:choose>
+						  			<c:when test="${fn:length(require.userphone)>3&&fn:length(require.userphone)<11 }">
+						  				${fn:substring(require.userphone,0,3) }********
+						  			</c:when>
+						  			<c:when test="${fn:length(require.userphone)>=11}">
+						  			${fn:substring(require.userphone,0,3) }****${fn:substring(require.userphone,7,11) }
+						  			</c:when>
+						  		</c:choose>
+						  		
 							</c:if>
 							<c:if test="${order.status==1 }">
 								${require.userphone }

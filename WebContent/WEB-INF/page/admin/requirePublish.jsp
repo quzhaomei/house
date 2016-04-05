@@ -166,14 +166,8 @@ position: relative !important;
 						  		<td>${temp.userId }</td>
 						  		<td>${temp.username }</td>
 						  		<td>
-						  		<c:choose>
-						  			<c:when test="${fn:length(temp.userphone)>3&&fn:length(temp.userphone)<11 }">
-						  				${fn:substring(temp.userphone,0,3) }********
-						  			</c:when>
-						  			<c:when test="${fn:length(temp.userphone)>=11}">
-						  			${fn:substring(temp.userphone,0,3) }****${fn:substring(temp.userphone,7,11) }
-						  			</c:when>
-						  		</c:choose></td>
+						  		<ad:phone phone="${temp.userphone}" roleId="<%=new int[]{1,2} %>"/>
+						  		</td>
 						  		<td>
 						  			<c:choose>
 						  				<c:when test="${temp.status==0 }">

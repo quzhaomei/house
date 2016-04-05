@@ -64,4 +64,23 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http:/
       </attribute>
       
 </tag>
+<tag>
+	<name>phone</name><!-- 后台权限控制按钮显示标签 -->
+      <tagclass>com.qicai.jspTag.PowerTagPhone</tagclass>
+      <bodycontent>scriptless</bodycontent>
+      <info>输出</info>
+    
+      <attribute>
+       <name>roleId</name><!-- 根据角色匹配权限 -->
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      
+       <attribute>
+       <name>phone</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      
+</tag>
 </taglib>

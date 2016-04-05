@@ -62,7 +62,9 @@
 							订单分配人员 : </span> ${order.createUser.nickname }
 							&nbsp;
 							<span class="basic-title">
-							客户电话 : </span> ${require.userphone }
+							客户电话 : </span> 
+							<ad:phone phone="${require.userphone}" roleId="<%=new int[]{1,2} %>"/>
+						  		
 							&nbsp;
 							
 							<c:if test="${order.status==1 }"><!-- 已接单才显示 -->

@@ -716,7 +716,14 @@ public class RequireController extends BaseController {
 				jxl.write.Label temp3 = new jxl.write.Label(2, i + 1, temp.getZone().getName());
 				jxl.write.Label temp4 = new jxl.write.Label(3, i + 1, temp.getUserId()+"");// 
 				jxl.write.Label temp5 = new jxl.write.Label(4, i + 1, temp.getUsername());//
-				jxl.write.Label temp6 = new jxl.write.Label(5, i + 1, temp.getUserphone().substring(0,5)+"******");//
+				String userphone="";
+				if( temp.getUserphone().length()>5){
+					userphone+=temp.getUserphone().substring(0, 3)+"****";
+				}
+				if(temp.getUserphone().length()>7){
+					userphone+=temp.getUserphone().substring(7, temp.getUserphone().length());
+				}
+				jxl.write.Label temp6 = new jxl.write.Label(5, i + 1, userphone);//
 				jxl.write.Label temp7 = new jxl.write.Label(6, i + 1,dateFormat.format( temp.getCreateDate()));// 客服
 				jxl.write.Label temp8 = new jxl.write.Label(7, i + 1,temp.getServiceDate()!=null?dateFormat.format( temp.getServiceDate()):"");// 价格
 				jxl.write.Label temp9 = new jxl.write.Label(8, i + 1, temp.getOrderCount()+"");// 需求号

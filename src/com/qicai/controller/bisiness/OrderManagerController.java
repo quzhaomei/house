@@ -221,8 +221,15 @@ public class OrderManagerController extends BaseController {
 						temp.getRequire().getRequiredId()+"");//需求号
 				jxl.write.Label temp10 = new jxl.write.Label(9, i + 1, 
 						temp.getRequire().getUsername());//客户名称
+				String userphone="";
+				if( temp.getRequire().getUserphone().length()>5){
+					userphone+=temp.getRequire().getUserphone().substring(0, 3)+"****";
+				}
+				if(temp.getRequire().getUserphone().length()>7){
+					userphone+=temp.getRequire().getUserphone().substring(7, temp.getRequire().getUserphone().length());
+				}
 				jxl.write.Label temp11 = new jxl.write.Label(10, i + 1, 
-						temp.getRequire().getUserphone());//电话
+						userphone);//电话
 				jxl.write.Label temp12 = new jxl.write.Label(11, i + 1, 
 						temp.getZonename());//房屋区域
 				jxl.write.Label temp13 = new jxl.write.Label(12, i + 1, 

@@ -1,2 +1,5 @@
 eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/conf/jdbc.properties=UTF-8
 encoding//WebContent/WEB-INF/sql/house.sql=UTF-8
+encoding//src/com/qicai/util/ImgUtil.java=UTF-8
+encoding/<project>=gbk

@@ -13,7 +13,7 @@
 	body {
 		padding: 0px;
 		margin: 0px;
-		padding-bottom: 105px;
+		padding-bottom: 120px;
 		background-color: #B81335;
 	}
 
@@ -135,6 +135,7 @@
 		background-size: 412px;
 		text-align: center;
 		line-height: 1.4em;
+		z-index: 1000;
 	}
 
 	.success img {
@@ -152,6 +153,93 @@
 		display: inline-block;
 		margin: auto;
 
+	}
+
+	.bottombar {
+		position: fixed;
+		z-index: 999;
+		background-color: rgba(0,0,0,0.85);
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+
+	}
+
+
+
+	.bottombar .container {
+		width: 850px;
+		padding: 15px;
+		height: 120px;
+		margin: auto;
+		position: relative;
+	}
+
+	.bottombar .logo {
+		position: absolute;
+		left: 20px;
+		top: -40px;
+		bottom: 20px;
+		width: 100px;
+	}
+
+		.bottombar .logo img {
+			width: 100%;
+			height: auto;
+			
+		}
+
+	.bottombar .container > div {
+		display: inline-block;
+	}
+
+	.bottombar .text {
+		width: 275px;
+		display: inline-block;
+		padding-left: 140px;
+	}
+
+	.bottombar .text img {
+		width: 100%;
+	}
+
+	.bottomform {
+		display: inline-block;
+		width: 515px;
+		padding-left: 50px;
+		vertical-align: top;
+	}
+
+	.bottomform input {
+		display: inline-block;
+		border: 0px;
+	}
+
+	.bottomform input[type=text] {
+		width: 200px;
+		margin-right: 10px;
+	}
+
+	.bottomform button {
+		width: 250px;
+		padding: 8px;
+		display: inline-block;
+		font-size: 16px;
+
+	}
+
+	.bottomform label {
+		background-color: white;
+		padding: 8px;
+		width: 70px;
+		margin-right: 8px;
+		text-align: center;
+		display: inline-block;
+	}
+
+	.bottomform select {
+		border: 0px;
+		width: 165px;
 	}
 </style>
 <body>
@@ -188,9 +276,48 @@
 				</select>
 			</div>
 		</div>
-		<button type="submit" id="subBtn">申请报名<span>（免费获得各项福利）</span></button>
+		<button type="submit" class="subBtn">申请报名<span>（免费获得各项福利）</span></button>
 
 		</div>
+	</div>
+
+	<div class="bottombar">
+		<div class="container">
+			<div class="logo">
+				<img src="../images/logo_white.png">
+			</div>
+			<div class="text">
+				<img src="../images/text.png">
+			</div>
+			<div class="bottomform">
+				<input type="text" placeholder="您的姓名" id="username_" maxlength="20">
+				<label for="">上海</label>
+				<select name="area" id="address_">
+					<option value="0">区域</option>
+					<option value="徐汇">徐汇</option>
+					<option value="静安">静安</option>
+					<option value="黄埔">黄埔</option>
+					<option value="卢湾">卢湾</option>
+					<option value="长宁">长宁</option>
+					<option value="闸北">闸北</option>
+					<option value="普陀">普陀</option>
+					<option value="虹口">虹口</option>
+					<option value="闵行">闵行</option>
+					<option value="杨浦">杨浦</option>
+					<option value="宝山">宝山</option>
+					<option value="浦东">浦东</option>
+					<option value="南汇(惠南镇)">南汇(惠南镇)</option>
+					<option value="松江">松江</option>
+					<option value="嘉定">嘉定</option>
+					<option value="青浦(徐泾)">青浦(徐泾)</option>
+				</select>
+				<input type="text" placeholder="您的手机号" id="userphone_" maxlength="11">
+				<button type="submit" class="subBtn">申请免费量房设计</button>
+
+			
+			</div>
+		</div>
+		
 	</div>
 
 	<div class="success hide">
@@ -206,10 +333,12 @@
 </body>
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
-$("#subBtn").on("click",function(){
-	var username=$("#username").val();
-	var userphone=$("#userphone").val();
-	var address=$("#address").val();
+$(".subBtn").on("click",function(){
+	var username=$("#username").val()?$("#username").val():$("#username_").val();
+	var userphone=$("#userphone").val()?$("#userphone").val():$("#userphone_").val();
+	var address=$("#address").val()!="0"?$("#address").val():$("#address_").val();
+	
+	
 	if(!username){
 		alert("请输入您的姓名");
 		return;
@@ -233,8 +362,8 @@ $("#subBtn").on("click",function(){
 			$(".success").show();
 		}else{
 			alert(json.message);
-			$("#subBtn").removeAttr("disabled");
 		}
+			$("#subBtn").removeAttr("disabled");
 	},"json");
 });
 </script>

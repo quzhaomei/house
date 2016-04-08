@@ -14,7 +14,7 @@
 		padding: 0px;
 		margin: 0px;
 		padding-bottom: 120px;
-		background-color: #B81335;
+		background-color: #fff;
 	}
 
 	* {font-family:"Lantinghei SC","Open Sans",Arial,"Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif;}
@@ -244,11 +244,14 @@
 </style>
 <body>
 	<div class="container">
-
+<!-- 从这里 -->
 		<img src="../images/web_01.png">
 		<img src="../images/web_02.jpg">
 		<img src="../images/web_03.png">
-		<img src="../images/web_04.jpg">
+		<img src="../images/web_04.jpg" USEMAP="#brands">
+		<map id="brands" name="brands"><area shape="rect" alt="" title="" coords="65,59,232,142" href="http://www.tongji01.com/" target="_blank" /><area shape="rect" alt="" title="" coords="240,59,399,144" href="http://www.yifan021.com/" target="_blank" /><area shape="rect" alt="" title="" coords="405,60,535,144" href="http://qszh.show.imosi.com/1/index.html" target="_blank" /><area shape="rect" alt="" title="" coords="543,60,693,145" href="http://www.021-jy.com" target="_blank" /><area shape="rect" alt="" title="" coords="703,60,871,144" href="http://www.sh-ysj.com/" target="_blank" /><area shape="rect" alt="" title="" coords="67,148,232,225" href="http://www.shtyzs.cn/" target="_blank" /><area shape="rect" alt="" title="" coords="240,150,399,227" href="http://shyintang.com/" target="_blank" /><area shape="rect" alt="" title="" coords="407,151,536,227" href="http://www.ourground.com/" target="_blank" /><area shape="rect" alt="" title="" coords="544,152,694,227" href="http://www.zh-t.cn/" target="_blank" /><area shape="rect" alt="" title="" coords="68,233,230,328" href="http://www.shrunqin.com" target="_blank" /><area shape="rect" alt="" title="" coords="68,437,226,529" href="http://www.leiyangzh.com/" target="_blank" /><area shape="rect" alt="" title="" coords="409,237,536,327" href="http://www.oubiya.com" target="_blank" /><area shape="rect" alt="" title="" coords="703,153,871,227" href="http://www.shleyi.net/" target="_blank" /><area shape="rect" alt="" title="" coords="706,235,865,331" href="http://www.1zzzw.com/shop/juyunn/" target="_blank" /><area shape="rect" alt="" title="" coords="68,339,227,425" href="http://www.shyanlian.com" target="_blank" /><area shape="rect" alt="" title="" coords="242,339,398,426" href="http://www.oy1998.com/" target="_blank" /><area shape="rect" alt="" title="" coords="562,342,689,427" href="http://www.oufang.com/" target="_blank" /><area shape="rect" alt="" title="" coords="711,342,866,429" href="http://www.qinhuizs.com/" target="_blank" /><area shape="rect" alt="" title="" coords="408,438,537,529" href="http://www.shrunqin.com" target="_blank" /><area shape="rect" alt="" title="" coords="559,439,688,526" href="http://www.langyu.cc/" target="_blank" /><area shape="rect" alt="" title="" coords="712,440,866,528" href="http://www.dhgjsj.com.cn" target="_blank" /><area shape="rect" alt="" title="" coords="69,540,226,622" href="http://www.wkzs123.com/" target="_blank" /><area shape="rect" alt="" title="" coords="561,540,689,622" href="www.yankdesign.com" target="_blank" /><area shape="rect" alt="" title="" coords="714,542,867,626" href="www.shyanlian.com" target="_blank" /></map>
+		<img src="../images/web_05.png">
+		<!-- 到这里 -->
 		<div class="formarea">
 		<div class="inputs">
 			<input type="text" placeholder="您的姓名" id="username" maxlength="20">

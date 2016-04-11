@@ -66,7 +66,19 @@ display: inline-block;
 					<li><a href="#">量房申请</a>
 					</li>
 				</ul>
-
+				<c:if test="${not empty users }">
+					<div>
+					<table class="table table-striped table-bordered ">
+					<caption>推广员</caption>
+					<tr><td width="20%">姓名</td><td width="60%">链接</td><td width="20%">渠道编号</td></tr>
+					<c:forEach items="${users }" var="user">
+						<tr><td>${user.nickname }</td>
+						<td>${rootUrl }/minisite/designApply_to.html?source=${user.adminUserId }</td>
+						<td>${user.adminUserId }</td></tr>
+					</c:forEach>
+					</table>
+					</div>
+				</c:if>
 				<div class="row-fluid sortable">
 					<div class="box span12">
 						<div class="box-header" data-original-title>
@@ -87,8 +99,21 @@ display: inline-block;
 						<form action="index.html" method="post" id="myform" rel="admin-form">
 						<input name="pageIndex" id="pageIndex" type="hidden" value="${pageResult.pageIndex}"/>
 						<input name="pageSize" type="hidden" value="${pageResult.pageSize}"/>
+						<table class="table" style="width:80%;">
+						<tr>
+						
+						<td>渠道编号：</td><td><input type="text" id="sourceNum" name="source" value="${param.source }" maxlength="10" /></td>
+						<td>报名时间</td>
+							<td>
+							<input type="text" name="startDate" id="startDate" value='${param.startDate }' class="datepicker span5" />
+									-
+							<input type="text" name="endDate" id="endDate" value='${param.endDate }' class="datepicker span5"/></td>
+						<td><button type="button" class="btn btn-small btn-search">
+							<i class="halflings-icon search white"></i> 查询</button></td>
+						</tr>
+						</table>
 						</form>
-							<table class="table table-striped table-bordered">
+							<table class="table table-striped table-bordered ">
 								<thead>
 									<tr>
 										<th >序列</th>
@@ -96,6 +121,7 @@ display: inline-block;
 										<th >电话号码</th>
 										<th style="width: 70px;">所在区域</th>
 										<th>报名时间</th>
+										<th>渠道编号</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -107,6 +133,7 @@ display: inline-block;
 										<td>${apply.location }</td>
 										<td><fmt:formatDate value="${apply.createDate }"
 										 pattern="yyyy-MM-dd HH:mm"/> </td>
+										 <td>${apply.source }</td>
 									</tr>
 								</c:forEach>
 								</tbody>
@@ -139,6 +166,13 @@ display: inline-block;
 	<!-- end: JavaScript-->
 	<script type="text/javascript">
 		$(function(){
+			$(".btn-search").on("click",function(){
+				var sourceNum=$("#sourceNum").val();
+				if(sourceNum&&!sourceNum.match(/^\d+$/)){
+					layer.msg("渠道编号为一数字！");return;
+				}
+				$("#myform").submit();
+			});
 		});
 	</script>
 </body>

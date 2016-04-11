@@ -23,6 +23,16 @@ public class CookieUtil {
 	        return null;
 	    }   
 	}
+	
+	public static String getCookieValueByName(HttpServletRequest request,String name){
+	    Map<String,Cookie> cookieMap = ReadCookieMap(request);
+	    if(cookieMap.containsKey(name)){
+	        Cookie cookie = (Cookie)cookieMap.get(name);
+	        return cookie.getValue();
+	    }else{
+	        return null;
+	    }   
+	}
 	/**
 	 * 将cookie封装到Map里面
 	 * @param request

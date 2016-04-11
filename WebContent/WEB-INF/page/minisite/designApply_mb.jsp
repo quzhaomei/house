@@ -128,7 +128,7 @@
 		<form class="formarea">
 			<div class="inputs">
 				<input type="text" placeholder="您的姓名" id="username" maxlength="30">
-				<input type="text" placeholder="您的手机号" id="userphone" maxlength="11">
+				<input type="text" placeholder="您的手机号" id="userphone" maxlength="30">
 			</div>
 			<button type="submit" id="subBtn">申请<br/>报名</button>
 
@@ -159,8 +159,8 @@ $("#subBtn").on("click",function(){
 	}else if(!userphone){
 		alert("请输入您的联系电话");
 		return;
-	}else if(userphone.length!=11){
-		alert("请输入正确的联系电话");
+	}else if(!userphone.match(/^\d{11}$/)){
+		alert("请输入正确的联系电话,只包含数字");
 		return;
 	}
 	
@@ -173,8 +173,8 @@ $("#subBtn").on("click",function(){
 			$(".success").show();
 		}else{
 			alert(json.message);
-			$("#subBtn").removeAttr("disabled");
 		}
+			$(".subBtn").removeAttr("disabled");
 	},"json");
 });
 </script>

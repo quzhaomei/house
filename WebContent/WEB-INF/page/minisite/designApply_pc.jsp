@@ -249,13 +249,13 @@
 		<img src="../images/web_02.jpg">
 		<img src="../images/web_03.png">
 		<img src="../images/web_04.jpg" USEMAP="#brands">
-		<map id="brands" name="brands"><area shape="rect" alt="" title="" coords="65,59,232,142" href="http://www.tongji01.com/" target="_blank" /><area shape="rect" alt="" title="" coords="240,59,399,144" href="http://www.yifan021.com/" target="_blank" /><area shape="rect" alt="" title="" coords="405,60,535,144" href="http://qszh.show.imosi.com/1/index.html" target="_blank" /><area shape="rect" alt="" title="" coords="543,60,693,145" href="http://www.021-jy.com" target="_blank" /><area shape="rect" alt="" title="" coords="703,60,871,144" href="http://www.sh-ysj.com/" target="_blank" /><area shape="rect" alt="" title="" coords="67,148,232,225" href="http://www.shtyzs.cn/" target="_blank" /><area shape="rect" alt="" title="" coords="240,150,399,227" href="http://shyintang.com/" target="_blank" /><area shape="rect" alt="" title="" coords="407,151,536,227" href="http://www.ourground.com/" target="_blank" /><area shape="rect" alt="" title="" coords="544,152,694,227" href="http://www.zh-t.cn/" target="_blank" /><area shape="rect" alt="" title="" coords="68,233,230,328" href="http://www.shrunqin.com" target="_blank" /><area shape="rect" alt="" title="" coords="68,437,226,529" href="http://www.leiyangzh.com/" target="_blank" /><area shape="rect" alt="" title="" coords="409,237,536,327" href="http://www.oubiya.com" target="_blank" /><area shape="rect" alt="" title="" coords="703,153,871,227" href="http://www.shleyi.net/" target="_blank" /><area shape="rect" alt="" title="" coords="706,235,865,331" href="http://www.1zzzw.com/shop/juyunn/" target="_blank" /><area shape="rect" alt="" title="" coords="68,339,227,425" href="http://www.shyanlian.com" target="_blank" /><area shape="rect" alt="" title="" coords="242,339,398,426" href="http://www.oy1998.com/" target="_blank" /><area shape="rect" alt="" title="" coords="562,342,689,427" href="http://www.oufang.com/" target="_blank" /><area shape="rect" alt="" title="" coords="711,342,866,429" href="http://www.qinhuizs.com/" target="_blank" /><area shape="rect" alt="" title="" coords="408,438,537,529" href="http://www.shrunqin.com" target="_blank" /><area shape="rect" alt="" title="" coords="559,439,688,526" href="http://www.langyu.cc/" target="_blank" /><area shape="rect" alt="" title="" coords="712,440,866,528" href="http://www.dhgjsj.com.cn" target="_blank" /><area shape="rect" alt="" title="" coords="69,540,226,622" href="http://www.wkzs123.com/" target="_blank" /><area shape="rect" alt="" title="" coords="561,540,689,622" href="www.yankdesign.com" target="_blank" /><area shape="rect" alt="" title="" coords="714,542,867,626" href="www.shyanlian.com" target="_blank" /></map>
+		<map id="brands" name="brands"><area shape="rect" alt="" title="" coords="65,59,232,142" href="http://www.tongji01.com/" target="_blank" /><area shape="rect" alt="" title="" coords="240,59,399,144" href="http://www.yifan021.com/" target="_blank" /><area shape="rect" alt="" title="" coords="405,60,535,144" href="http://qszh.show.imosi.com/1/index.html" target="_blank" /><area shape="rect" alt="" title="" coords="543,60,693,145" href="http://www.021-jy.com" target="_blank" /><area shape="rect" alt="" title="" coords="703,60,871,144" href="http://www.sh-ysj.com/" target="_blank" /><area shape="rect" alt="" title="" coords="67,148,232,225" href="http://www.shtyzs.cn/" target="_blank" /><area shape="rect" alt="" title="" coords="240,150,399,227" href="http://shyintang.com/" target="_blank" /><area shape="rect" alt="" title="" coords="407,151,536,227" href="http://www.ourground.com/" target="_blank" /><area shape="rect" alt="" title="" coords="544,152,694,227" href="http://www.zh-t.cn/" target="_blank" /><area shape="rect" alt="" title="" coords="68,233,230,328" href="http://www.shrunqin.com" target="_blank" /><area shape="rect" alt="" title="" coords="68,437,226,529" href="http://www.leiyangzh.com/" target="_blank" /><area shape="rect" alt="" title="" coords="409,237,536,327" href="http://www.oubiya.com" target="_blank" /><area shape="rect" alt="" title="" coords="703,153,871,227" href="http://www.shleyi.net/" target="_blank" /><area shape="rect" alt="" title="" coords="706,235,865,331" href="http://www.1zzzw.com/shop/juyunn/" target="_blank" /><area shape="rect" alt="" title="" coords="68,339,227,425" href="http://www.shyanlian.com" target="_blank" /><area shape="rect" alt="" title="" coords="242,339,398,426" href="http://www.oy1998.com/" target="_blank" /><area shape="rect" alt="" title="" coords="562,342,689,427" href="http://www.oufang.com/" target="_blank" /><area shape="rect" alt="" title="" coords="711,342,866,429" href="http://www.qinhuizs.com/" target="_blank" /><area shape="rect" alt="" title="" coords="408,438,537,529" href="http://www.shrunqin.com" target="_blank" /><area shape="rect" alt="" title="" coords="559,439,688,526" href="http://www.langyu.cc/" target="_blank" /><area shape="rect" alt="" title="" coords="712,440,866,528" href="http://www.dhgjsj.com.cn" target="_blank" /><area shape="rect" alt="" title="" coords="69,540,226,622" href="http://www.wkzs123.com/" target="_blank" /><area shape="rect" alt="" title="" coords="561,540,689,622" href="http://www.yankdesign.com" target="_blank" /><area shape="rect" alt="" title="" coords="714,542,867,626" href="http://www.shyanlian.com" target="_blank" /></map>
 		<img src="../images/web_05.png">
 		<!-- 到这里 -->
 		<div class="formarea">
 		<div class="inputs">
 			<input type="text" placeholder="您的姓名" id="username" maxlength="20">
-			<input type="text" placeholder="您的手机号" id="userphone" maxlength="11">
+			<input type="text" placeholder="您的手机号" id="userphone" maxlength="20">
 			<div class="select">
 				<label for="area">上海</label>
 				<select name="area" id="address">
@@ -314,7 +314,7 @@
 					<option value="嘉定">嘉定</option>
 					<option value="青浦(徐泾)">青浦(徐泾)</option>
 				</select>
-				<input type="text" placeholder="您的手机号" id="userphone_" maxlength="11">
+				<input type="text" placeholder="您的手机号" id="userphone_" maxlength="20">
 				<button type="submit" class="subBtn">申请免费量房设计</button>
 
 			
@@ -348,8 +348,8 @@ $(".subBtn").on("click",function(){
 	}else if(!userphone){
 		alert("请输入您的联系电话");
 		return;
-	}else if(userphone.length!=11){
-		alert("请输入正确的联系电话");
+	}else if(!userphone.match(/^\d{11}$/)){
+		alert("请输入正确的联系电话,只包含数字");
 		return;
 	}else if(address==0){
 		alert("请选择区域!");
@@ -366,7 +366,7 @@ $(".subBtn").on("click",function(){
 		}else{
 			alert(json.message);
 		}
-			$("#subBtn").removeAttr("disabled");
+			$(".subBtn").removeAttr("disabled");
 	},"json");
 });
 </script>

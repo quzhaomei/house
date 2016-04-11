@@ -14,15 +14,17 @@
 		<result property="createDate" column="createDate" />
 		<result property="description" column="description" />
 		<result property="status" column="status" />
+		
+		<result property="source" column="source" />
 	</resultMap>
 
 	<insert id="save" useGeneratedKeys="true" keyProperty="apply.applyId">
 		insert
 		into design_apply(applyId,phone,username,location,size,createDate,shortUrl,description
-		,status)
+		,status,source)
 		values
 		(#{apply.applyId},#{apply.phone},#{apply.username},#{apply.location},#{apply.size},
-		#{apply.createDate},#{apply.shortUrl},#{apply.description},#{apply.status}
+		#{apply.createDate},#{apply.shortUrl},#{apply.description},#{apply.status},#{apply.source}
 		)
 	</insert>
 	<update id="update">
@@ -62,12 +64,32 @@
 	</select>
 	<select id="getListByPage" resultMap="apply">
 		select applyId,phone,username,location,size,createDate,shortUrl,description
-		,status from design_apply 
+		,status,source from design_apply 
+		where 1=1
+		<if test="page.param.source!=null">
+			and source=#{page.param.source}
+		</if>
+		<if test="page.param.startDate!=null">
+			and createDate &gt; #{page.param.startDate}
+		</if>
+		<if test="page.param.endDate !=null">
+			and createDate &lt; #{page.param.endDate}
+		</if>
 		order by applyId asc
 		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
 	</select>
 	<select id="getCountByParam" resultType="int">
 		select count(*) from
 		design_apply u
+		where 1=1
+		<if test="apply.source!=null">
+			and source=#{apply.source}
+		</if>
+		<if test="apply.startDate!=null">
+			and createDate &gt; #{apply.startDate}
+		</if>
+		<if test="apply.endDate !=null">
+			and createDate &lt; #{apply.endDate}
+		</if>
 	</select>
 </mapper>  

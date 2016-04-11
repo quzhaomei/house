@@ -28,6 +28,7 @@ public class Store {
 	
 	
 	private String remarks;//备注
+	private String httpUrl;//外链地址
 	
 	private Integer status;//1-接单，0-暂停
 	private Integer createUserId;
@@ -202,6 +203,12 @@ public class Store {
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public String getHttpUrl() {
+		return httpUrl;
+	}
+	public void setHttpUrl(String httpUrl) {
+		this.httpUrl = httpUrl;
 	}
 	
 }

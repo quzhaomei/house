@@ -56,9 +56,23 @@ public class BaseController {
 	
 	public static final Integer  KEEPER_ROLE_ID=3;//商户负责人ID
 	public static final Integer  SERVICE_ROLE_ID=6;//业务员ID
+	public static final Integer TUIGUANG_ROLE_ID=8;//推广员
 	/**工具方法,获取当前登陆的管理员信息**/
 	protected AdminUserDTO getLoginAdminUser(HttpServletRequest request){
 		return (AdminUserDTO) request.getSession().getAttribute(ADMIN_USER_SESSION);
+	}
+	
+	/**获取当前访问链接的root url*/
+	protected String getRootUrl(HttpServletRequest request){
+		String host=request.getRequestURL().toString();
+		while(host.lastIndexOf("/")>7){
+			host=host.substring(0,host.lastIndexOf("/"));
+		}
+		String contextPath=request.getContextPath();
+		if(!"".equals(contextPath)){
+			host=host+contextPath;
+		}
+		return host;
 	}
 	/*** 常量结束*/
 	

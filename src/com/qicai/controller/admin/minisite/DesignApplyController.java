@@ -1,5 +1,6 @@
 package com.qicai.controller.admin.minisite;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -12,10 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.qicai.annotation.LimitTag;
+import com.qicai.bean.admin.AdminUser;
 import com.qicai.bean.minisite.DesignApply;
 import com.qicai.controller.BaseController;
 import com.qicai.dto.JsonDTO;
 import com.qicai.dto.PageDTO;
+import com.qicai.dto.admin.AdminUserDTO;
 import com.qicai.util.HttpSendResult;
 import com.qicai.util.JSONUtil;
 import com.qicai.util.MessageSender;
@@ -25,12 +28,21 @@ import com.qicai.util.ShortUrlUtil;
 @RequestMapping(value = "designApply")
 @LimitTag(uri = true)
 public class DesignApplyController extends BaseController {
+	protected SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	// 负责跳转菜单页面,并查出用户列表
 	@RequestMapping(value = "/index")
 	public String index(HttpServletRequest request,
 			HttpServletResponse response, Model model) {
+		//查询所有的推广员
+		List<AdminUserDTO> users=adminUserService.getListByParamAndRole(new AdminUser(), 8);
+		model.addAttribute("users", users);
+		model.addAttribute("rootUrl", getRootUrl(request));
 		String pageIndex = request.getParameter("pageIndex");// 页码
 		String pageSize = request.getParameter("pageSize");// 页容量
+		
+		String source=request.getParameter("source");
+		String startDate=request.getParameter("startDate");
+		String endDate=request.getParameter("endDate");
 		if (pageIndex == null) {
 			pageIndex = "1";
 		}
@@ -45,6 +57,25 @@ public class DesignApplyController extends BaseController {
 				page.setPageIndex(pageIndexInt);
 				page.setPageSize(pageSizeInt);
 				DesignApply selectParam = new DesignApply();
+				if(source!=null&&source.matches("\\d+")){
+					selectParam.setSource(Integer.parseInt(source));
+				}
+				if (startDate != null && startDate.length() == 10) {
+					try {
+						selectParam.setStartDate(format.parse(startDate));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				if (endDate != null && endDate.length() == 10) {
+					try {
+						Date endTime = format.parse(endDate);
+						endTime.setDate(endTime.getDate() + 1);
+						selectParam.setEndDate(endTime);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
 				page.setParam(selectParam);
 
 				PageDTO<List<DesignApply>> pageDate = applyService

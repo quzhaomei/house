@@ -228,6 +228,14 @@
 								  </div>
 								</div>
 							  </div>
+							   <div class="control-group">
+								<label class="control-label" for="httpUrl">外链地址</label>
+								<div class="controls">
+								  <div class="input-prepend input-append">
+									<input id="httpUrl" maxlength="200" value="${store.httpUrl }" placeholder="请输入外链地址" type="text">
+								  </div>
+								</div>
+							  </div>
 							  
 							  <div class="form-actions">
 								<button type="button" class="btn btn-primary btn-add-store">确认</button>
@@ -283,6 +291,7 @@
 			var callPhone=$("#callPhone").val();
 			var msgPhone=$("#msgPhone").val();
 			var remarks=$("#remarks").val();
+			var httpUrl=$("#httpUrl").val();
 			//数据判断
 			if(!storeName){
 				layer.msg("店铺名字不能为空");
@@ -346,7 +355,7 @@
 			param.msgPhone=msgPhone;
 			param.callPhone=callPhone;
 			param.remarks=remarks;
-			
+			param.httpUrl=httpUrl;
 			$(this).attr("disabled","disabled");
 			$.post("update.html",param,function(json){
 				if(json.status==1){

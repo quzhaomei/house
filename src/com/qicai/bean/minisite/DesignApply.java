@@ -15,7 +15,15 @@ public class DesignApply {
 	private String shortUrl;//短地址
 	private Date createDate;//申请时间
 	private String description;//描述
+	
+	private Integer source;//渠道
+	
 	private Integer status;//状态 0-后台创建中，1-短信已发送，2,浏览页面， 3-已注册
+	
+	
+	/**查询辅助字段*/
+	private Date startDate;
+	private Date endDate;
 	
 	public String getDescription() {
 		return description;
@@ -71,6 +79,24 @@ public class DesignApply {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public Integer getSource() {
+		return source;
+	}
+	public void setSource(Integer source) {
+		this.source = source;
+	}
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 }

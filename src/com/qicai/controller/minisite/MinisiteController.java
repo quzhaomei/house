@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.qicai.bean.minisite.DesignApply;
 import com.qicai.controller.BaseController;
 import com.qicai.dto.JsonDTO;
+import com.qicai.util.CookieUtil;
 import com.qicai.util.JSONUtil;
 import com.qicai.util.RequestUtil;
 /**
@@ -22,8 +23,13 @@ import com.qicai.util.RequestUtil;
 @Controller
 @RequestMapping(value = "minisite")
 public class MinisiteController extends BaseController {
+	private static final String SOURCE_TAG="designApply_souce";
 	@RequestMapping(value = "/designApply_to.html")
 	public String designApply_to(HttpServletRequest request, HttpServletResponse response, Model model) {
+		String source=request.getParameter("source");
+		if(source!=null&&source.matches("\\d+")){
+			CookieUtil.addCookie(response, SOURCE_TAG, source, -1);
+		}
 		if(RequestUtil.isMobileDevice(request)){
 			return "minisite/designApply_mb";
 		}
@@ -42,6 +48,12 @@ public class MinisiteController extends BaseController {
 		}else if(userphone==null){
 			json.setStatus(0).setMessage("请输入您的电话号码");
 		}
+		//绑定渠道编号
+		String source=CookieUtil.getCookieValueByName(request, SOURCE_TAG);
+		if(source!=null&&source.matches("\\d+")){
+			designApply.setSource(Integer.parseInt(source));
+		}
+		
 		designApply.setPhone(userphone);
 		DesignApply old=applyService.getByParam(designApply);
 		if(old!=null){

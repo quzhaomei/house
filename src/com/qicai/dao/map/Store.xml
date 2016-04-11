@@ -21,6 +21,7 @@
 		<result property="createDate" column="createDate" />
 		<result property="updateDate" column="updateDate" />
 		<result property="status" column="status" />
+		<result property="httpUrl" column="httpUrl" />
 		
 		<association property="zone" javaType="com.qicai.dto.bisiness.ZoneSetDTO" column="zone">
 			<id property="zoneId" column="zoneId"/>
@@ -77,13 +78,13 @@
 	<insert id="save"  useGeneratedKeys="true" keyProperty="store.storeId">
 		insert into store(storeId,logo,storeName,storeAddress,storePhone,callPhone,msgPhone,
 		size,companyName,ruleUserName,ruleUserPhone,createDate,
-		status,zoneId,keeperId,createUserId,remarks)
+		status,zoneId,keeperId,createUserId,remarks,httpUrl)
 		values
 		(#{store.storeId},#{store.logo},#{store.storeName},#{store.storeAddress},#{store.storePhone},
 		#{store.callPhone},#{store.msgPhone},#{store.size},#{store.companyName},
 		#{store.ruleUserName},#{store.ruleUserPhone},#{store.createDate},
 		#{store.status},#{store.zoneId},#{store.keeperId}
-		,#{store.createUserId},#{store.remarks})
+		,#{store.createUserId},#{store.remarks},#{store.httpUrl})
 	</insert>
 	<insert id="addStoreOrderZones">
 		<selectKey keyProperty="id" order="AFTER"  resultType="java.lang.Integer">  
@@ -158,6 +159,10 @@
 			,storePhone=#{store.storePhone}
 		</if>
 		
+		<if test="store.httpUrl!=null">
+			,httpUrl=#{store.httpUrl}
+		</if>
+		
 		<if test="store.status!=null">
 			,status=#{store.status}
 		</if>
@@ -212,7 +217,7 @@ from store s
 	
 	<select id="getListByParam" resultMap="storeDTO">
 		select s.storeId,s.storeName,s.createDate,s.status,s.balance,s.updateDate,s.remarks,
-		s.keeperId,au.nickname nickname_k,
+		s.keeperId,au.nickname nickname_k,s.httpUrl,
 		zs.zoneId,zs.name
 		from store s 
 		left join admin_user au on s.keeperId=au.adminUserId
@@ -245,7 +250,7 @@ from store s
 		
 	</select>
 	<select id="getByParam" resultMap="storeDTO" useCache="false">
-	select s.storeId,zs.zoneId,s.remarks,
+	select s.storeId,zs.zoneId,s.remarks,s.httpUrl,
 		zs.name,
 		zss.zoneId zoneId_o,zss.name name_o,
 		ht.typeId,ht.name name_type,

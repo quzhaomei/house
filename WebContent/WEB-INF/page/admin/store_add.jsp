@@ -205,6 +205,14 @@ position:absolute;right:150px;top:50px;}
 								  </div>
 								</div>
 							  </div>
+							  <div class="control-group">
+								<label class="control-label" for="httpUrl">外链地址</label>
+								<div class="controls">
+								  <div class="input-prepend input-append">
+									<input id="httpUrl" maxlength="200" placeholder="请输入外链地址" type="text">
+								  </div>
+								</div>
+							  </div>
 							  
 							  <div class="form-actions">
 								<button type="button" class="btn btn-primary btn-add-store">确认</button>
@@ -259,7 +267,7 @@ position:absolute;right:150px;top:50px;}
 			var ruleUserPhone=$("#ruleUserPhone").val();
 			var callPhone=$("#callPhone").val();
 			var msgPhone=$("#msgPhone").val();
-			
+			var httpUrl=$("#httpUrl").val();
 			var remarks=$("#remarks").val();
 			//数据判断
 			if(!storeName){
@@ -323,7 +331,7 @@ position:absolute;right:150px;top:50px;}
 			param.ruleUserPhone=ruleUserPhone;
 			param.msgPhone=msgPhone;
 			param.callPhone=callPhone;
-			
+			param.httpUrl=httpUrl;
 			$(this).attr("disabled","disabled");
 			$.post("add.html",param,function(json){
 				if(json.status==1){

@@ -128,6 +128,10 @@ td.title {
 										<td class="title">店铺备注</td>
 										<td colspan="5">${store.remarks }</td>
 									</tr>
+									<tr>
+										<td class="title">外链主页</td>
+										<td colspan="5">${store.httpUrl }</td>
+									</tr>
 								</table>
 
 								<form action="list.html#myform" method="post" id="myform"

@@ -550,10 +550,10 @@
 		and r.fileTime &lt; #{require.endFileTime}
 		</if>
 		<if test="require.startNextCallTime!=null">
-		and r.nextCallTime &gt; #{page.param.startNextCallTime}
+		and r.nextCallTime &gt; #{require.startNextCallTime}
 		</if>
 		<if test="require.endNextCallTime!=null">
-		and r.nextCallTime &lt; #{page.param.endNextCallTime}
+		and r.nextCallTime &lt; #{require.endNextCallTime}
 		</if>
 	</select>
 	<select id="publishList" resultMap="requireDTO">

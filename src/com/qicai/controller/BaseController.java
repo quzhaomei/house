@@ -56,7 +56,7 @@ public class BaseController {
 	
 	public static final Integer  KEEPER_ROLE_ID=3;//商户负责人ID
 	public static final Integer  SERVICE_ROLE_ID=6;//业务员ID
-	public static final Integer TUIGUANG_ROLE_ID=8;//推广员
+	public static final Integer TUIGUANG_ROLE_ID=9;//网上报名
 	/**工具方法,获取当前登陆的管理员信息**/
 	protected AdminUserDTO getLoginAdminUser(HttpServletRequest request){
 		return (AdminUserDTO) request.getSession().getAttribute(ADMIN_USER_SESSION);

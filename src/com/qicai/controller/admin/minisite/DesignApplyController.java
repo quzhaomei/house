@@ -34,7 +34,7 @@ public class DesignApplyController extends BaseController {
 	public String index(HttpServletRequest request,
 			HttpServletResponse response, Model model) {
 		//查询所有的推广员
-		List<AdminUserDTO> users=adminUserService.getListByParamAndRole(new AdminUser(), 8);
+		List<AdminUserDTO> users=adminUserService.getListByParamAndRole(new AdminUser(), TUIGUANG_ROLE_ID);
 		model.addAttribute("users", users);
 		model.addAttribute("rootUrl", getRootUrl(request));
 		String pageIndex = request.getParameter("pageIndex");// 页码

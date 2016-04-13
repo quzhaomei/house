@@ -489,6 +489,13 @@
 		and r.fileTime &lt; #{require.endFileTime}
 		</if>
 		
+		<if test="require.startNextCallTime!=null">
+		and r.nextCallTime &gt; #{require.startNextCallTime}
+		</if>
+		<if test="require.endNextCallTime!=null">
+		and r.nextCallTime &lt; #{require.endNextCallTime}
+		</if>
+		
 		<if test="require.specialStartDate!=null">
 		and rr.nextTime &gt; #{require.specialStartDate}
 		</if>
@@ -541,6 +548,12 @@
 		</if>
 		<if test="require.endFileTime!=null">
 		and r.fileTime &lt; #{require.endFileTime}
+		</if>
+		<if test="require.startNextCallTime!=null">
+		and r.nextCallTime &gt; #{page.param.startNextCallTime}
+		</if>
+		<if test="require.endNextCallTime!=null">
+		and r.nextCallTime &lt; #{page.param.endNextCallTime}
 		</if>
 	</select>
 	<select id="publishList" resultMap="requireDTO">

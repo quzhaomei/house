@@ -102,7 +102,17 @@ display: inline-block;
 						<table class="table" style="width:80%;">
 						<tr>
 						
-						<td>渠道编号：</td><td><input type="text" id="sourceNum" name="source" value="${param.source }" maxlength="10" /></td>
+						<td>渠道编号：</td>
+						<td>
+						<c:choose>
+							<c:when test="${not empty source }">
+								<input type="text" id="sourceNum" name="source" value="${source }" maxlength="10" readonly="readonly"/>
+							</c:when>
+							<c:otherwise>
+								<input type="text" id="sourceNum" name="source" value="${param.source }" maxlength="10" />
+							</c:otherwise>
+						</c:choose>
+						</td>
 						<td>报名时间</td>
 							<td>
 							<input type="text" name="startDate" id="startDate" value='${param.startDate }' class="datepicker span5" />

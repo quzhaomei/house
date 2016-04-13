@@ -13,7 +13,7 @@
 <style type="text/css">
 <style type="text/css">
 .modal-body{max-height: 580px;}
-
+tr.other-info{display:none;border-top:1px solid red;font-size:12px;}
 .layui-layer-content{
 padding:5px 5px;
 }
@@ -83,7 +83,7 @@ position: relative !important;
 						<tr>
 							<td width=7%>用户名称</td><td width=18%><input class="span10" type="text" id="username" value="${param.username }" name="username" maxlength="20" placeholder="请输入用户名称"/></td>
 							<td width=7% >用户Id</td><td width=18%><input class="span10" type="text" id="userId" value="${param.userId }" name="userId" maxlength="20" placeholder="请输入用户号码"/></td>
-							<td width=5%>状态</td><td width=18%><select style="width:100px;" name="status" rel="chosen">
+							<td width=5%>状态</td><td width=18%><select style="width:100px;" name="status" rel="chosen" id="chonsenstatus">
 								<option value="-1" ${param.status=="-1"?"selected='selected'":"" }>全部</option>
 								<option value="7" ${param.status=="7"?"selected='selected'":"" }>待派单</option>
 								<option value="8" ${param.status=="8"?"selected='selected'":"" }>已派单</option>
@@ -110,6 +110,25 @@ position: relative !important;
 							<i class="halflings-icon search white"></i> 查询</button>
 							</span>
 							</td>
+						</tr>
+							<tr class="other-info">
+						
+							<td >退单/入库 时间</td>
+							<td>
+							<input type="text" name="startFileTime" id="startFileTime"value='${param.startFileTime }' class="datepicker span5" />
+									-
+							<input type="text" name="endFileTime" id="endFileTime" value='${param.endFileTime }' class="datepicker span5"/>
+							</td>
+							<td >退单/入库 原因</td>
+							<td><input type="text" name="callbackTips" id="callbackTips" value='${param.callbackTips }' class="span10" maxlength="200" /> </td>
+							
+							<td >下次回访时间</td>
+							<td>
+							<input type="text" name="startNextCallTime" id="startNextCallTime"value='${param.startNextCallTime }' class="datepicker span5" />
+									-
+							<input type="text" name="endNextCallTime" id="endNextCallTime" value='${param.endNextCallTime }' class="datepicker span5"/>
+							</td>
+							
 						</tr>
 						</table>
 						</form>
@@ -379,6 +398,20 @@ position: relative !important;
 				
 			},"json");
 		});
+		
+		$("#chonsenstatus").on("change",function(){
+			var value=$(this).val();
+			if(value=="40"||value=="41"){
+				$(".other-info").show();
+			}else{
+				$(".other-info").hide();
+				$("#callbackTips").val("");
+				$("#startFileTime").val("");
+				$("#endFileTime").val("");
+			}
+		});
+		$("#chonsenstatus").change();
+		
 	});
 	</script>
 </body>

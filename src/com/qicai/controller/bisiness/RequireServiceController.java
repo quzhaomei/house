@@ -60,6 +60,14 @@ public class RequireServiceController extends BaseController {
 		String userId = request.getParameter("userId");
 		String serviceStartDate = request.getParameter("serviceStartDate");
 		String serviceEndDate = request.getParameter("serviceEndDate");
+		
+		String callbackTips = request.getParameter("callbackTips");
+		String startFileTime = request.getParameter("startFileTime");
+		String endFileTime = request.getParameter("endFileTime");
+
+		String startNextCallTime = request.getParameter("startNextCallTime");
+		String endNextCallTime = request.getParameter("endNextCallTime");
+		
 		if (pageIndex == null) {
 			pageIndex = "1";
 		}
@@ -110,6 +118,40 @@ public class RequireServiceController extends BaseController {
 						Date serviceEndTime = format.parse(serviceEndDate);
 						serviceEndTime.setDate(serviceEndTime.getDate() + 1);
 						selectParam.setServiceEndDate(serviceEndTime);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				if (callbackTips != null && !callbackTips.equals(""))
+					selectParam.setCallbackTips(callbackTips);
+				if (startFileTime != null && startFileTime.length() == 10) {
+					try {
+						selectParam.setStartFileTime(format.parse(startFileTime));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				if (endFileTime != null && endFileTime.length() == 10) {
+					try {
+						Date serviceEndTime = format.parse(endFileTime);
+						serviceEndTime.setDate(serviceEndTime.getDate() + 1);
+						selectParam.setEndFileTime(serviceEndTime);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				if (startNextCallTime != null && startNextCallTime.length() == 10) {
+					try {
+						selectParam.setStartNextCallTime(format.parse(startNextCallTime));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				if (endNextCallTime != null && endNextCallTime.length() == 10) {
+					try {
+						Date endNextCallTime_ = format.parse(endNextCallTime);
+						endNextCallTime_.setDate(endNextCallTime_.getDate() + 1);
+						selectParam.setEndNextCallTime(endNextCallTime_);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}

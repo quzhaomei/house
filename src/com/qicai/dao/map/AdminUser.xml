@@ -152,6 +152,9 @@
 		<if test="user.status!=null">
 		 and au.status=#{user.status}
 		</if>
+		<if test="user.adminUserId!=null">
+		 and au.adminUserId=#{user.adminUserId}
+		</if>
 		order by au.createDate
 	</select>
 	

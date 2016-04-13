@@ -36,7 +36,7 @@ public class MyDesignApplyController extends BaseController {
 		//查询推广员
 		AdminUser userParam=new AdminUser();
 		userParam.setAdminUserId(getLoginAdminUser(request).getAdminUserId());
-		List<AdminUserDTO> users=adminUserService.getListByParamAndRole(userParam, 8);
+		List<AdminUserDTO> users=adminUserService.getListByParamAndRole(userParam, TUIGUANG_ROLE_ID);
 		model.addAttribute("users", users);
 		model.addAttribute("rootUrl", getRootUrl(request));
 		String pageIndex = request.getParameter("pageIndex");// 页码

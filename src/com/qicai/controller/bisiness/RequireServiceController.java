@@ -2,6 +2,7 @@ package com.qicai.controller.bisiness;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,6 @@ import com.qicai.dto.bisiness.StoreDTO;
 import com.qicai.dto.bisiness.ZoneSetDTO;
 import com.qicai.util.JSONUtil;
 import com.qicai.util.MessageSender;
-import com.qicai.util.ShortUrlUtil;
 
 /**
  * 需求管理
@@ -526,7 +526,10 @@ public class RequireServiceController extends BaseController {
 					}
 
 					// 检测当月订单数目有没有超标
+					
 					Order countParam = new Order();
+					countParam.setStartDate(getMonthFirstDay());//本月第一天
+					countParam.setEndDate(getMonthLastDay());
 					countParam.setStoreId(Integer.parseInt(storeId));
 					int count = orderService.getCountByParam(countParam);
 					if (store.getSize() <= count) {
@@ -618,5 +621,29 @@ public class RequireServiceController extends BaseController {
 		}
 		return "admin/requireService_to_store";
 	}
-
+	
+	private Date getMonthFirstDay(){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+		Calendar cale = Calendar.getInstance();   
+		cale.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
+		String dateStr=format.format(cale.getTime());
+		try {
+			return format.parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	private Date getMonthLastDay(){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+		Calendar cale = Calendar.getInstance();   
+		cale.set(Calendar.DAY_OF_MONTH, cale.getActualMaximum(Calendar.DAY_OF_MONTH)+1);  
+		String dateStr=format.format(cale.getTime());
+		try {
+			return format.parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

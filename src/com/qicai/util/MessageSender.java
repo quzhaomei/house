@@ -14,7 +14,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
  * @author Beyond
  */
 public class MessageSender {
-	private static String sendUrl = "http://222.73.117.158/msg/";// 应用地址
+	private static String sendUrl = "http://222.73.117.156/msg/";// 应用地址
 	private static String account = "jupinghui02";// 账号
 	private static String pswd = "wyx@getmore01";// 密码
 	private static String testInfo = "您好，您的验证码是123456";// 短信内容

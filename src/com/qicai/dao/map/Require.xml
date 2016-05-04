@@ -334,33 +334,33 @@
 		and r.userphone like '${page.param.userphone}%'
 		</if>
 		<if test="page.param.startDate!=null">
-		and r.createDate &gt; #{page.param.startDate}
+		and r.createDate &gt;= #{page.param.startDate}
 		</if>
 		<if test="page.param.endDate!=null">
-		and r.createDate &lt; #{page.param.endDate}
+		and r.createDate &lt;= #{page.param.endDate}
 		</if>
 		<if test="page.param.serviceStartDate!=null">
-		and r.serviceDate &gt; #{page.param.serviceStartDate}
+		and r.serviceDate &gt;= #{page.param.serviceStartDate}
 		</if>
 		<if test="page.param.serviceEndDate!=null">
-		and r.serviceDate &lt; #{page.param.serviceEndDate}
+		and r.serviceDate &lt;= #{page.param.serviceEndDate}
 		</if>
 		
 		<if test="page.param.callbackTips!=null">
 		and r.callbackTips like '%${page.param.callbackTips}%'
 		</if>
 		<if test="page.param.startFileTime!=null">
-		and r.fileTime &gt; #{page.param.startFileTime}
+		and r.fileTime &gt;= #{page.param.startFileTime}
 		</if>
 		<if test="page.param.endFileTime!=null">
-		and r.fileTime &lt; #{page.param.endFileTime}
+		and r.fileTime &lt;= #{page.param.endFileTime}
 		</if>
 		
 		<if test="page.param.startNextCallTime!=null">
-		and r.nextCallTime &gt; #{page.param.startNextCallTime}
+		and r.nextCallTime &gt;= #{page.param.startNextCallTime}
 		</if>
 		<if test="page.param.endNextCallTime!=null">
-		and r.nextCallTime &lt; #{page.param.endNextCallTime}
+		and r.nextCallTime &lt;= #{page.param.endNextCallTime}
 		</if>
 		 order by r.requiredId desc
 		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
@@ -402,40 +402,40 @@
 		and r.userphone like '${page.param.userphone}%'
 		</if>
 		<if test="page.param.startDate!=null">
-		and r.createDate &gt; #{page.param.startDate}
+		and r.createDate &gt;= #{page.param.startDate}
 		</if>
 		<if test="page.param.endDate!=null">
-		and r.createDate &lt; #{page.param.endDate}
+		and r.createDate &lt;= #{page.param.endDate}
 		</if>
 		<if test="page.param.serviceStartDate!=null">
-		and r.serviceDate &gt; #{page.param.serviceStartDate}
+		and r.serviceDate &gt;= #{page.param.serviceStartDate}
 		</if>
 		<if test="page.param.serviceEndDate!=null">
-		and r.serviceDate &lt; #{page.param.serviceEndDate}
+		and r.serviceDate &lt;= #{page.param.serviceEndDate}
 		</if>
 		
 		<if test="page.param.callbackTips!=null">
 		and r.callbackTips like '%${page.param.callbackTips}%'
 		</if>
 		<if test="page.param.startFileTime!=null">
-		and r.fileTime &gt; #{page.param.startFileTime}
+		and r.fileTime &gt;= #{page.param.startFileTime}
 		</if>
 		<if test="page.param.endFileTime!=null">
-		and r.fileTime &lt; #{page.param.endFileTime}
+		and r.fileTime &lt;= #{page.param.endFileTime}
 		</if>
 		
 		<if test="page.param.startNextCallTime!=null">
-		and r.nextCallTime &gt; #{page.param.startNextCallTime}
+		and r.nextCallTime &gt;= #{page.param.startNextCallTime}
 		</if>
 		<if test="page.param.endNextCallTime!=null">
-		and r.nextCallTime &lt; #{page.param.endNextCallTime}
+		and r.nextCallTime &lt;= #{page.param.endNextCallTime}
 		</if>
 		
 		<if test="page.param.specialStartDate!=null">
-		and rr.nextTime &gt; #{page.param.specialStartDate}
+		and rr.nextTime &gt;= #{page.param.specialStartDate}
 		</if>
 		<if test="page.param.specialEndDate!=null">
-		and rr.nextTime &lt; #{page.param.specialEndDate}
+		and rr.nextTime &lt;= #{page.param.specialEndDate}
 		</if>
 		 order by r.createDate desc,r.requiredId desc
 		limit ${page.pageSize*(page.pageIndex-1)},${page.pageSize}
@@ -467,40 +467,40 @@
 		and r.userphone like '${require.userphone}%'
 		</if>
 		<if test="require.startDate!=null">
-		and r.createDate &gt; #{require.startDate}
+		and r.createDate &gt;= #{require.startDate}
 		</if>
 		<if test="require.endDate!=null">
-		and r.createDate &lt; #{require.endDate}
+		and r.createDate &lt;= #{require.endDate}
 		</if>
 		<if test="require.serviceStartDate!=null">
-		and r.serviceDate &gt; #{require.serviceStartDate}
+		and r.serviceDate &gt;= #{require.serviceStartDate}
 		</if>
 		<if test="require.serviceEndDate!=null">
-		and r.serviceDate &lt; #{require.serviceEndDate}
+		and r.serviceDate &lt;= #{require.serviceEndDate}
 		</if>
 		
 		<if test="require.callbackTips!=null">
 		and r.callbackTips like '%${require.callbackTips}%'
 		</if>
 		<if test="require.startFileTime!=null">
-		and r.fileTime &gt; #{require.startFileTime}
+		and r.fileTime &gt;= #{require.startFileTime}
 		</if>
 		<if test="require.endFileTime!=null">
-		and r.fileTime &lt; #{require.endFileTime}
+		and r.fileTime &lt;= #{require.endFileTime}
 		</if>
 		
 		<if test="require.startNextCallTime!=null">
-		and r.nextCallTime &gt; #{require.startNextCallTime}
+		and r.nextCallTime &gt;= #{require.startNextCallTime}
 		</if>
 		<if test="require.endNextCallTime!=null">
-		and r.nextCallTime &lt; #{require.endNextCallTime}
+		and r.nextCallTime &lt;= #{require.endNextCallTime}
 		</if>
 		
 		<if test="require.specialStartDate!=null">
-		and rr.nextTime &gt; #{require.specialStartDate}
+		and rr.nextTime &gt;= #{require.specialStartDate}
 		</if>
 		<if test="require.specialEndDate!=null">
-		and rr.nextTime &lt; #{require.specialEndDate}
+		and rr.nextTime &lt;= #{require.specialEndDate}
 		</if>
 	</select>
 	
@@ -528,32 +528,32 @@
 		and r.userphone like '${require.userphone}%'
 		</if>
 		<if test="require.startDate!=null">
-		and r.createDate &gt; #{require.startDate}
+		and r.createDate &gt;= #{require.startDate}
 		</if>
 		<if test="require.endDate!=null">
-		and r.createDate &lt; #{require.endDate}
+		and r.createDate &lt;= #{require.endDate}
 		</if>
 		<if test="require.serviceStartDate!=null">
-		and r.serviceDate &gt; #{require.serviceStartDate}
+		and r.serviceDate &gt;= #{require.serviceStartDate}
 		</if>
 		<if test="require.serviceEndDate!=null">
-		and r.serviceDate &lt; #{require.serviceEndDate}
+		and r.serviceDate &lt;= #{require.serviceEndDate}
 		</if>
 		
 		<if test="require.callbackTips!=null">
 		and r.callbackTips like '%${require.callbackTips}%'
 		</if>
 		<if test="require.startFileTime!=null">
-		and r.fileTime &gt; #{require.startFileTime}
+		and r.fileTime &gt;= #{require.startFileTime}
 		</if>
 		<if test="require.endFileTime!=null">
-		and r.fileTime &lt; #{require.endFileTime}
+		and r.fileTime &lt;= #{require.endFileTime}
 		</if>
 		<if test="require.startNextCallTime!=null">
-		and r.nextCallTime &gt; #{require.startNextCallTime}
+		and r.nextCallTime &gt;= #{require.startNextCallTime}
 		</if>
 		<if test="require.endNextCallTime!=null">
-		and r.nextCallTime &lt; #{require.endNextCallTime}
+		and r.nextCallTime &lt;= #{require.endNextCallTime}
 		</if>
 	</select>
 	<select id="publishList" resultMap="requireDTO">
@@ -588,33 +588,33 @@
 		and r.userphone like '${require.userphone}%'
 		</if>
 		<if test="require.startDate!=null">
-		and r.createDate &gt; #{require.startDate}
+		and r.createDate &gt;= #{require.startDate}
 		</if>
 		<if test="require.endDate!=null">
-		and r.createDate &lt; #{require.endDate}
+		and r.createDate &lt;= #{require.endDate}
 		</if>
 		<if test="require.serviceStartDate!=null">
-		and r.serviceDate &gt; #{require.serviceStartDate}
+		and r.serviceDate &gt;= #{require.serviceStartDate}
 		</if>
 		<if test="require.serviceEndDate!=null">
-		and r.serviceDate &lt; #{require.serviceEndDate}
+		and r.serviceDate &lt;= #{require.serviceEndDate}
 		</if>
 		
 		<if test="require.callbackTips!=null">
 		and r.callbackTips like '%${require.callbackTips}%'
 		</if>
 		<if test="require.startFileTime!=null">
-		and r.fileTime &gt; #{require.startFileTime}
+		and r.fileTime &gt;= #{require.startFileTime}
 		</if>
 		<if test="require.endFileTime!=null">
-		and r.fileTime &lt; #{require.endFileTime}
+		and r.fileTime &lt;= #{require.endFileTime}
 		</if>
 		
 		<if test="require.startNextCallTime!=null">
-		and r.nextCallTime &gt; #{require.startNextCallTime}
+		and r.nextCallTime &gt;= #{require.startNextCallTime}
 		</if>
 		<if test="require.endNextCallTime!=null">
-		and r.nextCallTime &lt; #{require.endNextCallTime}
+		and r.nextCallTime &lt;= #{require.endNextCallTime}
 		</if>
 		 order by r.createDate desc,r.requiredId desc
 	</select>
@@ -653,40 +653,40 @@
 		and r.userphone like '${require.userphone}%'
 		</if>
 		<if test="require.startDate!=null">
-		and r.createDate &gt; #{require.startDate}
+		and r.createDate &gt;= #{require.startDate}
 		</if>
 		<if test="require.endDate!=null">
-		and r.createDate &lt; #{require.endDate}
+		and r.createDate &lt;= #{require.endDate}
 		</if>
 		<if test="require.serviceStartDate!=null">
-		and r.serviceDate &gt; #{require.serviceStartDate}
+		and r.serviceDate &gt;= #{require.serviceStartDate}
 		</if>
 		<if test="require.serviceEndDate!=null">
-		and r.serviceDate &lt; #{require.serviceEndDate}
+		and r.serviceDate &lt;= #{require.serviceEndDate}
 		</if>
 		
 		<if test="require.callbackTips!=null">
 		and r.callbackTips like '%${require.callbackTips}%'
 		</if>
 		<if test="require.startFileTime!=null">
-		and r.fileTime &gt; #{require.startFileTime}
+		and r.fileTime &gt;= #{require.startFileTime}
 		</if>
 		<if test="require.endFileTime!=null">
-		and r.fileTime &lt; #{require.endFileTime}
+		and r.fileTime &lt;= #{require.endFileTime}
 		</if>
 		
 		<if test="require.startNextCallTime!=null">
-		and r.nextCallTime &gt; #{require.startNextCallTime}
+		and r.nextCallTime &gt;= #{require.startNextCallTime}
 		</if>
 		<if test="require.endNextCallTime!=null">
-		and r.nextCallTime &lt; #{require.endNextCallTime}
+		and r.nextCallTime &lt;= #{require.endNextCallTime}
 		</if>
 		
 		<if test="require.specialStartDate!=null">
-		and rr.nextTime &gt; #{require.specialStartDate}
+		and rr.nextTime &gt;= #{require.specialStartDate}
 		</if>
 		<if test="require.specialEndDate!=null">
-		and rr.nextTime &lt; #{require.specialEndDate}
+		and rr.nextTime &lt;= #{require.specialEndDate}
 		</if>
 		 order by r.createDate,r.requiredId 
 	</select>

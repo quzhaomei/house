@@ -384,6 +384,9 @@ public class RequireServiceController extends BaseController {
 						try {
 							requireService.update(updateParam);
 							json.setStatus(1).setMessage("更新成功");
+							require =requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+							model.addAttribute("temp", require);
+							return "admin/requireService_per";
 						} catch (Exception e) {
 							json.setStatus(0).setMessage("更新过程中，系统出现异常");
 							e.printStackTrace();

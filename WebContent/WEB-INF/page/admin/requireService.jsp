@@ -273,9 +273,9 @@ position: relative !important;
 		});
 		
 		var obj = new UCObj(window, document);
-		obj.start();
+//		obj.start();
 		//电话外呼
-		$(".call-customer").on("click",function(){
+		$("body").on("click",".call-customer",function(){
 			var url=$(this).attr("data-href");
 			$.post(url,function(json){
 				var dn = "Tel:"+json.data;
@@ -286,7 +286,7 @@ position: relative !important;
 		});
 		
 		//切换状态
-		$(".otherStatus").on("click",function(){
+		$("body").on("click",".otherStatus",function(){
 			var requiredId=$(this).attr("requiredId");
 			if(!requiredId){layer.msg("数据缺失！");return;}
 			var param={};
@@ -325,7 +325,8 @@ position: relative !important;
 			},"json");
 		});
 		//带跟进库激活
-		$(".useStatus").on("click",function(){
+		$("body").on("click",".useStatus",function(){
+			var _this=this;
 			var requiredId=$(this).attr("requiredId");
 			if(!requiredId){layer.msg("数据缺失！");return;}
 			var param={};
@@ -334,15 +335,23 @@ position: relative !important;
 
 			layer.confirm("确定激活吗？",function(index){
 				layer.close(index);
-				$.post("message.html",param,function(json){
+				$.post("message.html",param,function(html){
+					if(html){
+						layer.msg("激活成功！");
+						$(_this).parents("tr").html(html);
+					}else{
+						var json=JSON.parse(html);
+						layer.msg(json.message);
+					}
+					/**
 					if(json.status==1){
 						layer.msg(json.message);
 						$("#myform").submit();
 					}else{
 						layer.msg(json.message);
-					}
+					}**/
 					
-				},"json");
+				});
 			});
 		});
 		

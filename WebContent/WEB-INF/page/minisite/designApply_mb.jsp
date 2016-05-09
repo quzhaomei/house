@@ -119,12 +119,11 @@
 </style>
 <body>
 	<div class="container">
-		<img src="../images/mobile_01.jpg">
-		<img src="../images/mobile_02.jpg">
+		<img src="../images/mobile_01.png">
+		<img src="../images/mobile_02.png">
 		<img src="../images/mobile_03.png">
 		<img src="../images/mobile_04.jpg">
-		<img src="../images/mobile_05.jpg">
-		<img src="../images/mobile_06.png">
+		<img src="../images/mobile_05.png">
 		<form class="formarea">
 			<div class="inputs">
 				<input type="text" placeholder="您的姓名" id="username" maxlength="30">

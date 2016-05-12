@@ -46,5 +46,10 @@ public class DesignApplyServiceImpl implements DesignApplyService{
 	public DesignApply getByParam(DesignApply apply) {
 		return applyDao.getByParam(apply);
 	}
+
+	@Override
+	public List<DesignApply> getListByParam(DesignApply apply) {
+		return applyDao.getListByParam(apply);
+	}
 	
 }

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.chainsaw.Main;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.qicai.annotation.LimitTag;
@@ -34,6 +34,9 @@ public class LimitInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
+		if (handler instanceof HandlerMethod) {// 此处handler为处理该请求的method对象
+			handler = ((HandlerMethod) handler).getBean();// 转化为该方法的class对象
+		}
 		//微信登陆拦截
 		if (handler.getClass().getAnnotation(WechatTag.class) != null) {
 			String url = request.getRequestURL().toString();

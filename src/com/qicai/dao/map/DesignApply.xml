@@ -62,6 +62,21 @@
 			and status=#{apply.status}
 		</if>
 	</select>
+	<select id="getListByParam" resultMap="apply">
+		select applyId,phone,username,location,size,createDate,shortUrl,description
+		,status,source from design_apply 
+		where 1=1
+		<if test="apply.source!=null">
+			and source=#{apply.source}
+		</if>
+		<if test="apply.startDate!=null">
+			and createDate &gt;= #{apply.startDate}
+		</if>
+		<if test="apply.endDate !=null">
+			and createDate &lt; #{apply.endDate}
+		</if>
+		order by applyId asc
+	</select>
 	<select id="getListByPage" resultMap="apply">
 		select applyId,phone,username,location,size,createDate,shortUrl,description
 		,status,source from design_apply 

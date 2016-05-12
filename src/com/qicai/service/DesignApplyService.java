@@ -10,4 +10,5 @@ public interface DesignApplyService {
 	void update(DesignApply apply) throws Exception;
 	DesignApply getByParam(DesignApply apply);//按条件索引
 	PageDTO<List<DesignApply>> findByPage(PageDTO<DesignApply> page);
+	List<DesignApply> getListByParam(DesignApply apply);//查询数组
 }

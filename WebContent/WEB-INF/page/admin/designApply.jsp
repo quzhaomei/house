@@ -79,6 +79,20 @@ display: inline-block;
 					</table>
 					</div>
 				</c:if>
+				<c:choose>
+					<c:when test="${empty my }">
+						<c:set value="page" var="designApply"/>
+					</c:when>
+					<c:otherwise>
+						<c:set value="page" var="myDesignApply"/>
+					</c:otherwise>
+				</c:choose>
+				<ad:power uri="../${page }/load.html">
+				<p style="text-align:right;">
+							<a href="#" class="btn btn-mini red loadAll">下载数据</a>
+							</p>
+					</ad:power>
+							
 				<div class="row-fluid sortable">
 					<div class="box span12">
 						<div class="box-header" data-original-title>
@@ -183,6 +197,14 @@ display: inline-block;
 				}
 				$("#myform").submit();
 			});
+			
+			//接单
+			$(".loadAll").on("click",function(){
+				$("#myform").attr("action","load.html");
+				$("#myform").submit();
+				$("#myform").attr("action","index.html");
+			});
+			
 		});
 	</script>
 </body>

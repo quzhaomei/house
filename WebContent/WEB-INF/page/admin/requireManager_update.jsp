@@ -34,8 +34,7 @@
 			<div id="content" class="span10">
 				<ul class="breadcrumb">
 					<li><i class="icon-home"></i> <a href="index.html">首页</a></li>
-				 	<li><i class="icon-angle-right"></i><a href="index.html">发布需求 </a></li>
-				 	<li><i class="icon-angle-right"></i><a href="#">更正预约需求</a></li>
+				 	<li><i class="icon-angle-right"></i><a href="index.html">返回 </a></li>
 				</ul>
 
 				<div class="row-fluid sortable">

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qicai.annotation.LimitTag;
 import com.qicai.bean.admin.AdminUser;
@@ -402,7 +403,9 @@ public class RequireController extends BaseController {
 						param.setHouseTypeId(require.getHouseType().getTypeId());
 						param.setStoreId(temp.getStoreId());
 						HouseTypeToStoreDTO store = houseTypeToStoreService.getByParam(param);
-						if (store.getPrice() != null) {
+						if(require.getPrice()!=null){
+							temp.setPrice(require.getPrice());
+						}else if (store.getPrice() != null) {
 							temp.setPrice(store.getPrice());
 						} else {
 							temp.setPrice(require.getHouseType().getPrice());
@@ -488,7 +491,9 @@ public class RequireController extends BaseController {
 					HouseTypeToStoreDTO priceTemp = houseTypeToStoreService.getByParam(priceParam);
 					if (Integer.parseInt(type) == 2) {
 						saveParam.setPrice(1);// 1块钱赠送
-					} else if (priceTemp.getPrice() == null) {
+					} else if(require.getPrice()!=null){
+						saveParam.setPrice(require.getPrice());
+					}else if (priceTemp.getPrice() == null) {
 						saveParam.setPrice(require.getHouseType().getPrice());
 					} else {
 						saveParam.setPrice(priceTemp.getPrice());
@@ -795,4 +800,155 @@ public class RequireController extends BaseController {
 		return null;
 	}
 	
+	@RequestMapping(value = "/setPrice")
+	@ResponseBody
+	public JsonDTO setPrice(HttpServletRequest request,Integer requiredId,Integer price) {
+		JsonDTO result=new JsonDTO();
+		RequireDTO require=requireService.getByParam(new Require(requiredId));
+		if(require!=null){
+			Require updateParam=new Require(requiredId);
+			updateParam.setPrice(price);
+			updateParam.setOperatorLog(require.getOperatorLog() + " <br/> "
+					+ new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+					+ getLoginAdminUser(request).getNickname() + " 对需求进行了特殊定价为 " + price+"元");
+			try {
+				requireService.update(updateParam);
+				result.setMessage("调价成功");
+			} catch (Exception e) {
+				result.setMessage("调价失败");
+				e.printStackTrace();
+			}
+		}else{
+			result.setMessage("需求不存在");
+		}
+		return result;
+	}
+	
+	/**
+	 * 修正
+	 * 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/update")
+	public String update(HttpServletRequest request, HttpServletResponse response, Model model) {
+		String operator = request.getParameter("operator");
+		if ("toUpdate".equals(operator)) {
+			String requiredId = request.getParameter("requiredId");
+			if (requiredId != null && requiredId.matches("\\d+")) {
+				RequireDTO require = requireService.getByParam(new Require(Integer.parseInt(requiredId)));
+				if (require!=null) {// 未发布的才能更改
+					// 查找所有房屋类型
+					HouseType type = new HouseType();
+					type.setStatus(1);
+					List<HouseTypeDTO> houses = houseTypeService.getListByParam(type);
+					model.addAttribute("houses", houses);
+
+					// 查找所有的区域
+					ZoneSet zone = new ZoneSet();
+					zone.setParentId(0);
+					zone.setStatus(1);
+					List<ZoneSetDTO> zones = zoneSetService.getZoneSetByParam(zone);
+					model.addAttribute("zones", zones);
+
+					model.addAttribute("require", require);
+					return "admin/requireManager_update";
+				}
+			}
+		} else if ("update".equals(operator)) {
+			JsonDTO json = new JsonDTO();
+			String requiredId = request.getParameter("requiredId");
+
+			String username = request.getParameter("username");
+			String userphone = request.getParameter("userphone");
+			String zoneId = request.getParameter("zoneId");
+			String typeId = request.getParameter("typeId");
+			String houseDes = request.getParameter("houseDes");
+			String budget = request.getParameter("budget");
+			String houseInfo = request.getParameter("houseInfo");
+			String isReady = request.getParameter("isReady");
+			String isNew = request.getParameter("isNew");
+			String readyDate = request.getParameter("readyDate");
+			String houseLocation = request.getParameter("houseLocation");
+			String designTime = request.getParameter("designTime");
+			String phoneTime = request.getParameter("phoneTime");
+			String customerTips = request.getParameter("customerTips");
+
+			String designType = request.getParameter("designType");
+			String designStyle = request.getParameter("designStyle");
+			String houseStatus = request.getParameter("houseStatus");
+			// 数据校验
+			if (requiredId != null && requiredId.matches("\\d+") && budget != null && username != null
+					&& username.length() <= 20 && userphone != null && userphone.matches("\\d+")
+					&& (zoneId == null || zoneId != null && zoneId.matches("\\d+")) && typeId != null
+					&& typeId.matches("\\d+") && houseDes != null && isNew != null && isNew.matches("\\d+")
+					&& houseInfo != null && houseLocation != null && designTime != null && phoneTime != null
+					&& isReady.matches("[01]")
+
+					&& (("1".equals(isReady) || readyDate != null && readyDate.length() == 10))) {
+				Require updateParam = new Require();
+				updateParam.setRequiredId(Integer.parseInt(requiredId));
+				updateParam.setUsername(username);
+				updateParam.setUserphone(userphone);
+				if (zoneId != null && zoneId.matches("\\d+")) {
+					updateParam.setZoneId(Integer.parseInt(zoneId));
+				}
+				updateParam.setBudget(budget);
+				updateParam.setHouseTypeId(Integer.parseInt(typeId));
+				updateParam.setHouseDes(houseDes);
+				updateParam.setHouseInfo(houseInfo);
+				updateParam.setIsNew(Integer.parseInt(isNew));
+				updateParam.setIsReady(Integer.parseInt(isReady));
+				if (readyDate != null && readyDate.length() == 10 && "0".equals(isReady)) {
+					try {
+						updateParam.setReadyDate(format.parse(readyDate));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				updateParam.setHouseLocation(houseLocation);
+				updateParam.setDesignTime(designTime);
+				updateParam.setPhoneTime(phoneTime);
+				updateParam.setCustomerTips(customerTips);
+
+				updateParam.setDesignStyle(designStyle);
+				updateParam.setDesignType(designType);
+				updateParam.setHouseStatus(houseStatus);
+				
+				updateParam.setOperatorLog(updateParam.getOperatorLog() + " <br/> "
+						+ new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + " 由 "
+						+ getLoginAdminUser(request).getNickname() + " 对需求进行修正 ");
+				
+				try {
+					requireService.update(updateParam);
+					json.setStatus(1).setMessage("预约更新成功");
+
+				} catch (Exception e) {
+					json.setStatus(0).setMessage("更新过程中。系统出现异常");
+					e.printStackTrace();
+				}
+
+			} else {
+				json.setStatus(0).setMessage("数据异常");
+			}
+			model.addAttribute("json", JSONUtil.object2json(json));
+			return JSON;
+
+		} else if ("findOrderZone".equals(operator)) {// 查找
+			// 查找所有父级区域对应的子区域
+			String zoneId = request.getParameter("zoneId");
+			if (zoneId != null && zoneId.matches("\\d+")) {
+				ZoneSet zone = new ZoneSet();
+				zone.setParentId(Integer.parseInt(zoneId));
+				zone.setStatus(1);
+				List<ZoneSetDTO> zones = zoneSetService.getZoneSetByParam(zone);
+
+				model.addAttribute("json", JSONUtil.object2json(zones));
+				return JSON;
+			}
+		}
+		return "";
+	}
 }

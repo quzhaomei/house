@@ -53,6 +53,8 @@
 		<result property="acceptNum" column="acceptNum" />
 		<result property="successNum" column="successNum" />
 		
+		<result property="price" column="o_price" />
+		
 		<association property="remarks" javaType="com.qicai.bean.bisiness.RequireRemark" column="remarkId">
 			<id property="remarkId" column="remarkId"/>
 			<result property="requiredId" column="requiredId_r"/>
@@ -266,13 +268,16 @@
 		<if test="require.nextCallTime!=null">
 			,nextCallTime=#{require.nextCallTime}
 		</if>
+		<if test="require.price!=null">
+			,price=#{require.price}
+		</if>
 		
 		where requiredId=#{require.requiredId}
 	
 	</update>
 	
 	<select id="getByParam" resultMap="requireDTO">
-		SELECT r.requiredId,r.userId,r.username,r.userphone,r.zoneId,r.houseTypeId typeId,
+		SELECT r.requiredId,r.userId,r.username,r.userphone,r.zoneId,r.houseTypeId typeId,r.price o_price,
 		r.budget,r.budgetBak,r.designType,r.designTypeBak,r.designStyle,r.designStyleBak
 		,r.houseStatus,r.houseStatusBak,r.fileTime,r.nextCallTime,
 		 r.houseDes,r.isNew,r.houseInfo,r.isReady,r.readyDate,r.houseLocation,r.designTime, 
@@ -304,7 +309,7 @@
 	</select>
 	
 	<select id="findPublishByPage" resultMap="requireDTO">
-		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
+		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,r.price o_price,
 		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,r.callbackTips,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount ,
@@ -367,7 +372,7 @@
 	</select>
 	
 	<select id="getListByParam" resultMap="requireDTO">
-		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
+		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,r.price o_price,
 		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,r.callbackTips,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,r.createUserId,au.nickname,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount
@@ -557,7 +562,7 @@
 		</if>
 	</select>
 	<select id="publishList" resultMap="requireDTO">
-		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
+		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,r.price o_price,
 		r.budget,r.budgetBak,r.houseInfo,r.fileTime,r.nextCallTime,r.customerTips,
 		r.callbackTips,r.serviceTips,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
@@ -619,7 +624,7 @@
 		 order by r.createDate desc,r.requiredId desc
 	</select>
 	<select id="list" resultMap="requireDTO">
-		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,
+		select r.requiredId,r.createDate,r.userId,r.userphone,r.username,r.serviceDate,r.price o_price,
 		r.budget,r.budgetBak,r.fileTime,r.nextCallTime,
 		r.status,r.operatorLog,zs.zoneId,zs.name zonename,
 		(select count(*) from `order` o where o.requiredId=r.requiredId) orderCount

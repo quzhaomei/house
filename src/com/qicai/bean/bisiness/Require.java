@@ -50,6 +50,7 @@ public class Require {
 	
 	/**start-客户可以更改的信息*/
 	
+	private Integer price;//自定义价格
 	
 	private Date createDate;//生产时间
 	private Integer createUserId;//生成人员
@@ -453,4 +454,11 @@ public class Require {
 	}
 	public Require() {
 	}
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+	
 }

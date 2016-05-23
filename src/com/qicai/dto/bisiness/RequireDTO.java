@@ -53,6 +53,7 @@ public class RequireDTO {
 	private String houseStatusBak;//房屋状态 毛坯房、老房翻新、局部装修、工装
 	/**start-客户可以更改的信息*/
 	
+	private Integer price;//自定义价格
 	private Integer orderCount;//派单数目
 	
 	
@@ -401,6 +402,12 @@ public class RequireDTO {
 	}
 	public void setRemarks(RequireRemark remarks) {
 		this.remarks = remarks;
+	}
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
 	
 	

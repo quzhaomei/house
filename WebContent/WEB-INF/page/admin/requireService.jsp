@@ -213,6 +213,14 @@ position: relative !important;
 							  			激活</a>
 							  			</ad:power>
 						  			</c:if>
+						  			<ad:power uri="../requireService/setPrice.html">	
+						  			<a class="btn btn-mini green setPrice" href="#" requiredId="${temp.requiredId }">
+							  			特殊定价</a>
+							  			</ad:power>
+						  			<ad:power uri="../requireService/update.html">	
+							  		<a class="btn btn-mini yellow confirmRequire" href="#" requiredId="${temp.requiredId }">
+							  			修正需求</a>
+							  			</ad:power>
 						  		 </td>
 						  		</tr>
 						  	</c:forEach>
@@ -420,6 +428,40 @@ position: relative !important;
 			}
 		});
 		$("#chonsenstatus").change();
+		
+		layer.config({
+			  extend: 'extend/layer.ext.js'
+			});   
+		//设置价格
+		$("body").on("click","a.setPrice",function(){
+			var requiredId=$(this).attr("requiredId");
+			if(!requiredId){return;}
+			layer.prompt({
+				  title: '输入定价（整数）',
+				  formType: 0,
+				  maxlength:10				  
+				}, function(pass,index){
+				  if(!pass.match(/\d+/)){
+					  alert("请输入整数");return;
+				  }
+				  var data={};
+				  data.requiredId=requiredId;
+				  data.price=pass;
+				  $.post("setPrice.html",data,function(json){
+						  layer.msg(json.message);
+				  },"json")
+				});
+		});
+		//修正需求
+		$("body").on("click","a.confirmRequire",function(){
+			var requiredId=$(this).attr("requiredId");
+			var $form=$("<form>");
+			$form.attr("method","post").attr("action","update.html");
+			$form.append($("<input name='requiredId'/>").attr("value",requiredId));
+			$form.append($("<input name='operator'/>").attr("value","toUpdate"));
+			$form.submit();
+			
+		});
 		
 	});
 	</script>

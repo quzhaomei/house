@@ -172,6 +172,10 @@
 							<div>
 							<h2>店铺派单</h2>
 							订单默认单价：￥ ${require.houseType.price }
+							<c:if test="${not empty require.price }">
+							<br/>
+							<span style="color:red;">订单特殊定价：¥ ${require.price }</span>
+							</c:if>
 							<form class="form-horizontal" action="toStore.html#myform" method="post" id="myform" rel="admin-form">
 							<input name="operator" value="to_store" type="hidden"/>
 							<input name="pageIndex" id="pageIndex" type="hidden" value="${pageResult.pageIndex}"/>
